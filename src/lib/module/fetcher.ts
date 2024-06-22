@@ -1,8 +1,6 @@
 import { parse } from 'node-hiroba';
 import { csv2json } from 'json-2-csv';
-import User from '$lib/components/user.svelte';
-import Rating from '$lib/components/rating.svelte';
-import Display from '$lib/components/display.svelte';
+import Display from '../components/display.svelte';
 
 function createDialog() {
     const background = document.createElement('div');

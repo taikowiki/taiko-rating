@@ -21556,127 +21556,6 @@
   if (typeof window !== "undefined")
     (window.__svelte || (window.__svelte = { v: /* @__PURE__ */ new Set() })).v.add(PUBLIC_VERSION);
 
-  // src/lib/components/user.svelte
-  function add_css(target) {
-    append_styles(target, "svelte-1xx2p07", ".container.svelte-1xx2p07{width:min(100%, 300px);display:flex;flex-direction:column;align-items:center;justify-content:center}img.svelte-1xx2p07{width:min(100%, 200px);height:auto}table.svelte-1xx2p07{width:100%;border-collapse:collapse}td.svelte-1xx2p07{text-align:center;border:1px solid black}");
-  }
-  function create_fragment(ctx) {
-    let div2;
-    let img;
-    let img_src_value;
-    let t0;
-    let table;
-    let tr0;
-    let td0;
-    let t2;
-    let td1;
-    let t3_value = (
-      /*userData*/
-      ctx[0].nickname + ""
-    );
-    let t3;
-    let t4;
-    let tr1;
-    let td2;
-    let t6;
-    let td3;
-    let t7_value = (
-      /*userData*/
-      ctx[0].taikoNumber + ""
-    );
-    let t7;
-    return {
-      c() {
-        div2 = element("div");
-        img = element("img");
-        t0 = space();
-        table = element("table");
-        tr0 = element("tr");
-        td0 = element("td");
-        td0.textContent = "닉네임";
-        t2 = space();
-        td1 = element("td");
-        t3 = text3(t3_value);
-        t4 = space();
-        tr1 = element("tr");
-        td2 = element("td");
-        td2.textContent = "북 번호";
-        t6 = space();
-        td3 = element("td");
-        t7 = text3(t7_value);
-        if (!src_url_equal(img.src, img_src_value = /*userData*/
-        ctx[0].myDon)) attr2(img, "src", img_src_value);
-        attr2(img, "alt", "");
-        attr2(img, "class", "svelte-1xx2p07");
-        attr2(td0, "class", "svelte-1xx2p07");
-        attr2(td1, "class", "svelte-1xx2p07");
-        attr2(td2, "class", "svelte-1xx2p07");
-        attr2(td3, "class", "svelte-1xx2p07");
-        attr2(table, "class", "svelte-1xx2p07");
-        attr2(div2, "class", "container svelte-1xx2p07");
-      },
-      m(target, anchor) {
-        insert(target, div2, anchor);
-        append4(div2, img);
-        append4(div2, t0);
-        append4(div2, table);
-        append4(table, tr0);
-        append4(tr0, td0);
-        append4(tr0, t2);
-        append4(tr0, td1);
-        append4(td1, t3);
-        append4(table, t4);
-        append4(table, tr1);
-        append4(tr1, td2);
-        append4(tr1, t6);
-        append4(tr1, td3);
-        append4(td3, t7);
-      },
-      p(ctx2, [dirty]) {
-        if (dirty & /*userData*/
-        1 && !src_url_equal(img.src, img_src_value = /*userData*/
-        ctx2[0].myDon)) {
-          attr2(img, "src", img_src_value);
-        }
-        if (dirty & /*userData*/
-        1 && t3_value !== (t3_value = /*userData*/
-        ctx2[0].nickname + "")) set_data(t3, t3_value);
-        if (dirty & /*userData*/
-        1 && t7_value !== (t7_value = /*userData*/
-        ctx2[0].taikoNumber + "")) set_data(t7, t7_value);
-      },
-      i: noop2,
-      o: noop2,
-      d(detaching) {
-        if (detaching) {
-          detach(div2);
-        }
-      }
-    };
-  }
-  function instance($$self, $$props, $$invalidate) {
-    let { userData } = $$props;
-    $$self.$$set = ($$props2) => {
-      if ("userData" in $$props2) $$invalidate(0, userData = $$props2.userData);
-    };
-    return [userData];
-  }
-  var User = class extends SvelteComponent {
-    constructor(options) {
-      super();
-      init(this, options, instance, create_fragment, safe_not_equal, { userData: 0 }, add_css);
-    }
-    get userData() {
-      return this.$$.ctx[0];
-    }
-    set userData(userData) {
-      this.$$set({ userData });
-      flush();
-    }
-  };
-  create_custom_element(User, { "userData": {} }, [], [], true);
-  var user_default = User;
-
   // node_modules/@babel/runtime/helpers/esm/extends.js
   function _extends() {
     return _extends = Object.assign ? Object.assign.bind() : function(n) {
@@ -63950,7 +63829,7 @@
   var import_tiny_emitter = __toESM(require_tiny_emitter(), 1);
 
   // src/lib/components/rating.svelte
-  function add_css2(target) {
+  function add_css(target) {
     append_styles(target, "svelte-i3pbyn", "table.svelte-i3pbyn{border-collapse:collapse}th.svelte-i3pbyn,td.svelte-i3pbyn{border:1px solid black}");
   }
   function get_each_context(ctx, list, i2) {
@@ -64029,7 +63908,7 @@
       }
     };
   }
-  function create_fragment2(ctx) {
+  function create_fragment(ctx) {
     let div2;
     let t2;
     let table;
@@ -64139,7 +64018,7 @@
     }
     return Math.round(average + otherSum);
   }
-  function instance2($$self, $$props, $$invalidate) {
+  function instance($$self, $$props, $$invalidate) {
     let { measures } = $$props;
     let { scoreDatas } = $$props;
     const ratings = [];
@@ -64183,7 +64062,7 @@
   var Rating = class extends SvelteComponent {
     constructor(options) {
       super();
-      init(this, options, instance2, create_fragment2, safe_not_equal, { measures: 1, scoreDatas: 2 }, add_css2);
+      init(this, options, instance, create_fragment, safe_not_equal, { measures: 1, scoreDatas: 2 }, add_css);
     }
     get measures() {
       return this.$$.ctx[1];
@@ -64202,6 +64081,127 @@
   };
   create_custom_element(Rating, { "measures": {}, "scoreDatas": {} }, [], [], true);
   var rating_default = Rating;
+
+  // src/lib/components/user.svelte
+  function add_css2(target) {
+    append_styles(target, "svelte-1xx2p07", ".container.svelte-1xx2p07{width:min(100%, 300px);display:flex;flex-direction:column;align-items:center;justify-content:center}img.svelte-1xx2p07{width:min(100%, 200px);height:auto}table.svelte-1xx2p07{width:100%;border-collapse:collapse}td.svelte-1xx2p07{text-align:center;border:1px solid black}");
+  }
+  function create_fragment2(ctx) {
+    let div2;
+    let img;
+    let img_src_value;
+    let t0;
+    let table;
+    let tr0;
+    let td0;
+    let t2;
+    let td1;
+    let t3_value = (
+      /*userData*/
+      ctx[0].nickname + ""
+    );
+    let t3;
+    let t4;
+    let tr1;
+    let td2;
+    let t6;
+    let td3;
+    let t7_value = (
+      /*userData*/
+      ctx[0].taikoNumber + ""
+    );
+    let t7;
+    return {
+      c() {
+        div2 = element("div");
+        img = element("img");
+        t0 = space();
+        table = element("table");
+        tr0 = element("tr");
+        td0 = element("td");
+        td0.textContent = "닉네임";
+        t2 = space();
+        td1 = element("td");
+        t3 = text3(t3_value);
+        t4 = space();
+        tr1 = element("tr");
+        td2 = element("td");
+        td2.textContent = "북 번호";
+        t6 = space();
+        td3 = element("td");
+        t7 = text3(t7_value);
+        if (!src_url_equal(img.src, img_src_value = /*userData*/
+        ctx[0].myDon)) attr2(img, "src", img_src_value);
+        attr2(img, "alt", "");
+        attr2(img, "class", "svelte-1xx2p07");
+        attr2(td0, "class", "svelte-1xx2p07");
+        attr2(td1, "class", "svelte-1xx2p07");
+        attr2(td2, "class", "svelte-1xx2p07");
+        attr2(td3, "class", "svelte-1xx2p07");
+        attr2(table, "class", "svelte-1xx2p07");
+        attr2(div2, "class", "container svelte-1xx2p07");
+      },
+      m(target, anchor) {
+        insert(target, div2, anchor);
+        append4(div2, img);
+        append4(div2, t0);
+        append4(div2, table);
+        append4(table, tr0);
+        append4(tr0, td0);
+        append4(tr0, t2);
+        append4(tr0, td1);
+        append4(td1, t3);
+        append4(table, t4);
+        append4(table, tr1);
+        append4(tr1, td2);
+        append4(tr1, t6);
+        append4(tr1, td3);
+        append4(td3, t7);
+      },
+      p(ctx2, [dirty]) {
+        if (dirty & /*userData*/
+        1 && !src_url_equal(img.src, img_src_value = /*userData*/
+        ctx2[0].myDon)) {
+          attr2(img, "src", img_src_value);
+        }
+        if (dirty & /*userData*/
+        1 && t3_value !== (t3_value = /*userData*/
+        ctx2[0].nickname + "")) set_data(t3, t3_value);
+        if (dirty & /*userData*/
+        1 && t7_value !== (t7_value = /*userData*/
+        ctx2[0].taikoNumber + "")) set_data(t7, t7_value);
+      },
+      i: noop2,
+      o: noop2,
+      d(detaching) {
+        if (detaching) {
+          detach(div2);
+        }
+      }
+    };
+  }
+  function instance2($$self, $$props, $$invalidate) {
+    let { userData } = $$props;
+    $$self.$$set = ($$props2) => {
+      if ("userData" in $$props2) $$invalidate(0, userData = $$props2.userData);
+    };
+    return [userData];
+  }
+  var User = class extends SvelteComponent {
+    constructor(options) {
+      super();
+      init(this, options, instance2, create_fragment2, safe_not_equal, { userData: 0 }, add_css2);
+    }
+    get userData() {
+      return this.$$.ctx[0];
+    }
+    set userData(userData) {
+      this.$$set({ userData });
+      flush();
+    }
+  };
+  create_custom_element(User, { "userData": {} }, [], [], true);
+  var user_default = User;
 
   // src/lib/components/display.svelte
   function add_css3(target) {
