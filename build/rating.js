@@ -64013,12 +64013,12 @@
     let otherSum = 0;
     if (ratings.length > 50) {
       for (let i2 = 50; i2 < Math.min(100, ratings.length); i2++) {
-        otherSum += ratings[i2].rating * 0.01;
+        otherSum += ratings[i2].rating * 0.1;
       }
     }
     if (ratings.length > 100) {
       for (let i2 = 100; i2 < Math.min(150, ratings.length); i2++) {
-        otherSum += ratings[i2].rating * 5e-3;
+        otherSum += ratings[i2].rating * 0.01;
       }
     }
     if (ratings.length > 150) {
@@ -64049,7 +64049,7 @@
         } else if (difficulty.crown === "gold") {
           bonus = 1.3;
         } else if (difficulty.crown === "donderfull") {
-          bonus = 1.4;
+          bonus = 1.5;
         }
         ratings.push({
           songNo: song.songNo,
