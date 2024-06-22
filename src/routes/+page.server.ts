@@ -1,17 +1,5 @@
-import {build}  from 'esbuild';
-
-export async function load({url}){
-    const result = await build({
-        entryPoints: ['$lib/module/fetcher.ts'],
-        bundle: true,
-        minify: true,
-        write: false,
-        define:{
-            "process.env.POSTORIGIN": `"${url.origin}"`
-        }
-    })
-
+export async function load(){
     return{
-        code: result.outputFiles[0].text
+        code: (await import('$lib/module/fetcher.txt?raw')).default
     }
 }
