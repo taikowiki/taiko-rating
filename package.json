@@ -33,6 +33,8 @@
 	"dependencies": {
 		"cross-env": "^7.0.3",
 		"dotenv": "^16.4.5",
+		"json-2-csv": "^5.5.1",
+		"mathjs": "^13.0.0",
 		"node-hiroba": "^1.4.2"
 	}
 }
