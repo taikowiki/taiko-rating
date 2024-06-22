@@ -6,10 +6,12 @@
 				.valueOf();
 		} else if (score < 750000) {
 			return mathjs
-				.add(mathjs.multiply(mathjs.divide(7, 3), mathjs.subtract(score, 600000)), 400000)
+				.add(mathjs.multiply(mathjs.divide(5, 3), mathjs.subtract(score, 600000)), 400000)
 				.valueOf();
 		} else if (score < 950000) {
-			return score;
+			return mathjs
+				.add(mathjs.multiply(mathjs.divide(3, 2), mathjs.subtract(score, 750000)), 650000)
+				.valueOf();
 		} else {
 			return mathjs
 				.add(
