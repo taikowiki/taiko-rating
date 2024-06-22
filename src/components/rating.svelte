@@ -79,12 +79,12 @@
 		let otherSum = 0;
 		if (ratings.length > 50) {
 			for (let i = 50; i < Math.min(100, ratings.length); i++) {
-				otherSum += ratings[i].rating * 0.1;
+				otherSum += ratings[i].rating * 0.01;
 			}
 		}
 		if (ratings.length > 100) {
 			for (let i = 100; i < Math.min(150, ratings.length); i++) {
-				otherSum += ratings[i].rating * 0.01;
+				otherSum += ratings[i].rating * 0.005;
 			}
 		}
 		if (ratings.length > 150) {

@@ -23,7 +23,7 @@ javascript:(async() => {const fetched = await fetch('https://raw.githubuserconte
 &C = \mathrm{(상위 \, 51 \sim 100 \, 레이팅의 \, 합)}\\
 &D = \mathrm{(상위 \, 101 \sim 150 \, 레이팅의 \, 합)}\\
 &E = \mathrm{(상위 \, 151 \sim  \, 레이팅의 \, 합)}\\ {} \\
-&레이팅 = round(\frac{A + 0.8\times B}{50} + 0.1 \times C + 0.01 \times D + 0.001 \times E)
+&레이팅 = round(\frac{A + 0.8\times B}{50} + 0.01 \times C + 0.005 \times D + 0.001 \times E)
 \end{align}
 ```
 
