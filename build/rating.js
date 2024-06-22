@@ -20996,6 +20996,10 @@
   function space() {
     return text3(" ");
   }
+  function listen(node, event, handler, options) {
+    node.addEventListener(event, handler, options);
+    return () => node.removeEventListener(event, handler, options);
+  }
   function attr2(node, attribute, value) {
     if (value == null) node.removeAttribute(attribute);
     else if (node.getAttribute(attribute) !== value) node.setAttribute(attribute, value);
@@ -64221,11 +64225,15 @@
     let meta;
     let style;
     let t1;
+    let button;
+    let t3;
     let div2;
     let user;
-    let t2;
+    let t4;
     let rating;
     let current;
+    let mounted;
+    let dispose;
     user = new user_default({
       props: { userData: (
         /*data*/
@@ -64250,9 +64258,12 @@
         style = element("style");
         style.textContent = "body {\r\n            background-color: white !important;\r\n        }";
         t1 = space();
+        button = element("button");
+        button.textContent = "점수데이터 복사하기";
+        t3 = space();
         div2 = element("div");
         create_component(user.$$.fragment);
-        t2 = space();
+        t4 = space();
         create_component(rating.$$.fragment);
         attr2(meta, "name", "viewport");
         attr2(meta, "content", "width=device-width, initial-scale=1.0, user-scalable=yes");
@@ -64262,11 +64273,22 @@
         append4(document.head, meta);
         append4(document.head, style);
         insert(target, t1, anchor);
+        insert(target, button, anchor);
+        insert(target, t3, anchor);
         insert(target, div2, anchor);
         mount_component(user, div2, null);
-        append4(div2, t2);
+        append4(div2, t4);
         mount_component(rating, div2, null);
         current = true;
+        if (!mounted) {
+          dispose = listen(
+            button,
+            "click",
+            /*click_handler*/
+            ctx[2]
+          );
+          mounted = true;
+        }
       },
       p(ctx2, [dirty]) {
         const user_changes = {};
@@ -64297,23 +64319,34 @@
       d(detaching) {
         if (detaching) {
           detach(t1);
+          detach(button);
+          detach(t3);
           detach(div2);
         }
         detach(meta);
         detach(style);
         destroy_component(user);
         destroy_component(rating);
+        mounted = false;
+        dispose();
       }
     };
   }
   function instance3($$self, $$props, $$invalidate) {
     let { data: data2 } = $$props;
     let { measures } = $$props;
+    const click_handler = async () => {
+      try {
+        navigator.clipboard.writeText(JSON.stringify(data2));
+      } catch {
+        alert("복사 실패");
+      }
+    };
     $$self.$$set = ($$props2) => {
       if ("data" in $$props2) $$invalidate(0, data2 = $$props2.data);
       if ("measures" in $$props2) $$invalidate(1, measures = $$props2.measures);
     };
-    return [data2, measures];
+    return [data2, measures, click_handler];
   }
   var Display = class extends SvelteComponent {
     constructor(options) {

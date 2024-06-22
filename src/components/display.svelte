@@ -18,6 +18,15 @@
     </style>
 </svelte:head>
 
+<button on:click={async() => {
+    try{
+        navigator.clipboard.writeText(JSON.stringify(data))
+    }
+    catch{
+        alert('복사 실패')
+    }
+}}>점수데이터 복사하기</button>
+
 <div>
     <User userData={data.userData} />
     <Rating {measures} scoreDatas={data.scoreDatas} />
