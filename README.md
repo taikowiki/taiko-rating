@@ -18,11 +18,11 @@ javascript:(async() => {const fetched = await fetch('https://raw.githubuserconte
 
 ```math
 \begin{align}
-&A = (상위 \, 1 \sim 30 \, 레이팅의 \, 합)\\
-&B = (상위 \, 31 \sim 50 \, 레이팅의 \, 합)\\
-&C = (상위 \, 51 \sim 100 \, 레이팅의 \, 합)\\
-&D = (상위 \, 101 \sim 150 \, 레이팅의 \, 합)\\
-&E = (상위 \, 151 \sim  \, 레이팅의 \, 합)\\ {} \\
+&A = \mathrm{(상위 \, 1 \sim 30 \, 레이팅의 \, 합)}\\
+&B = \mathrm{(상위 \, 31 \sim 50 \, 레이팅의 \, 합)}\\
+&C = \mathrm{(상위 \, 51 \sim 100 \, 레이팅의 \, 합)}\\
+&D = \mathrm{(상위 \, 101 \sim 150 \, 레이팅의 \, 합)}\\
+&E = \mathrm{(상위 \, 151 \sim  \, 레이팅의 \, 합)}\\ {} \\
 &레이팅 = round(\frac{A + 0.7\times B}{50} + 0.01 \times C + 0.005 \times D + 0.001 \times E)
 \end{align}
 ```
@@ -32,7 +32,7 @@ javascript:(async() => {const fetched = await fetch('https://raw.githubuserconte
 곡 별 레이팅의 계산 방법은 다음과 같습니다
 
 ```math
-곡 \, 별 \, 레이팅 = round((점수의 \, 보정치) \times (보면 \, 상수) \times (왕관 \, 보정치) \div 1000)
+\mathrm{곡 \, 별 \, 레이팅} = round(\mathrm{(점수의 \, 보정치)} \times \mathrm{(보면 \, 상수)} \times \mathrm{(왕관 \, 보정치)} \div 1000)
 ```
 
 #### 점수의 보정치
@@ -40,7 +40,7 @@ javascript:(async() => {const fetched = await fetch('https://raw.githubuserconte
 점수의 보정치 계산 방법은 다음과 같습니다.
 
 ```math
-보정치(x) = 
+\mathrm{보정치}(x) = 
 \begin{cases}
 e^{\frac{ln400001}{600000}x} - 1 \quad (x < 600000)\\
 \frac{5}{3}(x-600000)+400000 \quad (600000 \leqq x < 750000)\\
