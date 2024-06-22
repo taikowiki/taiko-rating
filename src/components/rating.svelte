@@ -158,8 +158,6 @@
 	});
 
 	ratings.sort((a, b) => b.rating - a.rating);
-
-	console.log(ratings);
 </script>
 
 <div>

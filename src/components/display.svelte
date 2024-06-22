@@ -18,15 +18,27 @@
     </style>
 </svelte:head>
 
-<button on:click={async() => {
-    try{
-        navigator.clipboard.writeText(JSON.stringify(data));
-        alert('복사 완료')
-    }
-    catch{
-        alert('복사 실패')
-    }
-}}>점수데이터 복사하기</button>
+<button
+    on:click={async () => {
+        navigator.permissions
+            .query({ name: "clipboard-write" })
+            .then((result) => {
+                if (result.state === "granted" || result.state === "prompt") {
+                    try {
+                        navigator.clipboard.writeText(JSON.stringify(data));
+                        alert("복사 완료");
+                    } catch {
+                        alert("복사 실패");
+                    }
+                } else {
+                    alert("복사 실패");
+                }
+            })
+            .catch(() => {
+                alert("복사 실패");
+            });
+    }}>점수데이터 복사하기</button
+>
 
 <div>
     <User userData={data.userData} />
