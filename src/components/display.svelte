@@ -20,7 +20,8 @@
 
 <button on:click={async() => {
     try{
-        navigator.clipboard.writeText(JSON.stringify(data))
+        navigator.clipboard.writeText(JSON.stringify(data));
+        alert('복사 완료')
     }
     catch{
         alert('복사 실패')
