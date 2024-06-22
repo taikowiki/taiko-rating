@@ -2,7 +2,7 @@ import {build}  from 'esbuild';
 
 export async function load({url}){
     const result = await build({
-        entryPoints: ['src/lib/module/fetcher.ts'],
+        entryPoints: ['$lib/module/fetcher.ts'],
         bundle: true,
         minify: true,
         write: false,
