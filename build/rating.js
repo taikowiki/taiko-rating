@@ -64338,6 +64338,7 @@
     const click_handler = async () => {
       try {
         navigator.clipboard.writeText(JSON.stringify(data2));
+        alert("복사 완료");
       } catch {
         alert("복사 실패");
       }
