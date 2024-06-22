@@ -17,12 +17,14 @@ javascript:(async() => {const fetched = await fetch('https://raw.githubuserconte
 레이팅의 계산 방법은 다음과 같습니다.
 
 $$
-A = (상위\,1 \sim 30\,레이팅의\,합)\\
-B = (상위\,31 \sim 50\,레이팅의\,합)\\
-C = (상위\,51 \sim 100\,레이팅의\,합)\\
-D = (상위\,101 \sim 150\,레이팅의\,합)\\
-E = (상위\,151 \sim \,레이팅의\,합)\\ {} \\
-레이팅 = round(\frac{A + 0.7\times B}{50} + 0.01 \times C + 0.005 \times D + 0.001 \times E)
+\begin{align}
+&A = (상위\,1 \sim 30\,레이팅의\,합)\\
+&B = (상위\,31 \sim 50\,레이팅의\,합)\\
+&C = (상위\,51 \sim 100\,레이팅의\,합)\\
+&D = (상위\,101 \sim 150\,레이팅의\,합)\\
+&E = (상위\,151 \sim \,레이팅의\,합)\\ {} \\
+&레이팅 = round(\frac{A + 0.7\times B}{50} + 0.01 \times C + 0.005 \times D + 0.001 \times E)
+\end{align}
 $$
 
 ### 곡 별 레이팅
