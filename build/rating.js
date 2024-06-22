@@ -64048,7 +64048,7 @@
           bonus = 1.1;
         } else if (difficulty.crown === "gold") {
           bonus = 1.3;
-        } else if (difficulty.crown === "donderful") {
+        } else if (difficulty.crown === "donderfull") {
           bonus = 1.4;
         }
         ratings.push({
@@ -64215,9 +64215,10 @@
 
   // src/components/display.svelte
   function add_css3(target) {
-    append_styles(target, "svelte-1pqbld2", "div.svelte-1pqbld2{display:flex;flex-direction:column;justify-content:center;align-items:center}");
+    append_styles(target, "svelte-ay1d4c", "div.svelte-ay1d4c{display:flex;flex-direction:column;justify-content:center;align-items:center}");
   }
   function create_fragment3(ctx) {
+    let meta;
     let style;
     let t1;
     let div2;
@@ -64245,16 +64246,20 @@
     });
     return {
       c() {
+        meta = element("meta");
         style = element("style");
-        style.textContent = "body{\r\n            background-color: white !important;\r\n        }";
+        style.textContent = "body {\r\n            background-color: white !important;\r\n        }";
         t1 = space();
         div2 = element("div");
         create_component(user.$$.fragment);
         t2 = space();
         create_component(rating.$$.fragment);
-        attr2(div2, "class", "svelte-1pqbld2");
+        attr2(meta, "name", "viewport");
+        attr2(meta, "content", "width=device-width, initial-scale=1.0, user-scalable=yes");
+        attr2(div2, "class", "svelte-ay1d4c");
       },
       m(target, anchor) {
+        append4(document.head, meta);
         append4(document.head, style);
         insert(target, t1, anchor);
         insert(target, div2, anchor);
@@ -64294,6 +64299,7 @@
           detach(t1);
           detach(div2);
         }
+        detach(meta);
         detach(style);
         destroy_component(user);
         destroy_component(rating);

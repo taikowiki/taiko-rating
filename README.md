@@ -1,47 +1,59 @@
-# Svelte + TS + Vite
+# Taiko Analyzer
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+동더히로바를 이용하여 사용자를 분석합니다.
 
-## Recommended IDE Setup
+## 사용법
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+동더히로바에 접속한 후, 아래 코드를 주소창에 넣고 엔터키를 누르세요. 동더히로바에 로그인이 되어 있어야 합니다.
 
-## Need an official Svelte framework?
+```
+javascript:(async() => {const fetched = await fetch('https://raw.githubusercontent.com/taikowiki/taiko-analyzer/main/build/rating.js');const script = await fetched.text();(new Function(script))();})();
+```
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+## 레이팅
 
-## Technical considerations
+사용자의 플레이 기록을 이용하여 레이팅을 계산합니다.
 
-**Why use this over SvelteKit?**
+레이팅의 계산 방법은 다음과 같습니다.
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+$$
+A = (상위\,1 \sim 30\,레이팅의\,합)\\
+B = (상위\,31 \sim 50\,레이팅의\,합)\\
+C = (상위\,51 \sim 100\,레이팅의\,합)\\
+D = (상위\,101 \sim 150\,레이팅의\,합)\\
+E = (상위\,151 \sim \,레이팅의\,합)\\ {} \\
+레이팅 = round(\frac{A + 0.7\times B}{50} + 0.01 \times C + 0.005 \times D + 0.001 \times E)
+$$
 
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+### 곡 별 레이팅
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+곡 별 레이팅의 계산 방법은 다음과 같습니다
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
+$$
+곡\,별\,레이팅 = round((점수의\,보정치) \times (보면\,상수) \times (왕관\,보정치) \div 1000)
+$$
 
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+#### 점수의 보정치
 
-**Why include `.vscode/extensions.json`?**
+점수의 보정치 계산 방법은 다음과 같습니다.
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+$$
+보정치(x) = 
+\begin{cases}
+e^{\frac{ln400001}{600000}x} - 1 \quad (x < 600000)\\
+\frac{5}{3}(x-600000)+400000 \quad (600000 \leqq x < 750000)\\
+\frac{3}{2}(x-750000)+650000 \quad (750000 \leqq x < 950000)\\
+\frac{150000}{ln16}ln(\frac{x-950000}{10000}+1)+950000 \quad (950000 \leqq x)
+\end{cases}
+$$
 
-**Why enable `allowJs` in the TS template?**
+#### 왕관 보정치
 
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
+왕관 보정치의 계산 방법은 다음과 같습니다
 
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
+```
+일반: 1
+클리어: 1.1
+풀콤: 1.3
+전량: 1.4
 ```

@@ -134,7 +134,7 @@
 				bonus = 1.1;
 			} else if (difficulty.crown === "gold") {
 				bonus = 1.3;
-			} else if (difficulty.crown === "donderful") {
+			} else if (difficulty.crown === "donderfull") {
 				bonus = 1.4;
 			}
 
