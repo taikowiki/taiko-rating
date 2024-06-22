@@ -64010,7 +64010,7 @@
     let secondSum = 0;
     if (ratings.length > 30) {
       for (let i2 = 30; i2 < Math.min(50, ratings.length); i2++) {
-        secondSum += ratings[i2].rating * 0.7;
+        secondSum += ratings[i2].rating * 0.9;
       }
     }
     let average = (firstSum + secondSum) / 50;
@@ -64022,12 +64022,12 @@
     }
     if (ratings.length > 100) {
       for (let i2 = 100; i2 < Math.min(150, ratings.length); i2++) {
-        otherSum += ratings[i2].rating * 5e-3;
+        otherSum += ratings[i2].rating * 1e-3;
       }
     }
     if (ratings.length > 150) {
       for (let i2 = 150; i2 < ratings.length; i2++) {
-        otherSum += ratings[i2].rating * 1e-3;
+        otherSum += ratings[i2].rating * 1e-4;
       }
     }
     return Math.round(average + otherSum);

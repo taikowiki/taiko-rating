@@ -70,7 +70,7 @@
 		let secondSum = 0;
 		if (ratings.length > 30) {
 			for (let i = 30; i < Math.min(50, ratings.length); i++) {
-				secondSum += ratings[i].rating * 0.7;
+				secondSum += ratings[i].rating * 0.9;
 			}
 		}
 
@@ -84,12 +84,12 @@
 		}
 		if (ratings.length > 100) {
 			for (let i = 100; i < Math.min(150, ratings.length); i++) {
-				otherSum += ratings[i].rating * 0.005;
+				otherSum += ratings[i].rating * 0.001;
 			}
 		}
 		if (ratings.length > 150) {
 			for (let i = 150; i < ratings.length; i++) {
-				otherSum += ratings[i].rating * 0.001;
+				otherSum += ratings[i].rating * 0.0001;
 			}
 		}
 
