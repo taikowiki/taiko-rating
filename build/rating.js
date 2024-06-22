@@ -64335,20 +64335,12 @@
     let { data: data2 } = $$props;
     let { measures } = $$props;
     const click_handler = async () => {
-      navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
-        if (result.state === "granted" || result.state === "prompt") {
-          try {
-            navigator.clipboard.writeText(JSON.stringify(data2));
-            alert("복사 완료");
-          } catch {
-            alert("복사 실패");
-          }
-        } else {
-          alert("복사 실패");
-        }
-      }).catch(() => {
+      try {
+        await navigator.clipboard.writeText(JSON.stringify(data2));
+        alert("복사 완료");
+      } catch {
         alert("복사 실패");
-      });
+      }
     };
     $$self.$$set = ($$props2) => {
       if ("data" in $$props2) $$invalidate(0, data2 = $$props2.data);
