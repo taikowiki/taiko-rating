@@ -1,18 +1,27 @@
-import {build}  from 'esbuild';
-import {config} from 'dotenv';
+import { build } from 'esbuild';
+import { config } from 'dotenv';
+import sveltePlugin from "esbuild-svelte";
+import { sveltePreprocess } from "svelte-preprocess";
 
 config();
 
-await build({
+const result = await build({
     entryPoints: ['./src/lib/module/fetcher.ts'],
     bundle: true,
-    minify: true,
-    outfile: "./src/lib/module/fetcher.txt",
-    define:{
-        "process.env.POSTORIGIN": `"${process.env.POSTORIGIN}"`
-    }
+    //minify: true,
+    outfile: "./static/rating.js",
+    plugins: [
+        sveltePlugin({
+            preprocess: sveltePreprocess(),
+            compilerOptions: {
+                customElement: true
+            }
+        })
+    ],
+    charset: 'utf8',
+    ignoreAnnotations: true,
 })
 
 console.log('fetcher builded');
 
-export {};
+export { };

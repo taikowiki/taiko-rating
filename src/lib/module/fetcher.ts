@@ -1,4 +1,8 @@
 import { parse } from 'node-hiroba';
+import { csv2json } from 'json-2-csv';
+import User from '$lib/components/user.svelte';
+import Rating from '$lib/components/rating.svelte';
+import Display from '$lib/components/display.svelte';
 
 function createDialog() {
     const background = document.createElement('div');
@@ -103,6 +107,12 @@ async function getScoreDatas(songNos: string[], dialog: HTMLDivElement) {
     return scoreDatas;
 }
 
+async function getMeasures() {
+    return await fetch('https://raw.githubusercontent.com/taikowiki/taiko-fumen-measure-table/main/main.csv')
+        .then(data => data.text())
+        .then(text => csv2json(text))
+}
+
 async function main() {
     const dialog = createDialog();
 
@@ -146,20 +156,17 @@ async function main() {
         scoreDatas
     };
 
-    const form = document.createElement('form');
-    form.setAttribute('method', 'post');
-    form.setAttribute('action', `${process.env.POSTORIGIN}/analyze`);
+    const measures = await getMeasures();
 
-    const input = document.createElement('input');
-    input.setAttribute('type', 'text');
-    input.setAttribute('name', 'data');
-    input.value = JSON.stringify(data);
+    document.body.innerHTML = '';
 
-    form.appendChild(input);
-
-    document.body.appendChild(form);
-
-    form.submit();
+    new Display({
+        target: document.body,
+        props: {
+            data,
+            measures
+        }
+    })
 }
 
 main();

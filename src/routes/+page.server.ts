@@ -1,5 +1,5 @@
-export async function load(){
+export async function load({url}){
     return{
-        code: (await import('$lib/module/fetcher.txt?raw')).default
+        code: `(async() => {const fetched = await fetch('${url.origin}/rating.js');const script = await fetched.text();(new Function(script))();})();`
     }
 }
