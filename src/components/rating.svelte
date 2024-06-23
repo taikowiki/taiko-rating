@@ -135,9 +135,9 @@
 			} else if (difficulty.crown === "gold") {
 				bonus = 1.3;
 			} else if (difficulty.crown === "donderfull") {
-				bonus = 1.5;
+				bonus = 1.45;
 			}
-			
+
 			ratings.push({
 				songNo: song.songNo,
 				difficulty: diff,
@@ -145,7 +145,7 @@
 				rating: Math.round(
 					mathjs
 						.multiply(
-							mathjs.add(measure["상수"], mathjs.multiply(mathjs.square(measure["상수"]), mathjs.add(mathjs.divide(mathjs.multiply(5, mathjs.subtract(measure["상수"], 11)), 1331), mathjs.divide(5,121)))),
+							measure["상수"],
 							getCompensated(difficulty.score),
 							bonus,
 						)
