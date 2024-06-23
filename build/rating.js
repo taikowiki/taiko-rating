@@ -64053,7 +64053,7 @@
         } else if (difficulty.crown === "gold") {
           bonus = 1.3;
         } else if (difficulty.crown === "donderfull") {
-          bonus = 1.5;
+          bonus = 1.45;
         }
         ratings.push({
           songNo: song.songNo,
