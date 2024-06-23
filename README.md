@@ -32,7 +32,7 @@ javascript:(async() => {const fetched = await fetch('https://raw.githubuserconte
 곡 별 레이팅의 계산 방법은 다음과 같습니다
 
 ```math
-\mathrm{곡 \, 별 \, 레이팅} = round(\mathrm{(점수의 \, 보정치)} \times \mathrm{(보면 \, 상수)} \times \mathrm{(왕관 \, 보정치)} \div 1000)
+\mathrm{곡 \, 별 \, 레이팅} = round(\mathrm{(점수의 \, 보정치)} \times \mathrm{(보면 \, 상수의 \, 보정치)} \times \mathrm{(왕관 \, 보정치)} \div 1000)
 ```
 
 #### 점수의 보정치
@@ -49,6 +49,14 @@ e^{\frac{ln400001}{600000}x} - 1 \quad (x < 600000)\\
 \end{cases}
 ```
 
+#### 보면 상수의 보정치
+
+보면 상수의 보정치 계산 방법은 다음과 같습니다.
+
+```math
+\mathrm{보정치}(x) = x + x^{2}(\frac{5(x-11)}{1331}+\frac{5}{121})
+```
+
 #### 왕관 보정치
 
 왕관 보정치의 계산 방법은 다음과 같습니다
@@ -57,5 +65,5 @@ e^{\frac{ln400001}{600000}x} - 1 \quad (x < 600000)\\
 일반: 1
 클리어: 1.1
 풀콤: 1.3
-전량: 1.45
+전량: 1.5
 ```

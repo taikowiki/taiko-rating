@@ -64059,7 +64059,7 @@
           songNo: song.songNo,
           difficulty: diff2,
           score: difficulty.score,
-          rating: Math.round(multiply(measure["상수"], getCompensated(difficulty.score), bonus).valueOf() / 1e3),
+          rating: Math.round(multiply(add3(measure["상수"], multiply(square(measure["상수"]), add3(divide2(multiply(5, subtract(measure["상수"], 11)), 1331), divide2(5, 121)))), getCompensated(difficulty.score), bonus).valueOf() / 1e3),
           title: measure["곡명"],
           crown: difficulty.crown
         });
