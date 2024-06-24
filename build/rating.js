@@ -64048,24 +64048,37 @@
         }
         const difficulty = song.difficulty[diff2];
         let bonus = 1;
-        if (difficulty.crown === "silver") {
+        if (difficulty.crown !== null && difficulty.crown !== "played") {
           bonus = 1.1;
-        } else if (difficulty.crown === "gold") {
-          bonus = 1.3;
-        } else if (difficulty.crown === "donderfull") {
-          bonus = 1.45;
+          let notes = difficulty.good + difficulty.ok + difficulty.bad;
+          let denom = 5 * notes;
+          bonus += multiply(0.4, divide2(5 * difficulty.good + 3 * difficulty.ok, denom)).valueOf();
+          if (difficulty.crown === "gold") {
+            bonus += 0.1;
+          } else if (difficulty.crown === "donderfull") {
+            bonus += 0.11;
+          }
         }
         ratings.push({
           songNo: song.songNo,
           difficulty: diff2,
           score: difficulty.score,
-          rating: Math.round(multiply(measure["상수"], getCompensated(difficulty.score), bonus).valueOf() / 1e3),
+          rating: difficulty.score ? Math.round(multiply(measure["상수"], getCompensated(difficulty.score), bonus).valueOf() / 1e3) : 0,
           title: measure["곡명"],
           crown: difficulty.crown
         });
       });
     });
     ratings.sort((a, b) => b.rating - a.rating);
+    console.log(ratings.map((rating) => {
+      let score = scoreDatas.find((scoreData) => scoreData.songNo === rating.songNo);
+      return {
+        title: score.title,
+        good: score.difficulty[rating.difficulty].good,
+        ok: score.difficulty[rating.difficulty].ok,
+        bad: score.difficulty[rating.difficulty].bad
+      };
+    }));
     $$self.$$set = ($$props2) => {
       if ("measures" in $$props2) $$invalidate(1, measures = $$props2.measures);
       if ("scoreDatas" in $$props2) $$invalidate(2, scoreDatas = $$props2.scoreDatas);
