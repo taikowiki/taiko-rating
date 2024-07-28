@@ -64141,7 +64141,7 @@
   }
   function get_each_context(ctx, list, i2) {
     const child_ctx = ctx.slice();
-    child_ctx[10] = list[i2];
+    child_ctx[12] = list[i2];
     return child_ctx;
   }
   function create_else_block(ctx) {
@@ -64166,11 +64166,20 @@
     let t5;
     let t6;
     let t7;
+    let div3;
     let button;
     let t9;
+    let div4;
+    let t10;
+    let t11;
+    let t12;
+    let div5;
+    let t13;
+    let t14;
+    let t15;
     let table;
     let tr;
-    let t21;
+    let t27;
     let mounted;
     let dispose;
     let each_value = ensure_array_like(
@@ -64198,13 +64207,28 @@
           ctx[4]
         );
         t7 = space();
+        div3 = element("div");
         button = element("button");
         button.textContent = "점수데이터 복사하기";
         t9 = space();
+        div4 = element("div");
+        t10 = text("정확도 100% 이론치: ");
+        t11 = text(
+          /*max100*/
+          ctx[5]
+        );
+        t12 = space();
+        div5 = element("div");
+        t13 = text("정확도 105% 이론치: ");
+        t14 = text(
+          /*max105*/
+          ctx[6]
+        );
+        t15 = space();
         table = element("table");
         tr = element("tr");
         tr.innerHTML = `<th class="svelte-vropj8">songNo</th> <th class="svelte-vropj8">곡명</th> <th class="svelte-vropj8">diff</th> <th class="svelte-vropj8">왕관</th> <th class="svelte-vropj8">정확도</th> <th class="svelte-vropj8">레이팅</th>`;
-        t21 = space();
+        t27 = space();
         for (let i2 = 0; i2 < each_blocks.length; i2 += 1) {
           each_blocks[i2].c();
         }
@@ -64216,6 +64240,9 @@
         attr(div1, "class", "svelte-vropj8");
         attr(div2, "class", "svelte-vropj8");
         attr(button, "class", "svelte-vropj8");
+        attr(div3, "class", "svelte-vropj8");
+        attr(div4, "class", "svelte-vropj8");
+        attr(div5, "class", "svelte-vropj8");
         attr(tr, "class", "svelte-vropj8");
         attr(table, "class", "svelte-vropj8");
       },
@@ -64232,11 +64259,20 @@
         append(div2, t5);
         append(div2, t6);
         insert(target, t7, anchor);
-        insert(target, button, anchor);
+        insert(target, div3, anchor);
+        append(div3, button);
         insert(target, t9, anchor);
+        insert(target, div4, anchor);
+        append(div4, t10);
+        append(div4, t11);
+        insert(target, t12, anchor);
+        insert(target, div5, anchor);
+        append(div5, t13);
+        append(div5, t14);
+        insert(target, t15, anchor);
         insert(target, table, anchor);
         append(table, tr);
-        append(table, t21);
+        append(table, t27);
         for (let i2 = 0; i2 < each_blocks.length; i2 += 1) {
           if (each_blocks[i2]) {
             each_blocks[i2].m(table, null);
@@ -64247,7 +64283,7 @@
             button,
             "click",
             /*copy*/
-            ctx[7]
+            ctx[9]
           );
           mounted = true;
         }
@@ -64269,6 +64305,18 @@
           t6,
           /*totalRating*/
           ctx2[4]
+        );
+        if (dirty & /*max100*/
+        32) set_data(
+          t11,
+          /*max100*/
+          ctx2[5]
+        );
+        if (dirty & /*max105*/
+        64) set_data(
+          t14,
+          /*max105*/
+          ctx2[6]
         );
         if (dirty & /*ratings, Math*/
         8) {
@@ -64301,8 +64349,12 @@
           detach(t4);
           detach(div2);
           detach(t7);
-          detach(button);
+          detach(div3);
           detach(t9);
+          detach(div4);
+          detach(t12);
+          detach(div5);
+          detach(t15);
           detach(table);
         }
         destroy_each(each_blocks, detaching);
@@ -64320,7 +64372,7 @@
       c() {
         t0 = text(
           /*$completed*/
-          ctx[5]
+          ctx[7]
         );
         t1 = text("/");
         t2 = text(
@@ -64337,10 +64389,10 @@
       },
       p(ctx2, dirty) {
         if (dirty & /*$completed*/
-        32) set_data(
+        128) set_data(
           t0,
           /*$completed*/
-          ctx2[5]
+          ctx2[7]
         );
         if (dirty & /*totals*/
         4) set_data(
@@ -64381,35 +64433,35 @@
     let td0;
     let t0_value = (
       /*rating*/
-      ctx[10].songNo + ""
+      ctx[12].songNo + ""
     );
     let t0;
     let t1;
     let td1;
     let t2_value = (
       /*rating*/
-      ctx[10].title + ""
+      ctx[12].title + ""
     );
     let t2;
     let t3;
     let td2;
     let t4_value = (
       /*rating*/
-      ctx[10].diff + ""
+      ctx[12].diff + ""
     );
     let t4;
     let t5;
     let td3;
     let t6_value = (
       /*rating*/
-      ctx[10].crown + ""
+      ctx[12].crown + ""
     );
     let t6;
     let t7;
     let td4;
     let t8_value = Math.min(Math.round(
       /*rating*/
-      ctx[10].accuracy * 1e4
+      ctx[12].accuracy * 1e4
     ) / 1e4, 105) + "";
     let t8;
     let t9;
@@ -64417,7 +64469,7 @@
     let td5;
     let t11_value = (
       /*rating*/
-      ctx[10].rating + ""
+      ctx[12].rating + ""
     );
     let t11;
     let t12;
@@ -64476,24 +64528,24 @@
       p(ctx2, dirty) {
         if (dirty & /*ratings*/
         8 && t0_value !== (t0_value = /*rating*/
-        ctx2[10].songNo + "")) set_data(t0, t0_value);
+        ctx2[12].songNo + "")) set_data(t0, t0_value);
         if (dirty & /*ratings*/
         8 && t2_value !== (t2_value = /*rating*/
-        ctx2[10].title + "")) set_data(t2, t2_value);
+        ctx2[12].title + "")) set_data(t2, t2_value);
         if (dirty & /*ratings*/
         8 && t4_value !== (t4_value = /*rating*/
-        ctx2[10].diff + "")) set_data(t4, t4_value);
+        ctx2[12].diff + "")) set_data(t4, t4_value);
         if (dirty & /*ratings*/
         8 && t6_value !== (t6_value = /*rating*/
-        ctx2[10].crown + "")) set_data(t6, t6_value);
+        ctx2[12].crown + "")) set_data(t6, t6_value);
         if (dirty & /*ratings*/
         8 && t8_value !== (t8_value = Math.min(Math.round(
           /*rating*/
-          ctx2[10].accuracy * 1e4
+          ctx2[12].accuracy * 1e4
         ) / 1e4, 105) + "")) set_data(t8, t8_value);
         if (dirty & /*ratings*/
         8 && t11_value !== (t11_value = /*rating*/
-        ctx2[10].rating + "")) set_data(t11, t11_value);
+        ctx2[12].rating + "")) set_data(t11, t11_value);
       },
       d(detaching) {
         if (detaching) {
@@ -64553,12 +64605,14 @@
     let $completed;
     let scene = "songno";
     const completed = writable(0);
-    component_subscribe($$self, completed, (value) => $$invalidate(5, $completed = value));
+    component_subscribe($$self, completed, (value) => $$invalidate(7, $completed = value));
     let totals = 0;
     let { scoreDatas = void 0 } = $$props;
     let ratings;
     let totalRating;
     let { user = void 0 } = $$props;
+    let max100;
+    let max105;
     async function main2() {
       if (!user) {
         $$invalidate(0, user = await getUser());
@@ -64567,11 +64621,38 @@
       $$invalidate(2, totals = songs.length);
       $$invalidate(1, scene = "crawl");
       if (!scoreDatas) {
-        $$invalidate(8, scoreDatas = await getScoreDatas(songs, completed));
+        $$invalidate(10, scoreDatas = await getScoreDatas(songs, completed));
       }
-      $$invalidate(3, ratings = getRatings(scoreDatas, await getMeasures()));
+      const measures = await getMeasures();
+      $$invalidate(3, ratings = getRatings(scoreDatas, measures));
       $$invalidate(4, totalRating = getTotalRating(ratings));
       $$invalidate(1, scene = "result");
+      let max100Ratings = [];
+      measures.forEach((measure) => {
+        const r = {
+          songNo: `${measure.songno}`,
+          title: measure["곡명"],
+          level: measure["원본레벨"],
+          diff: measure["diff"],
+          crown: "donderful",
+          accuracy: 100,
+          rating: Math.round(measure["상수"] * 100 * getCrownBonus("donderfull") / 1e3)
+        };
+      });
+      $$invalidate(5, max100 = getTotalRating(max100Ratings));
+      let max105Ratings = [];
+      measures.forEach((measure) => {
+        const r = {
+          songNo: `${measure.songno}`,
+          title: measure["곡명"],
+          level: measure["원본레벨"],
+          diff: measure["diff"],
+          crown: "donderful",
+          accuracy: 105,
+          rating: Math.round(measure["상수"] * 105 * getCrownBonus("donderfull") / 1e3)
+        };
+      });
+      $$invalidate(6, max105 = getTotalRating(max105Ratings));
       console.log(ratings);
     }
     async function copy() {
@@ -64593,7 +64674,7 @@
     }
     main2();
     $$self.$$set = ($$props2) => {
-      if ("scoreDatas" in $$props2) $$invalidate(8, scoreDatas = $$props2.scoreDatas);
+      if ("scoreDatas" in $$props2) $$invalidate(10, scoreDatas = $$props2.scoreDatas);
       if ("user" in $$props2) $$invalidate(0, user = $$props2.user);
     };
     return [
@@ -64602,6 +64683,8 @@
       totals,
       ratings,
       totalRating,
+      max100,
+      max105,
       $completed,
       completed,
       copy,
@@ -64611,10 +64694,10 @@
   var Main = class extends SvelteComponent {
     constructor(options) {
       super();
-      init(this, options, instance, create_fragment, safe_not_equal, { scoreDatas: 8, user: 0 }, add_css);
+      init(this, options, instance, create_fragment, safe_not_equal, { scoreDatas: 10, user: 0 }, add_css);
     }
     get scoreDatas() {
-      return this.$$.ctx[8];
+      return this.$$.ctx[10];
     }
     set scoreDatas(scoreDatas) {
       this.$$set({ scoreDatas });

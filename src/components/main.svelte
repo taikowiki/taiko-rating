@@ -10,6 +10,7 @@
     import { getScoreDatas } from "../module/getScoreDatas";
     import { getMeasures } from "../module/getMeasures";
     import { getUser } from "../module/getUser";
+    import { getCrownBonus } from "../module/calculateRating";
 
     let scene: "songno" | "crawl" | "result" = "songno";
 
@@ -19,6 +20,8 @@
     let ratings: Rating[];
     let totalRating: number;
     export let user: CardData | undefined = undefined;
+    let max100: number;
+    let max105: number;
 
     async function main() {
         if (!user) {
@@ -33,43 +36,73 @@
         if (!scoreDatas) {
             scoreDatas = await getScoreDatas(songs, completed);
         }
-        ratings = getRatings(scoreDatas, await getMeasures());
+        const measures = await getMeasures();
+        ratings = getRatings(scoreDatas, measures);
         totalRating = getTotalRating(ratings);
 
         scene = "result";
 
+        let max100Ratings: Rating[] = [];
+        measures.forEach((measure) => {
+            const r: Rating = {
+                songNo: `${measure.songno}`,
+                title: measure["곡명"],
+                level: measure["원본레벨"],
+                diff: measure["diff"],
+                crown: "donderful",
+                accuracy: 100,
+                rating: Math.round(
+                    (measure["상수"] * 100 * getCrownBonus("donderfull")) /
+                        1000,
+                ),
+            };
+        });
+        max100 = getTotalRating(max100Ratings);
+
+        let max105Ratings: Rating[] = [];
+        measures.forEach((measure) => {
+            const r: Rating = {
+                songNo: `${measure.songno}`,
+                title: measure["곡명"],
+                level: measure["원본레벨"],
+                diff: measure["diff"],
+                crown: "donderful",
+                accuracy: 105,
+                rating: Math.round(
+                    (measure["상수"] * 105 * getCrownBonus("donderfull")) /
+                        1000,
+                ),
+            };
+        });
+        max105 = getTotalRating(max105Ratings);
+
         console.log(ratings);
     }
 
-    async function copy(){
+    async function copy() {
         navigator.permissions
-        //@ts-expect-error
-        .query({ name: "clipboard-write" })
-        .then((result) => {
-            if (
-                result.state === "granted" ||
-                result.state === "prompt"
-            ) {
-                try {
-                    const data = {
-                        userData: user,
-                        scoreDatas
-                    }
+            //@ts-expect-error
+            .query({ name: "clipboard-write" })
+            .then((result) => {
+                if (result.state === "granted" || result.state === "prompt") {
+                    try {
+                        const data = {
+                            userData: user,
+                            scoreDatas,
+                        };
 
-                    navigator.clipboard.writeText(
-                        JSON.stringify(data),
-                    );
-                    alert("복사 완료");
-                } catch {
+                        navigator.clipboard.writeText(JSON.stringify(data));
+                        alert("복사 완료");
+                    } catch {
+                        alert("복사 실패");
+                    }
+                } else {
                     alert("복사 실패");
                 }
-            } else {
+            })
+            .catch(() => {
                 alert("복사 실패");
-            }
-        })
-        .catch(() => {
-            alert("복사 실패");
-        });
+            });
     }
 
     main();
@@ -91,9 +124,15 @@
         <div>
             레이팅: {totalRating}
         </div>
-        <button
-            on:click={copy}>점수데이터 복사하기</button
-        >
+        <div>
+            <button on:click={copy}>점수데이터 복사하기</button>
+        </div>
+        <div>
+            정확도 100% 이론치: {max100}
+        </div>
+        <div>
+            정확도 105% 이론치: {max105}
+        </div>
         <table>
             <tr>
                 <th> songNo </th>

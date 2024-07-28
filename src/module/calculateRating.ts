@@ -9,7 +9,7 @@ export function calculateRating(difficultyScoreData: DifficultyScoreData, maxCom
     return Math.round(measure * compensatedPercentage * getCrownBonus(difficultyScoreData.crown) / 1000);
 }
 
-function getCrownBonus(crown: Crown) {
+export function getCrownBonus(crown: Crown) {
     switch (crown) {
         case ('played'): {
             return 0.7
@@ -29,7 +29,7 @@ function getCrownBonus(crown: Crown) {
     }
 }
 
-function getCompensated(percentage: number): number {
+export function getCompensated(percentage: number): number {
     const multiplied = percentage * 10000;
 
     let compensated: number;
