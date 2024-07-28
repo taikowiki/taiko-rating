@@ -11,7 +11,7 @@
     import { getScoreDatas } from "../module/getScoreDatas";
     import { getMeasures } from "../module/getMeasures";
     import { getUser } from "../module/getUser";
-    import { getCrownBonus } from "../module/calculateRating";
+    import { getCompensated, getCrownBonus } from "../module/calculateRating";
 
     let scene: "songno" | "crawl" | "result" = "songno";
 
@@ -55,7 +55,7 @@
                 crown: "donderful",
                 accuracy: 100,
                 rating: Math.round(
-                    (measure["상수"] * 1000000 * getCrownBonus("donderfull")) /
+                    (measure["상수"] * getCompensated(100) * getCrownBonus("donderfull")) /
                         1000,
                 ),
             };
@@ -74,7 +74,7 @@
                 crown: "donderful",
                 accuracy: 105,
                 rating: Math.round(
-                    (measure["상수"] * 1050000 * getCrownBonus("donderfull")) /
+                    (measure["상수"] * getCompensated(105) * getCrownBonus("donderfull")) /
                         1000,
                 ),
             };

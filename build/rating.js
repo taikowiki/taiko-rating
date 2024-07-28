@@ -64718,7 +64718,7 @@
           diff: measure["diff"],
           crown: "donderful",
           accuracy: 100,
-          rating: Math.round(measure["상수"] * 1e6 * getCrownBonus("donderfull") / 1e3)
+          rating: Math.round(measure["상수"] * getCompensated(100) * getCrownBonus("donderfull") / 1e3)
         };
         max100Ratings.push(r);
       });
@@ -64733,7 +64733,7 @@
           diff: measure["diff"],
           crown: "donderful",
           accuracy: 105,
-          rating: Math.round(measure["상수"] * 105e4 * getCrownBonus("donderfull") / 1e3)
+          rating: Math.round(measure["상수"] * getCompensated(105) * getCrownBonus("donderfull") / 1e3)
         };
         max105Ratings.push(r);
       });
