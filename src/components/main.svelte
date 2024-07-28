@@ -3,8 +3,9 @@
     import { getSongs } from "../module/getSongs";
     import {
         getRatings,
-        getTotalRating,
+        getCompetitive,
         type Rating,
+        getVertex,
     } from "../module/getRatings";
     import type { CardData, ScoreData } from "node-hiroba/types";
     import { getScoreDatas } from "../module/getScoreDatas";
@@ -18,10 +19,13 @@
     let totals: number = 0;
     export let scoreDatas: ScoreData[] | undefined = undefined;
     let ratings: Rating[];
-    let totalRating: number;
+    let competitive: number;
+    let vertex: number = 0;
     export let user: CardData | undefined = undefined;
-    let max100: number;
-    let max105: number;
+    let max100competitive: number;
+    let max100vertex: number;
+    let max105competitive: number;
+    let max105vertex: number;
 
     async function main() {
         if (!user) {
@@ -38,7 +42,8 @@
         }
         const measures = await getMeasures();
         ratings = getRatings(scoreDatas, measures);
-        totalRating = getTotalRating(ratings);
+        competitive = getCompetitive(ratings);
+        vertex = getVertex(ratings);
 
         let max100Ratings: Rating[] = [];
         measures.forEach((measure) => {
@@ -56,7 +61,8 @@
             };
             max100Ratings.push(r)
         });
-        max100 = getTotalRating(max100Ratings);
+        max100competitive = getCompetitive(max100Ratings);
+        max100vertex = getVertex(max100Ratings);
 
         let max105Ratings: Rating[] = [];
         measures.forEach((measure) => {
@@ -74,7 +80,8 @@
             };
             max105Ratings.push(r)
         });
-        max105 = getTotalRating(max105Ratings);
+        max105competitive = getCompetitive(max105Ratings);
+        max105vertex = getVertex(max105Ratings);
 
         scene = "result";
     }
@@ -122,16 +129,25 @@
             <img src={user?.myDon} alt="" />
         </div>
         <div>
-            레이팅: {totalRating}
+            경쟁 레이팅: {competitive}
+        </div>
+        <div>
+            표준 레이팅: {vertex}
         </div>
         <div>
             <button on:click={copy}>점수데이터 복사하기</button>
         </div>
         <div>
-            정확도 100% 이론치: {max100}
+            정확도 100% 경쟁 이론치: {max100competitive}
         </div>
         <div>
-            정확도 105% 이론치: {max105}
+            정확도 100% 표준 이론치: {max100vertex}
+        </div>
+        <div>
+            정확도 105% 경쟁 이론치: {max105competitive}
+        </div>
+        <div>
+            정확도 105% 표준 이론치: {max105vertex}
         </div>
         <table>
             <tr>

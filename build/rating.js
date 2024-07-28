@@ -64010,7 +64010,7 @@
     });
     return ratings.sort((a, b) => b.rating - a.rating);
   }
-  function getTotalRating(ratings) {
+  function getCompetitive(ratings) {
     let firstSum = 0;
     for (let i2 = 0; i2 < Math.min(30, ratings.length); i2++) {
       firstSum += ratings[i2].rating;
@@ -64039,6 +64039,13 @@
       }
     }
     return Math.round(average + otherSum);
+  }
+  function getVertex(ratings) {
+    let sum3 = 0;
+    for (let i2 = 0; i2 < Math.min(ratings.length, 50); i2++) {
+      sum3 += ratings[i2].rating;
+    }
+    return Math.floor(sum3 / 50);
   }
 
   // src/module/getScoreDatas.ts
@@ -64141,7 +64148,7 @@
   }
   function get_each_context(ctx, list, i2) {
     const child_ctx = ctx.slice();
-    child_ctx[12] = list[i2];
+    child_ctx[15] = list[i2];
     return child_ctx;
   }
   function create_else_block(ctx) {
@@ -64167,19 +64174,31 @@
     let t6;
     let t7;
     let div3;
-    let button;
+    let t8;
     let t9;
-    let div4;
     let t10;
-    let t11;
+    let div4;
+    let button;
     let t12;
     let div5;
     let t13;
     let t14;
     let t15;
+    let div6;
+    let t16;
+    let t17;
+    let t18;
+    let div7;
+    let t19;
+    let t20;
+    let t21;
+    let div8;
+    let t22;
+    let t23;
+    let t24;
     let table;
     let tr;
-    let t27;
+    let t36;
     let mounted;
     let dispose;
     let each_value = ensure_array_like(
@@ -64201,34 +64220,55 @@
         img = element("img");
         t4 = space();
         div2 = element("div");
-        t5 = text("레이팅: ");
+        t5 = text("경쟁 레이팅: ");
         t6 = text(
-          /*totalRating*/
+          /*competitive*/
           ctx[4]
         );
         t7 = space();
         div3 = element("div");
-        button = element("button");
-        button.textContent = "점수데이터 복사하기";
-        t9 = space();
-        div4 = element("div");
-        t10 = text("정확도 100% 이론치: ");
-        t11 = text(
-          /*max100*/
+        t8 = text("표준 레이팅: ");
+        t9 = text(
+          /*vertex*/
           ctx[5]
         );
+        t10 = space();
+        div4 = element("div");
+        button = element("button");
+        button.textContent = "점수데이터 복사하기";
         t12 = space();
         div5 = element("div");
-        t13 = text("정확도 105% 이론치: ");
+        t13 = text("정확도 100% 경쟁 이론치: ");
         t14 = text(
-          /*max105*/
+          /*max100competitive*/
           ctx[6]
         );
         t15 = space();
+        div6 = element("div");
+        t16 = text("정확도 100% 표준 이론치: ");
+        t17 = text(
+          /*max100vertex*/
+          ctx[7]
+        );
+        t18 = space();
+        div7 = element("div");
+        t19 = text("정확도 105% 경쟁 이론치: ");
+        t20 = text(
+          /*max105competitive*/
+          ctx[8]
+        );
+        t21 = space();
+        div8 = element("div");
+        t22 = text("정확도 105% 표준 이론치: ");
+        t23 = text(
+          /*max105vertex*/
+          ctx[9]
+        );
+        t24 = space();
         table = element("table");
         tr = element("tr");
         tr.innerHTML = `<th class="svelte-vropj8">songNo</th> <th class="svelte-vropj8">곡명</th> <th class="svelte-vropj8">diff</th> <th class="svelte-vropj8">왕관</th> <th class="svelte-vropj8">정확도</th> <th class="svelte-vropj8">레이팅</th>`;
-        t27 = space();
+        t36 = space();
         for (let i2 = 0; i2 < each_blocks.length; i2 += 1) {
           each_blocks[i2].c();
         }
@@ -64239,10 +64279,13 @@
         attr(img, "class", "svelte-vropj8");
         attr(div1, "class", "svelte-vropj8");
         attr(div2, "class", "svelte-vropj8");
-        attr(button, "class", "svelte-vropj8");
         attr(div3, "class", "svelte-vropj8");
+        attr(button, "class", "svelte-vropj8");
         attr(div4, "class", "svelte-vropj8");
         attr(div5, "class", "svelte-vropj8");
+        attr(div6, "class", "svelte-vropj8");
+        attr(div7, "class", "svelte-vropj8");
+        attr(div8, "class", "svelte-vropj8");
         attr(tr, "class", "svelte-vropj8");
         attr(table, "class", "svelte-vropj8");
       },
@@ -64260,19 +64303,31 @@
         append(div2, t6);
         insert(target, t7, anchor);
         insert(target, div3, anchor);
-        append(div3, button);
-        insert(target, t9, anchor);
+        append(div3, t8);
+        append(div3, t9);
+        insert(target, t10, anchor);
         insert(target, div4, anchor);
-        append(div4, t10);
-        append(div4, t11);
+        append(div4, button);
         insert(target, t12, anchor);
         insert(target, div5, anchor);
         append(div5, t13);
         append(div5, t14);
         insert(target, t15, anchor);
+        insert(target, div6, anchor);
+        append(div6, t16);
+        append(div6, t17);
+        insert(target, t18, anchor);
+        insert(target, div7, anchor);
+        append(div7, t19);
+        append(div7, t20);
+        insert(target, t21, anchor);
+        insert(target, div8, anchor);
+        append(div8, t22);
+        append(div8, t23);
+        insert(target, t24, anchor);
         insert(target, table, anchor);
         append(table, tr);
-        append(table, t27);
+        append(table, t36);
         for (let i2 = 0; i2 < each_blocks.length; i2 += 1) {
           if (each_blocks[i2]) {
             each_blocks[i2].m(table, null);
@@ -64283,7 +64338,7 @@
             button,
             "click",
             /*copy*/
-            ctx[9]
+            ctx[12]
           );
           mounted = true;
         }
@@ -64300,23 +64355,41 @@
         ctx2[0]?.myDon)) {
           attr(img, "src", img_src_value);
         }
-        if (dirty & /*totalRating*/
+        if (dirty & /*competitive*/
         16) set_data(
           t6,
-          /*totalRating*/
+          /*competitive*/
           ctx2[4]
         );
-        if (dirty & /*max100*/
+        if (dirty & /*vertex*/
         32) set_data(
-          t11,
-          /*max100*/
+          t9,
+          /*vertex*/
           ctx2[5]
         );
-        if (dirty & /*max105*/
+        if (dirty & /*max100competitive*/
         64) set_data(
           t14,
-          /*max105*/
+          /*max100competitive*/
           ctx2[6]
+        );
+        if (dirty & /*max100vertex*/
+        128) set_data(
+          t17,
+          /*max100vertex*/
+          ctx2[7]
+        );
+        if (dirty & /*max105competitive*/
+        256) set_data(
+          t20,
+          /*max105competitive*/
+          ctx2[8]
+        );
+        if (dirty & /*max105vertex*/
+        512) set_data(
+          t23,
+          /*max105vertex*/
+          ctx2[9]
         );
         if (dirty & /*ratings, Math*/
         8) {
@@ -64350,11 +64423,17 @@
           detach(div2);
           detach(t7);
           detach(div3);
-          detach(t9);
+          detach(t10);
           detach(div4);
           detach(t12);
           detach(div5);
           detach(t15);
+          detach(div6);
+          detach(t18);
+          detach(div7);
+          detach(t21);
+          detach(div8);
+          detach(t24);
           detach(table);
         }
         destroy_each(each_blocks, detaching);
@@ -64372,7 +64451,7 @@
       c() {
         t0 = text(
           /*$completed*/
-          ctx[7]
+          ctx[10]
         );
         t1 = text("/");
         t2 = text(
@@ -64389,10 +64468,10 @@
       },
       p(ctx2, dirty) {
         if (dirty & /*$completed*/
-        128) set_data(
+        1024) set_data(
           t0,
           /*$completed*/
-          ctx2[7]
+          ctx2[10]
         );
         if (dirty & /*totals*/
         4) set_data(
@@ -64433,35 +64512,35 @@
     let td0;
     let t0_value = (
       /*rating*/
-      ctx[12].songNo + ""
+      ctx[15].songNo + ""
     );
     let t0;
     let t1;
     let td1;
     let t2_value = (
       /*rating*/
-      ctx[12].title + ""
+      ctx[15].title + ""
     );
     let t2;
     let t3;
     let td2;
     let t4_value = (
       /*rating*/
-      ctx[12].diff + ""
+      ctx[15].diff + ""
     );
     let t4;
     let t5;
     let td3;
     let t6_value = (
       /*rating*/
-      ctx[12].crown + ""
+      ctx[15].crown + ""
     );
     let t6;
     let t7;
     let td4;
     let t8_value = Math.min(Math.round(
       /*rating*/
-      ctx[12].accuracy * 1e4
+      ctx[15].accuracy * 1e4
     ) / 1e4, 105) + "";
     let t8;
     let t9;
@@ -64469,7 +64548,7 @@
     let td5;
     let t11_value = (
       /*rating*/
-      ctx[12].rating + ""
+      ctx[15].rating + ""
     );
     let t11;
     let t12;
@@ -64528,24 +64607,24 @@
       p(ctx2, dirty) {
         if (dirty & /*ratings*/
         8 && t0_value !== (t0_value = /*rating*/
-        ctx2[12].songNo + "")) set_data(t0, t0_value);
+        ctx2[15].songNo + "")) set_data(t0, t0_value);
         if (dirty & /*ratings*/
         8 && t2_value !== (t2_value = /*rating*/
-        ctx2[12].title + "")) set_data(t2, t2_value);
+        ctx2[15].title + "")) set_data(t2, t2_value);
         if (dirty & /*ratings*/
         8 && t4_value !== (t4_value = /*rating*/
-        ctx2[12].diff + "")) set_data(t4, t4_value);
+        ctx2[15].diff + "")) set_data(t4, t4_value);
         if (dirty & /*ratings*/
         8 && t6_value !== (t6_value = /*rating*/
-        ctx2[12].crown + "")) set_data(t6, t6_value);
+        ctx2[15].crown + "")) set_data(t6, t6_value);
         if (dirty & /*ratings*/
         8 && t8_value !== (t8_value = Math.min(Math.round(
           /*rating*/
-          ctx2[12].accuracy * 1e4
+          ctx2[15].accuracy * 1e4
         ) / 1e4, 105) + "")) set_data(t8, t8_value);
         if (dirty & /*ratings*/
         8 && t11_value !== (t11_value = /*rating*/
-        ctx2[12].rating + "")) set_data(t11, t11_value);
+        ctx2[15].rating + "")) set_data(t11, t11_value);
       },
       d(detaching) {
         if (detaching) {
@@ -64605,14 +64684,17 @@
     let $completed;
     let scene = "songno";
     const completed = writable(0);
-    component_subscribe($$self, completed, (value) => $$invalidate(7, $completed = value));
+    component_subscribe($$self, completed, (value) => $$invalidate(10, $completed = value));
     let totals = 0;
     let { scoreDatas = void 0 } = $$props;
     let ratings;
-    let totalRating;
+    let competitive;
+    let vertex = 0;
     let { user = void 0 } = $$props;
-    let max100;
-    let max105;
+    let max100competitive;
+    let max100vertex;
+    let max105competitive;
+    let max105vertex;
     async function main2() {
       if (!user) {
         $$invalidate(0, user = await getUser());
@@ -64621,11 +64703,12 @@
       $$invalidate(2, totals = songs.length);
       $$invalidate(1, scene = "crawl");
       if (!scoreDatas) {
-        $$invalidate(10, scoreDatas = await getScoreDatas(songs, completed));
+        $$invalidate(13, scoreDatas = await getScoreDatas(songs, completed));
       }
       const measures = await getMeasures();
       $$invalidate(3, ratings = getRatings(scoreDatas, measures));
-      $$invalidate(4, totalRating = getTotalRating(ratings));
+      $$invalidate(4, competitive = getCompetitive(ratings));
+      $$invalidate(5, vertex = getVertex(ratings));
       let max100Ratings = [];
       measures.forEach((measure) => {
         const r = {
@@ -64639,7 +64722,8 @@
         };
         max100Ratings.push(r);
       });
-      $$invalidate(5, max100 = getTotalRating(max100Ratings));
+      $$invalidate(6, max100competitive = getCompetitive(max100Ratings));
+      $$invalidate(7, max100vertex = getVertex(max100Ratings));
       let max105Ratings = [];
       measures.forEach((measure) => {
         const r = {
@@ -64653,7 +64737,8 @@
         };
         max105Ratings.push(r);
       });
-      $$invalidate(6, max105 = getTotalRating(max105Ratings));
+      $$invalidate(8, max105competitive = getCompetitive(max105Ratings));
+      $$invalidate(9, max105vertex = getVertex(max105Ratings));
       $$invalidate(1, scene = "result");
     }
     async function copy() {
@@ -64675,7 +64760,7 @@
     }
     main2();
     $$self.$$set = ($$props2) => {
-      if ("scoreDatas" in $$props2) $$invalidate(10, scoreDatas = $$props2.scoreDatas);
+      if ("scoreDatas" in $$props2) $$invalidate(13, scoreDatas = $$props2.scoreDatas);
       if ("user" in $$props2) $$invalidate(0, user = $$props2.user);
     };
     return [
@@ -64683,9 +64768,12 @@
       scene,
       totals,
       ratings,
-      totalRating,
-      max100,
-      max105,
+      competitive,
+      vertex,
+      max100competitive,
+      max100vertex,
+      max105competitive,
+      max105vertex,
       $completed,
       completed,
       copy,
@@ -64695,10 +64783,10 @@
   var Main = class extends SvelteComponent {
     constructor(options) {
       super();
-      init(this, options, instance, create_fragment, safe_not_equal, { scoreDatas: 10, user: 0 }, add_css);
+      init(this, options, instance, create_fragment, safe_not_equal, { scoreDatas: 13, user: 0 }, add_css);
     }
     get scoreDatas() {
-      return this.$$.ctx[10];
+      return this.$$.ctx[13];
     }
     set scoreDatas(scoreDatas) {
       this.$$set({ scoreDatas });

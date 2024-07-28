@@ -55,7 +55,7 @@ export function getRatings(scoreDatas: ScoreData[], measures: Measure[]) {
     return ratings.sort((a, b) => b.rating - a.rating);
 }
 
-export function getTotalRating(ratings: Rating[]): number {
+export function getCompetitive(ratings: Rating[]): number {
     let firstSum = 0;
     for (let i = 0; i < Math.min(30, ratings.length); i++) {
         firstSum += ratings[i].rating;
@@ -87,4 +87,12 @@ export function getTotalRating(ratings: Rating[]): number {
     }
 
     return Math.round(average + otherSum);
+}
+
+export function getVertex(ratings:Rating[]){
+    let sum = 0;
+    for(let i = 0; i < Math.min(ratings.length, 50); i++){
+        sum += ratings[i].rating;
+    }
+    return Math.floor(sum/50)
 }
