@@ -12,11 +12,11 @@
 javascript:(async() => {const fetched = await fetch('https://raw.githubusercontent.com/taikowiki/taiko-rating/main/build/rating.js');const script = await fetched.text();(new Function(script))();})();
 ```
 
-## 레이팅
+## 경쟁 레이팅
 
-사용자의 플레이 기록을 이용하여 레이팅을 계산합니다.
+사용자의 플레이 기록을 이용하여 경쟁 레이팅 계산합니다.
 
-레이팅의 계산 방법은 다음과 같습니다.
+경쟁 레이팅 계산 방법은 다음과 같습니다.
 
 ```math
 \begin{align}
@@ -28,6 +28,14 @@ javascript:(async() => {const fetched = await fetch('https://raw.githubuserconte
 &레이팅 = round(\frac{A + 0.9\times B}{50} + 0.01 \times C + 0.001 \times D + 0.0001 \times E)
 \end{align}
 ```
+
+## 표준 레이팅
+
+표준레이팅은 
+```math
+(상위\,50개\,곡별\,레이팅의\,합) / 50
+```
+ 입니다.
 
 ### 곡 별 레이팅
 
