@@ -18,7 +18,7 @@
     export let scoreDatas: ScoreData[] | undefined = undefined;
     let ratings: Rating[];
     let totalRating: number;
-    export let user: CardData | undefined = undefined;;
+    export let user: CardData | undefined = undefined;
 
     async function main() {
         if (!user) {
@@ -41,6 +41,37 @@
         console.log(ratings);
     }
 
+    async function copy(){
+        navigator.permissions
+        //@ts-expect-error
+        .query({ name: "clipboard-write" })
+        .then((result) => {
+            if (
+                result.state === "granted" ||
+                result.state === "prompt"
+            ) {
+                try {
+                    const data = {
+                        userData: user,
+                        scoreDatas
+                    }
+
+                    navigator.clipboard.writeText(
+                        JSON.stringify(data),
+                    );
+                    alert("복사 완료");
+                } catch {
+                    alert("복사 실패");
+                }
+            } else {
+                alert("복사 실패");
+            }
+        })
+        .catch(() => {
+            alert("복사 실패");
+        });
+    }
+
     main();
 </script>
 
@@ -60,6 +91,9 @@
         <div>
             레이팅: {totalRating}
         </div>
+        <button
+            on:click={copy}>점수데이터 복사하기</button
+        >
         <table>
             <tr>
                 <th> songNo </th>
@@ -84,7 +118,10 @@
                         {rating.crown}
                     </td>
                     <td>
-                        {Math.min(Math.round(rating.accuracy * 10000) / 10000, 105)}%
+                        {Math.min(
+                            Math.round(rating.accuracy * 10000) / 10000,
+                            105,
+                        )}%
                     </td>
                     <td>
                         {rating.rating}
@@ -111,13 +148,14 @@
         align-items: center;
     }
 
-    table{
+    table {
         max-width: 100%;
 
         border-collapse: collapse;
     }
 
-    th, td {
+    th,
+    td {
         text-align: center;
         border: 1px solid black;
     }
