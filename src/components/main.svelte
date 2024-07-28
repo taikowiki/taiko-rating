@@ -98,6 +98,8 @@
 <style>
     :default(html, body) {
         height: 99%;
+
+        background-color: white;
     }
 
     .container {

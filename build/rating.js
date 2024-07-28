@@ -64133,7 +64133,7 @@
 
   // src/components/main.svelte
   function add_css(target) {
-    append_styles(target, "svelte-143s3ri", ".svelte-143s3ri:default(html, body){height:99%}.container.svelte-143s3ri{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center}table.svelte-143s3ri{max-width:100%;border-collapse:collapse}th.svelte-143s3ri,td.svelte-143s3ri{text-align:center;border:1px solid black}");
+    append_styles(target, "svelte-vmuw9s", ".svelte-vmuw9s:default(html, body){height:99%;background-color:white}.container.svelte-vmuw9s{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center}table.svelte-vmuw9s{max-width:100%;border-collapse:collapse}th.svelte-vmuw9s,td.svelte-vmuw9s{text-align:center;border:1px solid black}");
   }
   function get_each_context(ctx, list, i2) {
     const child_ctx = ctx.slice();
@@ -64192,20 +64192,20 @@
         t7 = space();
         table = element("table");
         tr = element("tr");
-        tr.innerHTML = `<th class="svelte-143s3ri">songNo</th> <th class="svelte-143s3ri">곡명</th> <th class="svelte-143s3ri">diff</th> <th class="svelte-143s3ri">왕관</th> <th class="svelte-143s3ri">정확도</th> <th class="svelte-143s3ri">레이팅</th>`;
+        tr.innerHTML = `<th class="svelte-vmuw9s">songNo</th> <th class="svelte-vmuw9s">곡명</th> <th class="svelte-vmuw9s">diff</th> <th class="svelte-vmuw9s">왕관</th> <th class="svelte-vmuw9s">정확도</th> <th class="svelte-vmuw9s">레이팅</th>`;
         t19 = space();
         for (let i2 = 0; i2 < each_blocks.length; i2 += 1) {
           each_blocks[i2].c();
         }
-        attr(div0, "class", "svelte-143s3ri");
+        attr(div0, "class", "svelte-vmuw9s");
         if (!src_url_equal(img.src, img_src_value = /*user*/
         ctx[0]?.myDon)) attr(img, "src", img_src_value);
         attr(img, "alt", "");
-        attr(img, "class", "svelte-143s3ri");
-        attr(div1, "class", "svelte-143s3ri");
-        attr(div2, "class", "svelte-143s3ri");
-        attr(tr, "class", "svelte-143s3ri");
-        attr(table, "class", "svelte-143s3ri");
+        attr(img, "class", "svelte-vmuw9s");
+        attr(div1, "class", "svelte-vmuw9s");
+        attr(div2, "class", "svelte-vmuw9s");
+        attr(tr, "class", "svelte-vmuw9s");
+        attr(table, "class", "svelte-vmuw9s");
       },
       m(target, anchor) {
         insert(target, div0, anchor);
@@ -64416,13 +64416,13 @@
         td5 = element("td");
         t11 = text(t11_value);
         t12 = space();
-        attr(td0, "class", "svelte-143s3ri");
-        attr(td1, "class", "svelte-143s3ri");
-        attr(td2, "class", "svelte-143s3ri");
-        attr(td3, "class", "svelte-143s3ri");
-        attr(td4, "class", "svelte-143s3ri");
-        attr(td5, "class", "svelte-143s3ri");
-        attr(tr, "class", "svelte-143s3ri");
+        attr(td0, "class", "svelte-vmuw9s");
+        attr(td1, "class", "svelte-vmuw9s");
+        attr(td2, "class", "svelte-vmuw9s");
+        attr(td3, "class", "svelte-vmuw9s");
+        attr(td4, "class", "svelte-vmuw9s");
+        attr(td5, "class", "svelte-vmuw9s");
+        attr(tr, "class", "svelte-vmuw9s");
       },
       m(target, anchor) {
         insert(target, tr, anchor);
@@ -64494,7 +64494,7 @@
       c() {
         div2 = element("div");
         if_block.c();
-        attr(div2, "class", "container svelte-143s3ri");
+        attr(div2, "class", "container svelte-vmuw9s");
       },
       m(target, anchor) {
         insert(target, div2, anchor);
