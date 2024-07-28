@@ -4284,6 +4284,10 @@
   function space() {
     return text(" ");
   }
+  function listen(node, event, handler, options) {
+    node.addEventListener(event, handler, options);
+    return () => node.removeEventListener(event, handler, options);
+  }
   function attr(node, attribute, value) {
     if (value == null) node.removeAttribute(attribute);
     else if (node.getAttribute(attribute) !== value) node.setAttribute(attribute, value);
@@ -64133,11 +64137,11 @@
 
   // src/components/main.svelte
   function add_css(target) {
-    append_styles(target, "svelte-1el91rq", ".svelte-1el91rq:default(html, body){height:99%;background-color:white}.container.svelte-1el91rq{width:100%;display:flex;flex-direction:column;justify-content:center;align-items:center}table.svelte-1el91rq{max-width:100%;border-collapse:collapse}th.svelte-1el91rq,td.svelte-1el91rq{text-align:center;border:1px solid black}");
+    append_styles(target, "svelte-vropj8", ".svelte-vropj8:default(html, body){height:99%;background-color:white}.container.svelte-vropj8{width:100%;display:flex;flex-direction:column;justify-content:center;align-items:center}table.svelte-vropj8{max-width:100%;border-collapse:collapse}th.svelte-vropj8,td.svelte-vropj8{text-align:center;border:1px solid black}");
   }
   function get_each_context(ctx, list, i2) {
     const child_ctx = ctx.slice();
-    child_ctx[9] = list[i2];
+    child_ctx[10] = list[i2];
     return child_ctx;
   }
   function create_else_block(ctx) {
@@ -64162,9 +64166,13 @@
     let t5;
     let t6;
     let t7;
+    let button;
+    let t9;
     let table;
     let tr;
-    let t19;
+    let t21;
+    let mounted;
+    let dispose;
     let each_value = ensure_array_like(
       /*ratings*/
       ctx[3]
@@ -64190,22 +64198,26 @@
           ctx[4]
         );
         t7 = space();
+        button = element("button");
+        button.textContent = "점수데이터 복사하기";
+        t9 = space();
         table = element("table");
         tr = element("tr");
-        tr.innerHTML = `<th class="svelte-1el91rq">songNo</th> <th class="svelte-1el91rq">곡명</th> <th class="svelte-1el91rq">diff</th> <th class="svelte-1el91rq">왕관</th> <th class="svelte-1el91rq">정확도</th> <th class="svelte-1el91rq">레이팅</th>`;
-        t19 = space();
+        tr.innerHTML = `<th class="svelte-vropj8">songNo</th> <th class="svelte-vropj8">곡명</th> <th class="svelte-vropj8">diff</th> <th class="svelte-vropj8">왕관</th> <th class="svelte-vropj8">정확도</th> <th class="svelte-vropj8">레이팅</th>`;
+        t21 = space();
         for (let i2 = 0; i2 < each_blocks.length; i2 += 1) {
           each_blocks[i2].c();
         }
-        attr(div0, "class", "svelte-1el91rq");
+        attr(div0, "class", "svelte-vropj8");
         if (!src_url_equal(img.src, img_src_value = /*user*/
         ctx[0]?.myDon)) attr(img, "src", img_src_value);
         attr(img, "alt", "");
-        attr(img, "class", "svelte-1el91rq");
-        attr(div1, "class", "svelte-1el91rq");
-        attr(div2, "class", "svelte-1el91rq");
-        attr(tr, "class", "svelte-1el91rq");
-        attr(table, "class", "svelte-1el91rq");
+        attr(img, "class", "svelte-vropj8");
+        attr(div1, "class", "svelte-vropj8");
+        attr(div2, "class", "svelte-vropj8");
+        attr(button, "class", "svelte-vropj8");
+        attr(tr, "class", "svelte-vropj8");
+        attr(table, "class", "svelte-vropj8");
       },
       m(target, anchor) {
         insert(target, div0, anchor);
@@ -64220,13 +64232,24 @@
         append(div2, t5);
         append(div2, t6);
         insert(target, t7, anchor);
+        insert(target, button, anchor);
+        insert(target, t9, anchor);
         insert(target, table, anchor);
         append(table, tr);
-        append(table, t19);
+        append(table, t21);
         for (let i2 = 0; i2 < each_blocks.length; i2 += 1) {
           if (each_blocks[i2]) {
             each_blocks[i2].m(table, null);
           }
+        }
+        if (!mounted) {
+          dispose = listen(
+            button,
+            "click",
+            /*copy*/
+            ctx[7]
+          );
+          mounted = true;
         }
       },
       p(ctx2, dirty) {
@@ -64278,9 +64301,13 @@
           detach(t4);
           detach(div2);
           detach(t7);
+          detach(button);
+          detach(t9);
           detach(table);
         }
         destroy_each(each_blocks, detaching);
+        mounted = false;
+        dispose();
       }
     };
   }
@@ -64354,35 +64381,35 @@
     let td0;
     let t0_value = (
       /*rating*/
-      ctx[9].songNo + ""
+      ctx[10].songNo + ""
     );
     let t0;
     let t1;
     let td1;
     let t2_value = (
       /*rating*/
-      ctx[9].title + ""
+      ctx[10].title + ""
     );
     let t2;
     let t3;
     let td2;
     let t4_value = (
       /*rating*/
-      ctx[9].diff + ""
+      ctx[10].diff + ""
     );
     let t4;
     let t5;
     let td3;
     let t6_value = (
       /*rating*/
-      ctx[9].crown + ""
+      ctx[10].crown + ""
     );
     let t6;
     let t7;
     let td4;
     let t8_value = Math.min(Math.round(
       /*rating*/
-      ctx[9].accuracy * 1e4
+      ctx[10].accuracy * 1e4
     ) / 1e4, 105) + "";
     let t8;
     let t9;
@@ -64390,7 +64417,7 @@
     let td5;
     let t11_value = (
       /*rating*/
-      ctx[9].rating + ""
+      ctx[10].rating + ""
     );
     let t11;
     let t12;
@@ -64416,13 +64443,13 @@
         td5 = element("td");
         t11 = text(t11_value);
         t12 = space();
-        attr(td0, "class", "svelte-1el91rq");
-        attr(td1, "class", "svelte-1el91rq");
-        attr(td2, "class", "svelte-1el91rq");
-        attr(td3, "class", "svelte-1el91rq");
-        attr(td4, "class", "svelte-1el91rq");
-        attr(td5, "class", "svelte-1el91rq");
-        attr(tr, "class", "svelte-1el91rq");
+        attr(td0, "class", "svelte-vropj8");
+        attr(td1, "class", "svelte-vropj8");
+        attr(td2, "class", "svelte-vropj8");
+        attr(td3, "class", "svelte-vropj8");
+        attr(td4, "class", "svelte-vropj8");
+        attr(td5, "class", "svelte-vropj8");
+        attr(tr, "class", "svelte-vropj8");
       },
       m(target, anchor) {
         insert(target, tr, anchor);
@@ -64449,24 +64476,24 @@
       p(ctx2, dirty) {
         if (dirty & /*ratings*/
         8 && t0_value !== (t0_value = /*rating*/
-        ctx2[9].songNo + "")) set_data(t0, t0_value);
+        ctx2[10].songNo + "")) set_data(t0, t0_value);
         if (dirty & /*ratings*/
         8 && t2_value !== (t2_value = /*rating*/
-        ctx2[9].title + "")) set_data(t2, t2_value);
+        ctx2[10].title + "")) set_data(t2, t2_value);
         if (dirty & /*ratings*/
         8 && t4_value !== (t4_value = /*rating*/
-        ctx2[9].diff + "")) set_data(t4, t4_value);
+        ctx2[10].diff + "")) set_data(t4, t4_value);
         if (dirty & /*ratings*/
         8 && t6_value !== (t6_value = /*rating*/
-        ctx2[9].crown + "")) set_data(t6, t6_value);
+        ctx2[10].crown + "")) set_data(t6, t6_value);
         if (dirty & /*ratings*/
         8 && t8_value !== (t8_value = Math.min(Math.round(
           /*rating*/
-          ctx2[9].accuracy * 1e4
+          ctx2[10].accuracy * 1e4
         ) / 1e4, 105) + "")) set_data(t8, t8_value);
         if (dirty & /*ratings*/
         8 && t11_value !== (t11_value = /*rating*/
-        ctx2[9].rating + "")) set_data(t11, t11_value);
+        ctx2[10].rating + "")) set_data(t11, t11_value);
       },
       d(detaching) {
         if (detaching) {
@@ -64494,7 +64521,7 @@
       c() {
         div2 = element("div");
         if_block.c();
-        attr(div2, "class", "container svelte-1el91rq");
+        attr(div2, "class", "container svelte-vropj8");
       },
       m(target, anchor) {
         insert(target, div2, anchor);
@@ -64532,7 +64559,6 @@
     let ratings;
     let totalRating;
     let { user = void 0 } = $$props;
-    ;
     async function main2() {
       if (!user) {
         $$invalidate(0, user = await getUser());
@@ -64541,27 +64567,54 @@
       $$invalidate(2, totals = songs.length);
       $$invalidate(1, scene = "crawl");
       if (!scoreDatas) {
-        $$invalidate(7, scoreDatas = await getScoreDatas(songs, completed));
+        $$invalidate(8, scoreDatas = await getScoreDatas(songs, completed));
       }
       $$invalidate(3, ratings = getRatings(scoreDatas, await getMeasures()));
       $$invalidate(4, totalRating = getTotalRating(ratings));
       $$invalidate(1, scene = "result");
       console.log(ratings);
     }
+    async function copy() {
+      navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
+        if (result.state === "granted" || result.state === "prompt") {
+          try {
+            const data2 = { userData: user, scoreDatas };
+            navigator.clipboard.writeText(JSON.stringify(data2));
+            alert("복사 완료");
+          } catch {
+            alert("복사 실패");
+          }
+        } else {
+          alert("복사 실패");
+        }
+      }).catch(() => {
+        alert("복사 실패");
+      });
+    }
     main2();
     $$self.$$set = ($$props2) => {
-      if ("scoreDatas" in $$props2) $$invalidate(7, scoreDatas = $$props2.scoreDatas);
+      if ("scoreDatas" in $$props2) $$invalidate(8, scoreDatas = $$props2.scoreDatas);
       if ("user" in $$props2) $$invalidate(0, user = $$props2.user);
     };
-    return [user, scene, totals, ratings, totalRating, $completed, completed, scoreDatas];
+    return [
+      user,
+      scene,
+      totals,
+      ratings,
+      totalRating,
+      $completed,
+      completed,
+      copy,
+      scoreDatas
+    ];
   }
   var Main = class extends SvelteComponent {
     constructor(options) {
       super();
-      init(this, options, instance, create_fragment, safe_not_equal, { scoreDatas: 7, user: 0 }, add_css);
+      init(this, options, instance, create_fragment, safe_not_equal, { scoreDatas: 8, user: 0 }, add_css);
     }
     get scoreDatas() {
-      return this.$$.ctx[7];
+      return this.$$.ctx[8];
     }
     set scoreDatas(scoreDatas) {
       this.$$set({ scoreDatas });
@@ -64581,6 +64634,7 @@
   // src/module/main.ts
   async function main() {
     document.body.innerHTML = "";
+    document.body.style.backgroundColor = "white";
     new main_default({
       target: document.body
     });
