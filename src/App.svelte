@@ -1,17 +1,10 @@
-<script lang="ts">
-    import Display from "./components/display.svelte";
-    import { data } from "./module/sample";
-    import { csv2json } from "json-2-csv";
+<script>
+    import Main from "./components/main.svelte";
 
-    async function getMeasures() {
-        return await fetch(
-            "https://raw.githubusercontent.com/taikowiki/taiko-fumen-measure-table/main/main.csv",
-        )
-            .then((data) => data.text())
-            .then((text) => csv2json(text));
-    }
+    import {data as sample} from './module/sample.js'
 </script>
 
-{#await getMeasures() then measures}
-    <Display {data} {measures} />
-{/await}
+<Main
+    user={sample.userData}
+    scoreDatas={sample.scoreDatas}
+/>

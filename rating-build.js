@@ -3,7 +3,7 @@ import sveltePlugin from "esbuild-svelte";
 import { sveltePreprocess } from "svelte-preprocess";
 
 const result = await build({
-    entryPoints: ['./src/module/rating.ts'],
+    entryPoints: ['./src/module/main.ts'],
     bundle: true,
     //minify: true,
     outfile: "./build/rating.js",

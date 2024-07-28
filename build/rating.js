@@ -44,1027 +44,6 @@
     }
   });
 
-  // node_modules/json-2-csv/lib/constants.js
-  var require_constants = __commonJS({
-    "node_modules/json-2-csv/lib/constants.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.excelBOM = exports.defaultCsv2JsonOptions = exports.defaultJson2CsvOptions = exports.errors = void 0;
-      exports.errors = {
-        optionsRequired: "Options were not passed and are required.",
-        json2csv: {
-          cannotCallOn: "Cannot call json2csv on",
-          dataCheckFailure: "Data provided was not an array of documents.",
-          notSameSchema: "Not all documents have the same schema."
-        },
-        csv2json: {
-          cannotCallOn: "Cannot call csv2json on",
-          dataCheckFailure: "CSV is not a string."
-        }
-      };
-      exports.defaultJson2CsvOptions = {
-        arrayIndexesAsKeys: false,
-        checkSchemaDifferences: false,
-        delimiter: {
-          field: ",",
-          wrap: '"',
-          eol: "\n"
-        },
-        emptyFieldValue: void 0,
-        escapeHeaderNestedDots: true,
-        excelBOM: false,
-        excludeKeys: [],
-        expandNestedObjects: true,
-        expandArrayObjects: false,
-        prependHeader: true,
-        preventCsvInjection: false,
-        sortHeader: false,
-        trimFieldValues: false,
-        trimHeaderFields: false,
-        unwindArrays: false,
-        useDateIso8601Format: false,
-        useLocaleFormat: false,
-        wrapBooleans: false
-      };
-      exports.defaultCsv2JsonOptions = {
-        delimiter: {
-          field: ",",
-          wrap: '"',
-          eol: "\n"
-        },
-        excelBOM: false,
-        preventCsvInjection: false,
-        trimFieldValues: false,
-        trimHeaderFields: false,
-        wrapBooleans: false
-      };
-      exports.excelBOM = "\uFEFF";
-    }
-  });
-
-  // node_modules/doc-path/lib/path.js
-  var require_path = __commonJS({
-    "node_modules/doc-path/lib/path.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.setPath = exports.evaluatePath = void 0;
-      function evaluatePath(obj, kp) {
-        if (!obj) {
-          return null;
-        }
-        const { dotIndex, key, remaining } = state(kp);
-        const kpVal = typeof obj === "object" && kp in obj ? obj[kp] : void 0;
-        const keyVal = typeof obj === "object" && key in obj ? obj[key] : void 0;
-        if (dotIndex >= 0 && typeof obj === "object" && !(kp in obj)) {
-          const { key: nextKey } = state(remaining);
-          const nextKeyAsInt = parseInt(nextKey);
-          if (Array.isArray(keyVal) && isNaN(nextKeyAsInt)) {
-            return keyVal.map((doc) => evaluatePath(doc, remaining));
-          }
-          return evaluatePath(keyVal, remaining);
-        } else if (Array.isArray(obj)) {
-          const keyAsInt = parseInt(key);
-          if (kp === key && dotIndex === -1 && !isNaN(keyAsInt)) {
-            return keyVal;
-          }
-          return obj.map((doc) => evaluatePath(doc, kp));
-        } else if (dotIndex >= 0 && kp !== key && typeof obj === "object" && key in obj) {
-          return evaluatePath(keyVal, remaining);
-        } else if (dotIndex === -1 && typeof obj === "object" && key in obj && !(kp in obj)) {
-          return keyVal;
-        }
-        return kpVal;
-      }
-      exports.evaluatePath = evaluatePath;
-      function setPath(obj, kp, v) {
-        if (!obj) {
-          throw new Error("No object was provided.");
-        } else if (!kp) {
-          throw new Error("No keyPath was provided.");
-        }
-        return _sp(obj, kp, v);
-      }
-      exports.setPath = setPath;
-      function _sp(obj, kp, v) {
-        const { dotIndex, key, remaining } = state(kp);
-        if (kp.startsWith("__proto__") || kp.startsWith("constructor") || kp.startsWith("prototype")) {
-          return obj;
-        }
-        if (dotIndex >= 0) {
-          const keyAsInt = parseInt(key);
-          if (typeof obj === "object" && obj !== null && !(key in obj) && Array.isArray(obj) && !isNaN(keyAsInt)) {
-            obj[key] = obj[key] ?? {};
-            _sp(obj[key], remaining, v);
-            return obj;
-          } else if (typeof obj === "object" && obj !== null && !(key in obj) && Array.isArray(obj)) {
-            obj.forEach((doc) => _sp(doc, kp, v));
-            return obj;
-          } else if (typeof obj === "object" && obj !== null && !(key in obj) && !Array.isArray(obj)) {
-            const { key: nextKey } = state(remaining);
-            const nextKeyAsInt = parseInt(nextKey);
-            if (!isNaN(nextKeyAsInt)) {
-              obj[key] = [];
-            } else if (remaining === "") {
-              obj[kp] = v;
-              return obj;
-            } else {
-              obj[key] = {};
-            }
-          }
-          _sp(obj[key], remaining, v);
-        } else if (Array.isArray(obj)) {
-          const keyAsInt = parseInt(key);
-          if (kp === key && dotIndex === -1 && !isNaN(keyAsInt)) {
-            obj[key] = v;
-            return obj;
-          }
-          obj.forEach((doc) => _sp(doc, remaining, v));
-          return obj;
-        } else {
-          obj[key] = v;
-        }
-        return obj;
-      }
-      function state(kp) {
-        const dotIndex = findFirstNonEscapedDotIndex(kp);
-        return {
-          dotIndex,
-          key: kp.slice(0, dotIndex >= 0 ? dotIndex : void 0).replace(/\\./g, "."),
-          remaining: kp.slice(dotIndex + 1)
-        };
-      }
-      function findFirstNonEscapedDotIndex(kp) {
-        for (let i2 = 0; i2 < kp.length; i2++) {
-          const previousChar = i2 > 0 ? kp[i2 - 1] : "", currentChar = kp[i2];
-          if (currentChar === "." && previousChar !== "\\")
-            return i2;
-        }
-        return -1;
-      }
-    }
-  });
-
-  // node_modules/deeks/lib/utils.js
-  var require_utils = __commonJS({
-    "node_modules/deeks/lib/utils.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.isDocumentToRecurOn = exports.flatten = exports.unique = void 0;
-      function unique(array) {
-        return [...new Set(array)];
-      }
-      exports.unique = unique;
-      function flatten4(array) {
-        return [].concat(...array);
-      }
-      exports.flatten = flatten4;
-      function isDocumentToRecurOn(val2) {
-        return typeof val2 === "object" && val2 !== null && !Array.isArray(val2) && Object.keys(val2).length;
-      }
-      exports.isDocumentToRecurOn = isDocumentToRecurOn;
-    }
-  });
-
-  // node_modules/deeks/lib/types.js
-  var require_types = __commonJS({
-    "node_modules/deeks/lib/types.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-    }
-  });
-
-  // node_modules/deeks/lib/deeks.js
-  var require_deeks = __commonJS({
-    "node_modules/deeks/lib/deeks.js"(exports) {
-      "use strict";
-      var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
-        if (k2 === void 0) k2 = k;
-        var desc = Object.getOwnPropertyDescriptor(m, k);
-        if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-          desc = { enumerable: true, get: function() {
-            return m[k];
-          } };
-        }
-        Object.defineProperty(o, k2, desc);
-      } : function(o, m, k, k2) {
-        if (k2 === void 0) k2 = k;
-        o[k2] = m[k];
-      });
-      var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? function(o, v) {
-        Object.defineProperty(o, "default", { enumerable: true, value: v });
-      } : function(o, v) {
-        o["default"] = v;
-      });
-      var __importStar = exports && exports.__importStar || function(mod3) {
-        if (mod3 && mod3.__esModule) return mod3;
-        var result = {};
-        if (mod3 != null) {
-          for (var k in mod3) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod3, k)) __createBinding(result, mod3, k);
-        }
-        __setModuleDefault(result, mod3);
-        return result;
-      };
-      var __exportStar = exports && exports.__exportStar || function(m, exports2) {
-        for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports2, p)) __createBinding(exports2, m, p);
-      };
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.deepKeysFromList = exports.deepKeys = void 0;
-      var utils = __importStar(require_utils());
-      __exportStar(require_types(), exports);
-      function deepKeys(object, options) {
-        const parsedOptions = mergeOptions(options);
-        if (typeof object === "object" && object !== null) {
-          return generateDeepKeysList("", object, parsedOptions);
-        }
-        return [];
-      }
-      exports.deepKeys = deepKeys;
-      function deepKeysFromList(list, options) {
-        const parsedOptions = mergeOptions(options);
-        return list.map((document2) => {
-          if (typeof document2 === "object" && document2 !== null) {
-            return deepKeys(document2, parsedOptions);
-          }
-          return [];
-        });
-      }
-      exports.deepKeysFromList = deepKeysFromList;
-      function generateDeepKeysList(heading, data2, options) {
-        const keys = Object.keys(data2).map((currentKey) => {
-          const keyName = buildKeyName(heading, escapeNestedDotsIfSpecified(currentKey, options));
-          if (options.expandNestedObjects && utils.isDocumentToRecurOn(data2[currentKey]) || options.arrayIndexesAsKeys && Array.isArray(data2[currentKey]) && data2[currentKey].length) {
-            return generateDeepKeysList(keyName, data2[currentKey], options);
-          } else if (options.expandArrayObjects && Array.isArray(data2[currentKey])) {
-            return processArrayKeys(data2[currentKey], keyName, options);
-          } else if (options.ignoreEmptyArrays && Array.isArray(data2[currentKey]) && !data2[currentKey].length) {
-            return [];
-          }
-          return keyName;
-        });
-        return utils.flatten(keys);
-      }
-      function processArrayKeys(subArray, currentKeyPath, options) {
-        let subArrayKeys = deepKeysFromList(subArray, options);
-        if (!subArray.length) {
-          return options.ignoreEmptyArraysWhenExpanding ? [] : [currentKeyPath];
-        } else if (subArray.length && utils.flatten(subArrayKeys).length === 0) {
-          return [currentKeyPath];
-        } else {
-          subArrayKeys = subArrayKeys.map((schemaKeys) => {
-            if (Array.isArray(schemaKeys) && schemaKeys.length === 0) {
-              return [currentKeyPath];
-            }
-            return schemaKeys.map((subKey) => buildKeyName(currentKeyPath, escapeNestedDotsIfSpecified(subKey, options)));
-          });
-          return utils.unique(utils.flatten(subArrayKeys));
-        }
-      }
-      function escapeNestedDotsIfSpecified(key, options) {
-        if (options.escapeNestedDots) {
-          return key.replace(/\./g, "\\.");
-        }
-        return key;
-      }
-      function buildKeyName(upperKeyName, currentKeyName) {
-        if (upperKeyName) {
-          return upperKeyName + "." + currentKeyName;
-        }
-        return currentKeyName;
-      }
-      function mergeOptions(options) {
-        return {
-          arrayIndexesAsKeys: false,
-          expandNestedObjects: true,
-          expandArrayObjects: false,
-          ignoreEmptyArraysWhenExpanding: false,
-          escapeNestedDots: false,
-          ignoreEmptyArrays: false,
-          ...options ?? {}
-        };
-      }
-    }
-  });
-
-  // node_modules/json-2-csv/lib/utils.js
-  var require_utils2 = __commonJS({
-    "node_modules/json-2-csv/lib/utils.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.isInvalid = exports.flatten = exports.unique = exports.arrayDifference = exports.isError = exports.isUndefined = exports.isNull = exports.isObject = exports.isString = exports.isNumber = exports.unwind = exports.getNCharacters = exports.removeEmptyFields = exports.isEmptyField = exports.computeSchemaDifferences = exports.isDateRepresentation = exports.isStringRepresentation = exports.deepCopy = exports.validate = exports.buildC2JOptions = exports.buildJ2COptions = void 0;
-      var doc_path_1 = require_path();
-      var constants_1 = require_constants();
-      var dateStringRegex = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/;
-      var MAX_ARRAY_LENGTH = 1e5;
-      function buildJ2COptions(opts) {
-        return {
-          ...constants_1.defaultJson2CsvOptions,
-          ...opts,
-          delimiter: {
-            field: opts?.delimiter?.field ?? constants_1.defaultJson2CsvOptions.delimiter.field,
-            wrap: opts?.delimiter?.wrap || constants_1.defaultJson2CsvOptions.delimiter.wrap,
-            eol: opts?.delimiter?.eol || constants_1.defaultJson2CsvOptions.delimiter.eol
-          },
-          fieldTitleMap: /* @__PURE__ */ Object.create({})
-        };
-      }
-      exports.buildJ2COptions = buildJ2COptions;
-      function buildC2JOptions(opts) {
-        return {
-          ...constants_1.defaultCsv2JsonOptions,
-          ...opts,
-          delimiter: {
-            field: opts?.delimiter?.field ?? constants_1.defaultCsv2JsonOptions.delimiter.field,
-            wrap: opts?.delimiter?.wrap || constants_1.defaultCsv2JsonOptions.delimiter.wrap,
-            eol: opts?.delimiter?.eol || constants_1.defaultCsv2JsonOptions.delimiter.eol
-          }
-        };
-      }
-      exports.buildC2JOptions = buildC2JOptions;
-      function validate2(data2, validationFn, errorMessages) {
-        if (!data2)
-          throw new Error(`${errorMessages.cannotCallOn} ${data2}.`);
-        if (!validationFn(data2))
-          throw new Error(errorMessages.dataCheckFailure);
-        return true;
-      }
-      exports.validate = validate2;
-      function deepCopy(obj) {
-        return JSON.parse(JSON.stringify(obj));
-      }
-      exports.deepCopy = deepCopy;
-      function isStringRepresentation(fieldValue, options) {
-        const firstChar = fieldValue[0], lastIndex = fieldValue.length - 1, lastChar = fieldValue[lastIndex];
-        return firstChar === options.delimiter.wrap && lastChar === options.delimiter.wrap;
-      }
-      exports.isStringRepresentation = isStringRepresentation;
-      function isDateRepresentation(fieldValue) {
-        return dateStringRegex.test(fieldValue);
-      }
-      exports.isDateRepresentation = isDateRepresentation;
-      function computeSchemaDifferences(schemaA, schemaB) {
-        return arrayDifference(schemaA, schemaB).concat(arrayDifference(schemaB, schemaA));
-      }
-      exports.computeSchemaDifferences = computeSchemaDifferences;
-      function isEmptyField(fieldValue) {
-        return isUndefined3(fieldValue) || isNull2(fieldValue) || fieldValue === "";
-      }
-      exports.isEmptyField = isEmptyField;
-      function removeEmptyFields(fields) {
-        return fields.filter((field) => !isEmptyField(field));
-      }
-      exports.removeEmptyFields = removeEmptyFields;
-      function getNCharacters(str, start, n) {
-        return str.substring(start, start + n);
-      }
-      exports.getNCharacters = getNCharacters;
-      function unwindItem(accumulator, item, fieldPath) {
-        const valueToUnwind = (0, doc_path_1.evaluatePath)(item, fieldPath);
-        let cloned = deepCopy(item);
-        if (Array.isArray(valueToUnwind) && valueToUnwind.length) {
-          valueToUnwind.forEach((val2) => {
-            cloned = deepCopy(item);
-            accumulator.push((0, doc_path_1.setPath)(cloned, fieldPath, val2));
-          });
-        } else if (Array.isArray(valueToUnwind) && valueToUnwind.length === 0) {
-          (0, doc_path_1.setPath)(cloned, fieldPath, "");
-          accumulator.push(cloned);
-        } else {
-          accumulator.push(cloned);
-        }
-      }
-      function unwind(array, field) {
-        const result = [];
-        array.forEach((item) => {
-          unwindItem(result, item, field);
-        });
-        return result;
-      }
-      exports.unwind = unwind;
-      function isNumber5(value) {
-        return !isNaN(Number(value));
-      }
-      exports.isNumber = isNumber5;
-      function isString3(value) {
-        return typeof value === "string";
-      }
-      exports.isString = isString3;
-      function isObject3(value) {
-        return typeof value === "object";
-      }
-      exports.isObject = isObject3;
-      function isNull2(value) {
-        return value === null;
-      }
-      exports.isNull = isNull2;
-      function isUndefined3(value) {
-        return typeof value === "undefined";
-      }
-      exports.isUndefined = isUndefined3;
-      function isError(value) {
-        return Object.prototype.toString.call(value) === "[object Error]";
-      }
-      exports.isError = isError;
-      function arrayDifference(a, b) {
-        return a.filter((x) => !b.includes(x));
-      }
-      exports.arrayDifference = arrayDifference;
-      function unique(array) {
-        return [...new Set(array)];
-      }
-      exports.unique = unique;
-      function flatten4(array) {
-        if (array.flat) {
-          return array.flat();
-        }
-        if (array.length > MAX_ARRAY_LENGTH) {
-          let safeArray = [];
-          for (let a = 0; a < array.length; a += MAX_ARRAY_LENGTH) {
-            safeArray = safeArray.concat(...array.slice(a, a + MAX_ARRAY_LENGTH));
-          }
-          return safeArray;
-        }
-        return array.reduce((accumulator, value) => accumulator.concat(value), []);
-      }
-      exports.flatten = flatten4;
-      function isInvalid(parsedJson) {
-        return parsedJson === Infinity || parsedJson === -Infinity;
-      }
-      exports.isInvalid = isInvalid;
-    }
-  });
-
-  // node_modules/json-2-csv/lib/json2csv.js
-  var require_json2csv = __commonJS({
-    "node_modules/json-2-csv/lib/json2csv.js"(exports) {
-      "use strict";
-      var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
-        if (k2 === void 0) k2 = k;
-        var desc = Object.getOwnPropertyDescriptor(m, k);
-        if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-          desc = { enumerable: true, get: function() {
-            return m[k];
-          } };
-        }
-        Object.defineProperty(o, k2, desc);
-      } : function(o, m, k, k2) {
-        if (k2 === void 0) k2 = k;
-        o[k2] = m[k];
-      });
-      var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? function(o, v) {
-        Object.defineProperty(o, "default", { enumerable: true, value: v });
-      } : function(o, v) {
-        o["default"] = v;
-      });
-      var __importStar = exports && exports.__importStar || function(mod3) {
-        if (mod3 && mod3.__esModule) return mod3;
-        var result = {};
-        if (mod3 != null) {
-          for (var k in mod3) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod3, k)) __createBinding(result, mod3, k);
-        }
-        __setModuleDefault(result, mod3);
-        return result;
-      };
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.Json2Csv = void 0;
-      var doc_path_1 = require_path();
-      var deeks_1 = require_deeks();
-      var constants_1 = require_constants();
-      var utils = __importStar(require_utils2());
-      var Json2Csv = function(options) {
-        const wrapDelimiterCheckRegex = new RegExp(options.delimiter.wrap, "g"), crlfSearchRegex = /\r?\n|\r/, customValueParser = options.parseValue && typeof options.parseValue === "function" ? options.parseValue : null, expandingWithoutUnwinding = options.expandArrayObjects && !options.unwindArrays, deeksOptions = {
-          arrayIndexesAsKeys: options.arrayIndexesAsKeys,
-          expandNestedObjects: options.expandNestedObjects,
-          expandArrayObjects: expandingWithoutUnwinding,
-          ignoreEmptyArraysWhenExpanding: expandingWithoutUnwinding,
-          escapeNestedDots: true
-        };
-        function getFieldNameList(data2) {
-          return (0, deeks_1.deepKeysFromList)(data2, deeksOptions);
-        }
-        function processSchemas(documentSchemas) {
-          if (options.checkSchemaDifferences) {
-            return checkSchemaDifferences(documentSchemas);
-          } else {
-            const uniqueFieldNames = utils.unique(utils.flatten(documentSchemas));
-            return uniqueFieldNames;
-          }
-        }
-        function checkSchemaDifferences(documentSchemas) {
-          const firstDocSchema = documentSchemas[0], restOfDocumentSchemas = documentSchemas.slice(1), schemaDifferences = computeNumberOfSchemaDifferences(firstDocSchema, restOfDocumentSchemas);
-          if (schemaDifferences) {
-            throw new Error(constants_1.errors.json2csv.notSameSchema);
-          }
-          return firstDocSchema;
-        }
-        function computeNumberOfSchemaDifferences(firstDocSchema, restOfDocumentSchemas) {
-          return restOfDocumentSchemas.reduce((schemaDifferences, documentSchema) => {
-            const numberOfDifferences = utils.computeSchemaDifferences(firstDocSchema, documentSchema).length;
-            return numberOfDifferences > 0 ? schemaDifferences + 1 : schemaDifferences;
-          }, 0);
-        }
-        function filterExcludedKeys(keyPaths) {
-          if (options.excludeKeys) {
-            return keyPaths.filter((keyPath) => {
-              for (const excludedKey of options.excludeKeys) {
-                const regex = excludedKey instanceof RegExp ? excludedKey : new RegExp(`^${excludedKey}`);
-                if (excludedKey === keyPath || keyPath.match(regex)) {
-                  return false;
-                }
-              }
-              return true;
-            });
-          }
-          return keyPaths;
-        }
-        function sortHeaderFields(fieldNames) {
-          if (options.sortHeader && typeof options.sortHeader === "function") {
-            return fieldNames.sort(options.sortHeader);
-          } else if (options.sortHeader) {
-            return fieldNames.sort();
-          }
-          return fieldNames;
-        }
-        function trimHeaderFields(params) {
-          if (options.trimHeaderFields) {
-            params.headerFields = params.headerFields.map((field) => field.split(".").map((component) => component.trim()).join("."));
-          }
-          return params;
-        }
-        function wrapHeaderFields(params) {
-          if (options.prependHeader) {
-            params.headerFields = params.headerFields.map(function(headingKey) {
-              return wrapFieldValueIfNecessary(headingKey);
-            });
-          }
-          return params;
-        }
-        function generateCsvHeader(params) {
-          const fieldTitleMapKeys = Object.keys(options.fieldTitleMap);
-          params.header = params.headerFields.map(function(field) {
-            let headerKey = field;
-            if (fieldTitleMapKeys.includes(field)) {
-              headerKey = options.fieldTitleMap[field];
-            } else if (!options.escapeHeaderNestedDots) {
-              headerKey = headerKey.replace(/\\\./g, ".");
-            }
-            return wrapFieldValueIfNecessary(headerKey);
-          }).join(options.delimiter.field);
-          return params;
-        }
-        function convertKeysToHeaderFields() {
-          if (!options.keys)
-            return [];
-          return options.keys.map((key) => {
-            if (typeof key === "object" && "field" in key) {
-              options.fieldTitleMap[key.field] = key.title ?? key.field;
-              return key.field;
-            }
-            return key;
-          });
-        }
-        function extractWildcardMatchKeys() {
-          if (!options.keys)
-            return [];
-          return options.keys.flatMap((item) => {
-            if (typeof item === "string") {
-              return [];
-            } else if (item?.wildcardMatch) {
-              return item.field;
-            }
-            return [];
-          });
-        }
-        function retrieveHeaderFields(data2) {
-          const wildcardMatchKeys = extractWildcardMatchKeys();
-          const keyStrings = convertKeysToHeaderFields();
-          const fieldNames = getFieldNameList(data2);
-          const processed = processSchemas(fieldNames);
-          if (options.keys) {
-            options.keys = keyStrings;
-            const matchedKeys = keyStrings.flatMap((userProvidedKey) => {
-              if (!wildcardMatchKeys.includes(userProvidedKey)) {
-                return userProvidedKey;
-              }
-              const matches = [];
-              const regex = new RegExp(`^${userProvidedKey}`);
-              for (const detectedKey of processed) {
-                if (userProvidedKey === detectedKey || detectedKey.match(regex)) {
-                  matches.push(detectedKey);
-                }
-              }
-              return matches;
-            });
-            if (!options.unwindArrays) {
-              const filtered2 = filterExcludedKeys(matchedKeys);
-              return sortHeaderFields(filtered2);
-            }
-          }
-          const filtered = filterExcludedKeys(processed);
-          return sortHeaderFields(filtered);
-        }
-        function unwindRecordsIfNecessary(params, finalPass = false) {
-          if (options.unwindArrays) {
-            const originalRecordsLength = params.records.length;
-            params.headerFields.forEach((headerField) => {
-              params.records = utils.unwind(params.records, headerField);
-            });
-            const headerFields = retrieveHeaderFields(params.records);
-            params.headerFields = headerFields;
-            if (originalRecordsLength !== params.records.length) {
-              return unwindRecordsIfNecessary(params);
-            }
-            if (!finalPass) {
-              return unwindRecordsIfNecessary(params, true);
-            }
-            if (options.keys) {
-              const userSelectedFields = convertKeysToHeaderFields();
-              params.headerFields = filterExcludedKeys(userSelectedFields);
-            }
-            return params;
-          }
-          return params;
-        }
-        function processRecords(params) {
-          params.recordString = params.records.map((record) => {
-            const recordFieldData = retrieveRecordFieldData(record, params.headerFields), processedRecordData = recordFieldData.map((fieldValue) => {
-              fieldValue = trimRecordFieldValue(fieldValue);
-              fieldValue = preventCsvInjection(fieldValue);
-              let stringified = customValueParser ? customValueParser(fieldValue, recordFieldValueToString) : recordFieldValueToString(fieldValue);
-              stringified = wrapFieldValueIfNecessary(stringified);
-              return stringified;
-            });
-            return generateCsvRowFromRecord(processedRecordData);
-          }).join(options.delimiter.eol);
-          return params;
-        }
-        function processRecordFieldDataForExpandedArrayObject(recordFieldValue) {
-          const filteredRecordFieldValue = utils.removeEmptyFields(recordFieldValue);
-          if (!recordFieldValue.length || !filteredRecordFieldValue.length) {
-            return options.emptyFieldValue || "";
-          } else if (filteredRecordFieldValue.length === 1) {
-            return filteredRecordFieldValue[0];
-          }
-          return recordFieldValue;
-        }
-        function retrieveRecordFieldData(record, fields) {
-          const recordValues = [];
-          fields.forEach((field) => {
-            let recordFieldValue = (0, doc_path_1.evaluatePath)(record, field);
-            if (!utils.isUndefined(options.emptyFieldValue) && utils.isEmptyField(recordFieldValue)) {
-              recordFieldValue = options.emptyFieldValue;
-            } else if (options.expandArrayObjects && Array.isArray(recordFieldValue)) {
-              recordFieldValue = processRecordFieldDataForExpandedArrayObject(recordFieldValue);
-            }
-            recordValues.push(recordFieldValue);
-          });
-          return recordValues;
-        }
-        function recordFieldValueToString(fieldValue) {
-          const isDate3 = fieldValue instanceof Date;
-          if (fieldValue === null || Array.isArray(fieldValue) || typeof fieldValue === "object" && !isDate3) {
-            return JSON.stringify(fieldValue);
-          } else if (typeof fieldValue === "undefined") {
-            return "undefined";
-          } else if (isDate3 && options.useDateIso8601Format) {
-            return fieldValue.toISOString();
-          } else {
-            return !options.useLocaleFormat ? fieldValue.toString() : fieldValue.toLocaleString();
-          }
-        }
-        function trimRecordFieldValue(fieldValue) {
-          if (options.trimFieldValues) {
-            if (Array.isArray(fieldValue)) {
-              return fieldValue.map(trimRecordFieldValue);
-            } else if (typeof fieldValue === "string") {
-              return fieldValue.trim();
-            }
-            return fieldValue;
-          }
-          return fieldValue;
-        }
-        function preventCsvInjection(fieldValue) {
-          if (options.preventCsvInjection) {
-            if (Array.isArray(fieldValue)) {
-              return fieldValue.map(preventCsvInjection);
-            } else if (typeof fieldValue === "string" && !utils.isNumber(fieldValue)) {
-              return fieldValue.replace(/^[=+\-@\t\r]+/g, "");
-            }
-            return fieldValue;
-          }
-          return fieldValue;
-        }
-        function wrapFieldValueIfNecessary(fieldValue) {
-          const wrapDelimiter = options.delimiter.wrap;
-          if (fieldValue.includes(options.delimiter.wrap)) {
-            fieldValue = fieldValue.replace(wrapDelimiterCheckRegex, wrapDelimiter + wrapDelimiter);
-          }
-          if (fieldValue.includes(options.delimiter.field) || fieldValue.includes(options.delimiter.wrap) || fieldValue.match(crlfSearchRegex) || options.wrapBooleans && (fieldValue === "true" || fieldValue === "false")) {
-            fieldValue = wrapDelimiter + fieldValue + wrapDelimiter;
-          }
-          return fieldValue;
-        }
-        function generateCsvRowFromRecord(recordFieldValues) {
-          return recordFieldValues.join(options.delimiter.field);
-        }
-        function generateCsvFromComponents(params) {
-          const header = params.header, records = params.recordString, csv = (options.excelBOM ? constants_1.excelBOM : "") + (options.prependHeader ? header + options.delimiter.eol : "") + records;
-          return csv;
-        }
-        function convert(data2) {
-          if (utils.isObject(data2) && !data2.length) {
-            data2 = [data2];
-          }
-          const headerFields = {
-            headerFields: retrieveHeaderFields(data2),
-            records: data2,
-            header: "",
-            recordString: ""
-          };
-          const unwinded = unwindRecordsIfNecessary(headerFields);
-          const processed = processRecords(unwinded);
-          const wrapped = wrapHeaderFields(processed);
-          const trimmed = trimHeaderFields(wrapped);
-          const generated = generateCsvHeader(trimmed);
-          return generateCsvFromComponents(generated);
-        }
-        return {
-          convert
-        };
-      };
-      exports.Json2Csv = Json2Csv;
-    }
-  });
-
-  // node_modules/json-2-csv/lib/csv2json.js
-  var require_csv2json = __commonJS({
-    "node_modules/json-2-csv/lib/csv2json.js"(exports) {
-      "use strict";
-      var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
-        if (k2 === void 0) k2 = k;
-        var desc = Object.getOwnPropertyDescriptor(m, k);
-        if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-          desc = { enumerable: true, get: function() {
-            return m[k];
-          } };
-        }
-        Object.defineProperty(o, k2, desc);
-      } : function(o, m, k, k2) {
-        if (k2 === void 0) k2 = k;
-        o[k2] = m[k];
-      });
-      var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? function(o, v) {
-        Object.defineProperty(o, "default", { enumerable: true, value: v });
-      } : function(o, v) {
-        o["default"] = v;
-      });
-      var __importStar = exports && exports.__importStar || function(mod3) {
-        if (mod3 && mod3.__esModule) return mod3;
-        var result = {};
-        if (mod3 != null) {
-          for (var k in mod3) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod3, k)) __createBinding(result, mod3, k);
-        }
-        __setModuleDefault(result, mod3);
-        return result;
-      };
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.Csv2Json = void 0;
-      var doc_path_1 = require_path();
-      var constants_1 = require_constants();
-      var utils = __importStar(require_utils2());
-      var Csv2Json = function(options) {
-        const escapedWrapDelimiterRegex = new RegExp(options.delimiter.wrap + options.delimiter.wrap, "g"), excelBOMRegex = new RegExp("^" + constants_1.excelBOM), valueParserFn = options.parseValue && typeof options.parseValue === "function" ? options.parseValue : JSON.parse;
-        function processHeaderKey(headerKey) {
-          headerKey = removeWrapDelimitersFromValue(headerKey);
-          if (options.trimHeaderFields) {
-            return headerKey.split(".").map((component) => component.trim()).join(".");
-          }
-          return headerKey;
-        }
-        function retrieveHeading(lines) {
-          let headerFields = [];
-          if (options.headerFields) {
-            headerFields = options.headerFields.map((headerField, index3) => ({
-              value: processHeaderKey(headerField),
-              index: index3
-            }));
-          } else {
-            const headerRow = lines[0];
-            headerFields = headerRow.map((headerKey, index3) => ({
-              value: processHeaderKey(headerKey),
-              index: index3
-            }));
-            if (options.keys) {
-              const keys = options.keys;
-              headerFields = headerFields.filter((headerKey) => keys.includes(headerKey.value));
-            }
-          }
-          return {
-            lines,
-            headerFields,
-            recordLines: []
-          };
-        }
-        function stripExcelBOM(csv) {
-          if (options.excelBOM) {
-            return csv.replace(excelBOMRegex, "");
-          }
-          return csv;
-        }
-        function splitLines(csv) {
-          const lines = [], lastCharacterIndex = csv.length - 1, eolDelimiterLength = options.delimiter.eol.length, stateVariables = {
-            insideWrapDelimiter: false,
-            parsingValue: true,
-            justParsedDoubleQuote: false,
-            startIndex: 0
-          };
-          let splitLine = [], character, charBefore, charAfter, nextNChar, index3 = 0;
-          while (index3 < csv.length) {
-            character = csv[index3];
-            charBefore = index3 ? csv[index3 - 1] : "";
-            charAfter = index3 < lastCharacterIndex ? csv[index3 + 1] : "";
-            nextNChar = utils.getNCharacters(csv, index3, eolDelimiterLength);
-            if ((nextNChar === options.delimiter.eol && !stateVariables.insideWrapDelimiter || index3 === lastCharacterIndex) && charBefore === options.delimiter.field) {
-              if (nextNChar === options.delimiter.eol && stateVariables.startIndex === index3) {
-                splitLine.push("");
-              } else if (character === options.delimiter.field) {
-                splitLine.push("");
-              } else {
-                splitLine.push(csv.substr(stateVariables.startIndex));
-              }
-              splitLine.push("");
-              lines.push(splitLine);
-              splitLine = [];
-              stateVariables.startIndex = index3 + eolDelimiterLength;
-              stateVariables.parsingValue = true;
-              stateVariables.insideWrapDelimiter = charAfter === options.delimiter.wrap;
-            } else if (index3 === lastCharacterIndex && character === options.delimiter.field) {
-              const parsedValue = csv.substring(stateVariables.startIndex, index3);
-              splitLine.push(parsedValue);
-              splitLine.push("");
-              lines.push(splitLine);
-            } else if (index3 === lastCharacterIndex || nextNChar === options.delimiter.eol && // if we aren't inside wrap delimiters or if we are but the character before was a wrap delimiter and we didn't just see two
-            (!stateVariables.insideWrapDelimiter || stateVariables.insideWrapDelimiter && charBefore === options.delimiter.wrap && !stateVariables.justParsedDoubleQuote)) {
-              const toIndex = index3 !== lastCharacterIndex || charBefore === options.delimiter.wrap ? index3 : void 0;
-              splitLine.push(csv.substring(stateVariables.startIndex, toIndex));
-              lines.push(splitLine);
-              splitLine = [];
-              stateVariables.startIndex = index3 + eolDelimiterLength;
-              stateVariables.parsingValue = true;
-              stateVariables.insideWrapDelimiter = charAfter === options.delimiter.wrap;
-            } else if (character === options.delimiter.wrap && charBefore === options.delimiter.field && !stateVariables.insideWrapDelimiter && !stateVariables.parsingValue) {
-              stateVariables.startIndex = index3;
-              stateVariables.insideWrapDelimiter = true;
-              stateVariables.parsingValue = true;
-              if (utils.getNCharacters(csv, index3 + 1, eolDelimiterLength) === options.delimiter.eol) {
-                index3 += options.delimiter.eol.length + 1;
-              }
-            } else if ((charBefore !== options.delimiter.wrap || stateVariables.justParsedDoubleQuote && charBefore === options.delimiter.wrap) && character === options.delimiter.wrap && utils.getNCharacters(csv, index3 + 1, eolDelimiterLength) === options.delimiter.eol) {
-              stateVariables.insideWrapDelimiter = false;
-              stateVariables.parsingValue = false;
-            } else if (character === options.delimiter.wrap && (index3 === 0 || utils.getNCharacters(csv, index3 - eolDelimiterLength, eolDelimiterLength) === options.delimiter.eol && !stateVariables.insideWrapDelimiter)) {
-              stateVariables.insideWrapDelimiter = true;
-              stateVariables.parsingValue = true;
-              stateVariables.startIndex = index3;
-            } else if (character === options.delimiter.wrap && charAfter === options.delimiter.field) {
-              splitLine.push(csv.substring(stateVariables.startIndex, index3 + 1));
-              stateVariables.startIndex = index3 + 2;
-              stateVariables.insideWrapDelimiter = false;
-              stateVariables.parsingValue = false;
-            } else if (character === options.delimiter.wrap && charBefore === options.delimiter.field && !stateVariables.insideWrapDelimiter && stateVariables.parsingValue) {
-              splitLine.push(csv.substring(stateVariables.startIndex, index3 - 1));
-              stateVariables.insideWrapDelimiter = true;
-              stateVariables.parsingValue = true;
-              stateVariables.startIndex = index3;
-            } else if (character === options.delimiter.wrap && charAfter === options.delimiter.wrap && index3 !== stateVariables.startIndex) {
-              index3 += 2;
-              stateVariables.justParsedDoubleQuote = true;
-              continue;
-            } else if (character === options.delimiter.field && charBefore !== options.delimiter.wrap && charAfter !== options.delimiter.wrap && !stateVariables.insideWrapDelimiter && stateVariables.parsingValue) {
-              splitLine.push(csv.substring(stateVariables.startIndex, index3));
-              stateVariables.startIndex = index3 + 1;
-            } else if (character === options.delimiter.field && charBefore === options.delimiter.wrap && charAfter !== options.delimiter.wrap && !stateVariables.parsingValue) {
-              stateVariables.insideWrapDelimiter = false;
-              stateVariables.parsingValue = true;
-              stateVariables.startIndex = index3 + 1;
-            }
-            index3++;
-            stateVariables.justParsedDoubleQuote = false;
-          }
-          return lines;
-        }
-        function retrieveRecordLines(params) {
-          if (options.headerFields) {
-            params.recordLines = params.lines;
-          } else {
-            params.recordLines = params.lines.splice(1);
-          }
-          return params;
-        }
-        function retrieveRecordValueFromLine(headerField, line) {
-          const value = line[headerField.index];
-          return processRecordValue(value);
-        }
-        function processRecordValue(fieldValue) {
-          const parsedJson = parseValue(fieldValue);
-          if (!utils.isError(parsedJson) && !utils.isInvalid(parsedJson)) {
-            return parsedJson;
-          } else if (fieldValue === "undefined") {
-            return void 0;
-          }
-          return fieldValue;
-        }
-        function trimRecordValue(fieldValue) {
-          if (options.trimFieldValues && fieldValue !== null) {
-            return fieldValue.trim();
-          }
-          return fieldValue;
-        }
-        function createDocument(headerFields, line) {
-          return headerFields.reduce((document2, headerField) => {
-            const value = retrieveRecordValueFromLine(headerField, line);
-            try {
-              return (0, doc_path_1.setPath)(document2, headerField.value, value);
-            } catch (error) {
-              return document2;
-            }
-          }, {});
-        }
-        function removeWrapDelimitersFromValue(fieldValue) {
-          const firstChar = fieldValue[0], lastIndex = fieldValue.length - 1, lastChar = fieldValue[lastIndex];
-          if (firstChar === options.delimiter.wrap && lastChar === options.delimiter.wrap) {
-            return fieldValue.substr(1, lastIndex - 1);
-          }
-          return fieldValue;
-        }
-        function unescapeWrapDelimiterInField(fieldValue) {
-          return fieldValue.replace(escapedWrapDelimiterRegex, options.delimiter.wrap);
-        }
-        function transformRecordLines(params) {
-          return params.recordLines.reduce((generatedJsonObjects, line) => {
-            line = line.map((fieldValue) => {
-              fieldValue = removeWrapDelimitersFromValue(fieldValue);
-              fieldValue = unescapeWrapDelimiterInField(fieldValue);
-              fieldValue = trimRecordValue(fieldValue);
-              return fieldValue;
-            });
-            const generatedDocument = createDocument(params.headerFields, line);
-            return generatedJsonObjects.concat(generatedDocument);
-          }, []);
-        }
-        function parseValue(value) {
-          try {
-            if (utils.isStringRepresentation(value, options) && !utils.isDateRepresentation(value)) {
-              return value;
-            }
-            const parsedJson = valueParserFn(value);
-            if (Array.isArray(parsedJson)) {
-              return parsedJson.map(trimRecordValue);
-            }
-            return parsedJson;
-          } catch (err) {
-            return err;
-          }
-        }
-        function convert(data2) {
-          const stripped = stripExcelBOM(data2);
-          const split = splitLines(stripped);
-          const heading = retrieveHeading(split);
-          const lines = retrieveRecordLines(heading);
-          return transformRecordLines(lines);
-        }
-        return {
-          convert
-        };
-      };
-      exports.Csv2Json = Csv2Json;
-    }
-  });
-
-  // node_modules/json-2-csv/lib/converter.js
-  var require_converter = __commonJS({
-    "node_modules/json-2-csv/lib/converter.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.csv2json = exports.json2csv = void 0;
-      var constants_1 = require_constants();
-      var json2csv_1 = require_json2csv();
-      var csv2json_1 = require_csv2json();
-      var utils_1 = require_utils2();
-      function json2csv(data2, options) {
-        const builtOptions = (0, utils_1.buildJ2COptions)(options ?? {});
-        (0, utils_1.validate)(data2, utils_1.isObject, constants_1.errors.json2csv);
-        return (0, json2csv_1.Json2Csv)(builtOptions).convert(data2);
-      }
-      exports.json2csv = json2csv;
-      function csv2json2(data2, options) {
-        const builtOptions = (0, utils_1.buildC2JOptions)(options ?? {});
-        (0, utils_1.validate)(data2, utils_1.isString, constants_1.errors.csv2json);
-        return (0, csv2json_1.Csv2Json)(builtOptions).convert(data2);
-      }
-      exports.csv2json = csv2json2;
-    }
-  });
-
   // node_modules/typed-function/lib/umd/typed-function.js
   var require_typed_function = __commonJS({
     "node_modules/typed-function/lib/umd/typed-function.js"(exports, module) {
@@ -4126,6 +3105,1769 @@
     }
   });
 
+  // node_modules/json-2-csv/lib/constants.js
+  var require_constants = __commonJS({
+    "node_modules/json-2-csv/lib/constants.js"(exports) {
+      "use strict";
+      Object.defineProperty(exports, "__esModule", { value: true });
+      exports.excelBOM = exports.defaultCsv2JsonOptions = exports.defaultJson2CsvOptions = exports.errors = void 0;
+      exports.errors = {
+        optionsRequired: "Options were not passed and are required.",
+        json2csv: {
+          cannotCallOn: "Cannot call json2csv on",
+          dataCheckFailure: "Data provided was not an array of documents.",
+          notSameSchema: "Not all documents have the same schema."
+        },
+        csv2json: {
+          cannotCallOn: "Cannot call csv2json on",
+          dataCheckFailure: "CSV is not a string."
+        }
+      };
+      exports.defaultJson2CsvOptions = {
+        arrayIndexesAsKeys: false,
+        checkSchemaDifferences: false,
+        delimiter: {
+          field: ",",
+          wrap: '"',
+          eol: "\n"
+        },
+        emptyFieldValue: void 0,
+        escapeHeaderNestedDots: true,
+        excelBOM: false,
+        excludeKeys: [],
+        expandNestedObjects: true,
+        expandArrayObjects: false,
+        prependHeader: true,
+        preventCsvInjection: false,
+        sortHeader: false,
+        trimFieldValues: false,
+        trimHeaderFields: false,
+        unwindArrays: false,
+        useDateIso8601Format: false,
+        useLocaleFormat: false,
+        wrapBooleans: false
+      };
+      exports.defaultCsv2JsonOptions = {
+        delimiter: {
+          field: ",",
+          wrap: '"',
+          eol: "\n"
+        },
+        excelBOM: false,
+        preventCsvInjection: false,
+        trimFieldValues: false,
+        trimHeaderFields: false,
+        wrapBooleans: false
+      };
+      exports.excelBOM = "\uFEFF";
+    }
+  });
+
+  // node_modules/doc-path/lib/path.js
+  var require_path = __commonJS({
+    "node_modules/doc-path/lib/path.js"(exports) {
+      "use strict";
+      Object.defineProperty(exports, "__esModule", { value: true });
+      exports.setPath = exports.evaluatePath = void 0;
+      function evaluatePath(obj, kp) {
+        if (!obj) {
+          return null;
+        }
+        const { dotIndex, key, remaining } = state(kp);
+        const kpVal = typeof obj === "object" && kp in obj ? obj[kp] : void 0;
+        const keyVal = typeof obj === "object" && key in obj ? obj[key] : void 0;
+        if (dotIndex >= 0 && typeof obj === "object" && !(kp in obj)) {
+          const { key: nextKey } = state(remaining);
+          const nextKeyAsInt = parseInt(nextKey);
+          if (Array.isArray(keyVal) && isNaN(nextKeyAsInt)) {
+            return keyVal.map((doc) => evaluatePath(doc, remaining));
+          }
+          return evaluatePath(keyVal, remaining);
+        } else if (Array.isArray(obj)) {
+          const keyAsInt = parseInt(key);
+          if (kp === key && dotIndex === -1 && !isNaN(keyAsInt)) {
+            return keyVal;
+          }
+          return obj.map((doc) => evaluatePath(doc, kp));
+        } else if (dotIndex >= 0 && kp !== key && typeof obj === "object" && key in obj) {
+          return evaluatePath(keyVal, remaining);
+        } else if (dotIndex === -1 && typeof obj === "object" && key in obj && !(kp in obj)) {
+          return keyVal;
+        }
+        return kpVal;
+      }
+      exports.evaluatePath = evaluatePath;
+      function setPath(obj, kp, v) {
+        if (!obj) {
+          throw new Error("No object was provided.");
+        } else if (!kp) {
+          throw new Error("No keyPath was provided.");
+        }
+        return _sp(obj, kp, v);
+      }
+      exports.setPath = setPath;
+      function _sp(obj, kp, v) {
+        const { dotIndex, key, remaining } = state(kp);
+        if (kp.startsWith("__proto__") || kp.startsWith("constructor") || kp.startsWith("prototype")) {
+          return obj;
+        }
+        if (dotIndex >= 0) {
+          const keyAsInt = parseInt(key);
+          if (typeof obj === "object" && obj !== null && !(key in obj) && Array.isArray(obj) && !isNaN(keyAsInt)) {
+            obj[key] = obj[key] ?? {};
+            _sp(obj[key], remaining, v);
+            return obj;
+          } else if (typeof obj === "object" && obj !== null && !(key in obj) && Array.isArray(obj)) {
+            obj.forEach((doc) => _sp(doc, kp, v));
+            return obj;
+          } else if (typeof obj === "object" && obj !== null && !(key in obj) && !Array.isArray(obj)) {
+            const { key: nextKey } = state(remaining);
+            const nextKeyAsInt = parseInt(nextKey);
+            if (!isNaN(nextKeyAsInt)) {
+              obj[key] = [];
+            } else if (remaining === "") {
+              obj[kp] = v;
+              return obj;
+            } else {
+              obj[key] = {};
+            }
+          }
+          _sp(obj[key], remaining, v);
+        } else if (Array.isArray(obj)) {
+          const keyAsInt = parseInt(key);
+          if (kp === key && dotIndex === -1 && !isNaN(keyAsInt)) {
+            obj[key] = v;
+            return obj;
+          }
+          obj.forEach((doc) => _sp(doc, remaining, v));
+          return obj;
+        } else {
+          obj[key] = v;
+        }
+        return obj;
+      }
+      function state(kp) {
+        const dotIndex = findFirstNonEscapedDotIndex(kp);
+        return {
+          dotIndex,
+          key: kp.slice(0, dotIndex >= 0 ? dotIndex : void 0).replace(/\\./g, "."),
+          remaining: kp.slice(dotIndex + 1)
+        };
+      }
+      function findFirstNonEscapedDotIndex(kp) {
+        for (let i2 = 0; i2 < kp.length; i2++) {
+          const previousChar = i2 > 0 ? kp[i2 - 1] : "", currentChar = kp[i2];
+          if (currentChar === "." && previousChar !== "\\")
+            return i2;
+        }
+        return -1;
+      }
+    }
+  });
+
+  // node_modules/deeks/lib/utils.js
+  var require_utils = __commonJS({
+    "node_modules/deeks/lib/utils.js"(exports) {
+      "use strict";
+      Object.defineProperty(exports, "__esModule", { value: true });
+      exports.isDocumentToRecurOn = exports.flatten = exports.unique = void 0;
+      function unique(array) {
+        return [...new Set(array)];
+      }
+      exports.unique = unique;
+      function flatten4(array) {
+        return [].concat(...array);
+      }
+      exports.flatten = flatten4;
+      function isDocumentToRecurOn(val2) {
+        return typeof val2 === "object" && val2 !== null && !Array.isArray(val2) && Object.keys(val2).length;
+      }
+      exports.isDocumentToRecurOn = isDocumentToRecurOn;
+    }
+  });
+
+  // node_modules/deeks/lib/types.js
+  var require_types = __commonJS({
+    "node_modules/deeks/lib/types.js"(exports) {
+      "use strict";
+      Object.defineProperty(exports, "__esModule", { value: true });
+    }
+  });
+
+  // node_modules/deeks/lib/deeks.js
+  var require_deeks = __commonJS({
+    "node_modules/deeks/lib/deeks.js"(exports) {
+      "use strict";
+      var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
+        if (k2 === void 0) k2 = k;
+        var desc = Object.getOwnPropertyDescriptor(m, k);
+        if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+          desc = { enumerable: true, get: function() {
+            return m[k];
+          } };
+        }
+        Object.defineProperty(o, k2, desc);
+      } : function(o, m, k, k2) {
+        if (k2 === void 0) k2 = k;
+        o[k2] = m[k];
+      });
+      var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? function(o, v) {
+        Object.defineProperty(o, "default", { enumerable: true, value: v });
+      } : function(o, v) {
+        o["default"] = v;
+      });
+      var __importStar = exports && exports.__importStar || function(mod3) {
+        if (mod3 && mod3.__esModule) return mod3;
+        var result = {};
+        if (mod3 != null) {
+          for (var k in mod3) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod3, k)) __createBinding(result, mod3, k);
+        }
+        __setModuleDefault(result, mod3);
+        return result;
+      };
+      var __exportStar = exports && exports.__exportStar || function(m, exports2) {
+        for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports2, p)) __createBinding(exports2, m, p);
+      };
+      Object.defineProperty(exports, "__esModule", { value: true });
+      exports.deepKeysFromList = exports.deepKeys = void 0;
+      var utils = __importStar(require_utils());
+      __exportStar(require_types(), exports);
+      function deepKeys(object, options) {
+        const parsedOptions = mergeOptions(options);
+        if (typeof object === "object" && object !== null) {
+          return generateDeepKeysList("", object, parsedOptions);
+        }
+        return [];
+      }
+      exports.deepKeys = deepKeys;
+      function deepKeysFromList(list, options) {
+        const parsedOptions = mergeOptions(options);
+        return list.map((document2) => {
+          if (typeof document2 === "object" && document2 !== null) {
+            return deepKeys(document2, parsedOptions);
+          }
+          return [];
+        });
+      }
+      exports.deepKeysFromList = deepKeysFromList;
+      function generateDeepKeysList(heading, data2, options) {
+        const keys = Object.keys(data2).map((currentKey) => {
+          const keyName = buildKeyName(heading, escapeNestedDotsIfSpecified(currentKey, options));
+          if (options.expandNestedObjects && utils.isDocumentToRecurOn(data2[currentKey]) || options.arrayIndexesAsKeys && Array.isArray(data2[currentKey]) && data2[currentKey].length) {
+            return generateDeepKeysList(keyName, data2[currentKey], options);
+          } else if (options.expandArrayObjects && Array.isArray(data2[currentKey])) {
+            return processArrayKeys(data2[currentKey], keyName, options);
+          } else if (options.ignoreEmptyArrays && Array.isArray(data2[currentKey]) && !data2[currentKey].length) {
+            return [];
+          }
+          return keyName;
+        });
+        return utils.flatten(keys);
+      }
+      function processArrayKeys(subArray, currentKeyPath, options) {
+        let subArrayKeys = deepKeysFromList(subArray, options);
+        if (!subArray.length) {
+          return options.ignoreEmptyArraysWhenExpanding ? [] : [currentKeyPath];
+        } else if (subArray.length && utils.flatten(subArrayKeys).length === 0) {
+          return [currentKeyPath];
+        } else {
+          subArrayKeys = subArrayKeys.map((schemaKeys) => {
+            if (Array.isArray(schemaKeys) && schemaKeys.length === 0) {
+              return [currentKeyPath];
+            }
+            return schemaKeys.map((subKey) => buildKeyName(currentKeyPath, escapeNestedDotsIfSpecified(subKey, options)));
+          });
+          return utils.unique(utils.flatten(subArrayKeys));
+        }
+      }
+      function escapeNestedDotsIfSpecified(key, options) {
+        if (options.escapeNestedDots) {
+          return key.replace(/\./g, "\\.");
+        }
+        return key;
+      }
+      function buildKeyName(upperKeyName, currentKeyName) {
+        if (upperKeyName) {
+          return upperKeyName + "." + currentKeyName;
+        }
+        return currentKeyName;
+      }
+      function mergeOptions(options) {
+        return {
+          arrayIndexesAsKeys: false,
+          expandNestedObjects: true,
+          expandArrayObjects: false,
+          ignoreEmptyArraysWhenExpanding: false,
+          escapeNestedDots: false,
+          ignoreEmptyArrays: false,
+          ...options ?? {}
+        };
+      }
+    }
+  });
+
+  // node_modules/json-2-csv/lib/utils.js
+  var require_utils2 = __commonJS({
+    "node_modules/json-2-csv/lib/utils.js"(exports) {
+      "use strict";
+      Object.defineProperty(exports, "__esModule", { value: true });
+      exports.isInvalid = exports.flatten = exports.unique = exports.arrayDifference = exports.isError = exports.isUndefined = exports.isNull = exports.isObject = exports.isString = exports.isNumber = exports.unwind = exports.getNCharacters = exports.removeEmptyFields = exports.isEmptyField = exports.computeSchemaDifferences = exports.isDateRepresentation = exports.isStringRepresentation = exports.deepCopy = exports.validate = exports.buildC2JOptions = exports.buildJ2COptions = void 0;
+      var doc_path_1 = require_path();
+      var constants_1 = require_constants();
+      var dateStringRegex = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/;
+      var MAX_ARRAY_LENGTH = 1e5;
+      function buildJ2COptions(opts) {
+        return {
+          ...constants_1.defaultJson2CsvOptions,
+          ...opts,
+          delimiter: {
+            field: opts?.delimiter?.field ?? constants_1.defaultJson2CsvOptions.delimiter.field,
+            wrap: opts?.delimiter?.wrap || constants_1.defaultJson2CsvOptions.delimiter.wrap,
+            eol: opts?.delimiter?.eol || constants_1.defaultJson2CsvOptions.delimiter.eol
+          },
+          fieldTitleMap: /* @__PURE__ */ Object.create({})
+        };
+      }
+      exports.buildJ2COptions = buildJ2COptions;
+      function buildC2JOptions(opts) {
+        return {
+          ...constants_1.defaultCsv2JsonOptions,
+          ...opts,
+          delimiter: {
+            field: opts?.delimiter?.field ?? constants_1.defaultCsv2JsonOptions.delimiter.field,
+            wrap: opts?.delimiter?.wrap || constants_1.defaultCsv2JsonOptions.delimiter.wrap,
+            eol: opts?.delimiter?.eol || constants_1.defaultCsv2JsonOptions.delimiter.eol
+          }
+        };
+      }
+      exports.buildC2JOptions = buildC2JOptions;
+      function validate2(data2, validationFn, errorMessages) {
+        if (!data2)
+          throw new Error(`${errorMessages.cannotCallOn} ${data2}.`);
+        if (!validationFn(data2))
+          throw new Error(errorMessages.dataCheckFailure);
+        return true;
+      }
+      exports.validate = validate2;
+      function deepCopy(obj) {
+        return JSON.parse(JSON.stringify(obj));
+      }
+      exports.deepCopy = deepCopy;
+      function isStringRepresentation(fieldValue, options) {
+        const firstChar = fieldValue[0], lastIndex = fieldValue.length - 1, lastChar = fieldValue[lastIndex];
+        return firstChar === options.delimiter.wrap && lastChar === options.delimiter.wrap;
+      }
+      exports.isStringRepresentation = isStringRepresentation;
+      function isDateRepresentation(fieldValue) {
+        return dateStringRegex.test(fieldValue);
+      }
+      exports.isDateRepresentation = isDateRepresentation;
+      function computeSchemaDifferences(schemaA, schemaB) {
+        return arrayDifference(schemaA, schemaB).concat(arrayDifference(schemaB, schemaA));
+      }
+      exports.computeSchemaDifferences = computeSchemaDifferences;
+      function isEmptyField(fieldValue) {
+        return isUndefined3(fieldValue) || isNull2(fieldValue) || fieldValue === "";
+      }
+      exports.isEmptyField = isEmptyField;
+      function removeEmptyFields(fields) {
+        return fields.filter((field) => !isEmptyField(field));
+      }
+      exports.removeEmptyFields = removeEmptyFields;
+      function getNCharacters(str, start, n) {
+        return str.substring(start, start + n);
+      }
+      exports.getNCharacters = getNCharacters;
+      function unwindItem(accumulator, item, fieldPath) {
+        const valueToUnwind = (0, doc_path_1.evaluatePath)(item, fieldPath);
+        let cloned = deepCopy(item);
+        if (Array.isArray(valueToUnwind) && valueToUnwind.length) {
+          valueToUnwind.forEach((val2) => {
+            cloned = deepCopy(item);
+            accumulator.push((0, doc_path_1.setPath)(cloned, fieldPath, val2));
+          });
+        } else if (Array.isArray(valueToUnwind) && valueToUnwind.length === 0) {
+          (0, doc_path_1.setPath)(cloned, fieldPath, "");
+          accumulator.push(cloned);
+        } else {
+          accumulator.push(cloned);
+        }
+      }
+      function unwind(array, field) {
+        const result = [];
+        array.forEach((item) => {
+          unwindItem(result, item, field);
+        });
+        return result;
+      }
+      exports.unwind = unwind;
+      function isNumber5(value) {
+        return !isNaN(Number(value));
+      }
+      exports.isNumber = isNumber5;
+      function isString3(value) {
+        return typeof value === "string";
+      }
+      exports.isString = isString3;
+      function isObject3(value) {
+        return typeof value === "object";
+      }
+      exports.isObject = isObject3;
+      function isNull2(value) {
+        return value === null;
+      }
+      exports.isNull = isNull2;
+      function isUndefined3(value) {
+        return typeof value === "undefined";
+      }
+      exports.isUndefined = isUndefined3;
+      function isError(value) {
+        return Object.prototype.toString.call(value) === "[object Error]";
+      }
+      exports.isError = isError;
+      function arrayDifference(a, b) {
+        return a.filter((x) => !b.includes(x));
+      }
+      exports.arrayDifference = arrayDifference;
+      function unique(array) {
+        return [...new Set(array)];
+      }
+      exports.unique = unique;
+      function flatten4(array) {
+        if (array.flat) {
+          return array.flat();
+        }
+        if (array.length > MAX_ARRAY_LENGTH) {
+          let safeArray = [];
+          for (let a = 0; a < array.length; a += MAX_ARRAY_LENGTH) {
+            safeArray = safeArray.concat(...array.slice(a, a + MAX_ARRAY_LENGTH));
+          }
+          return safeArray;
+        }
+        return array.reduce((accumulator, value) => accumulator.concat(value), []);
+      }
+      exports.flatten = flatten4;
+      function isInvalid(parsedJson) {
+        return parsedJson === Infinity || parsedJson === -Infinity;
+      }
+      exports.isInvalid = isInvalid;
+    }
+  });
+
+  // node_modules/json-2-csv/lib/json2csv.js
+  var require_json2csv = __commonJS({
+    "node_modules/json-2-csv/lib/json2csv.js"(exports) {
+      "use strict";
+      var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
+        if (k2 === void 0) k2 = k;
+        var desc = Object.getOwnPropertyDescriptor(m, k);
+        if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+          desc = { enumerable: true, get: function() {
+            return m[k];
+          } };
+        }
+        Object.defineProperty(o, k2, desc);
+      } : function(o, m, k, k2) {
+        if (k2 === void 0) k2 = k;
+        o[k2] = m[k];
+      });
+      var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? function(o, v) {
+        Object.defineProperty(o, "default", { enumerable: true, value: v });
+      } : function(o, v) {
+        o["default"] = v;
+      });
+      var __importStar = exports && exports.__importStar || function(mod3) {
+        if (mod3 && mod3.__esModule) return mod3;
+        var result = {};
+        if (mod3 != null) {
+          for (var k in mod3) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod3, k)) __createBinding(result, mod3, k);
+        }
+        __setModuleDefault(result, mod3);
+        return result;
+      };
+      Object.defineProperty(exports, "__esModule", { value: true });
+      exports.Json2Csv = void 0;
+      var doc_path_1 = require_path();
+      var deeks_1 = require_deeks();
+      var constants_1 = require_constants();
+      var utils = __importStar(require_utils2());
+      var Json2Csv = function(options) {
+        const wrapDelimiterCheckRegex = new RegExp(options.delimiter.wrap, "g"), crlfSearchRegex = /\r?\n|\r/, customValueParser = options.parseValue && typeof options.parseValue === "function" ? options.parseValue : null, expandingWithoutUnwinding = options.expandArrayObjects && !options.unwindArrays, deeksOptions = {
+          arrayIndexesAsKeys: options.arrayIndexesAsKeys,
+          expandNestedObjects: options.expandNestedObjects,
+          expandArrayObjects: expandingWithoutUnwinding,
+          ignoreEmptyArraysWhenExpanding: expandingWithoutUnwinding,
+          escapeNestedDots: true
+        };
+        function getFieldNameList(data2) {
+          return (0, deeks_1.deepKeysFromList)(data2, deeksOptions);
+        }
+        function processSchemas(documentSchemas) {
+          if (options.checkSchemaDifferences) {
+            return checkSchemaDifferences(documentSchemas);
+          } else {
+            const uniqueFieldNames = utils.unique(utils.flatten(documentSchemas));
+            return uniqueFieldNames;
+          }
+        }
+        function checkSchemaDifferences(documentSchemas) {
+          const firstDocSchema = documentSchemas[0], restOfDocumentSchemas = documentSchemas.slice(1), schemaDifferences = computeNumberOfSchemaDifferences(firstDocSchema, restOfDocumentSchemas);
+          if (schemaDifferences) {
+            throw new Error(constants_1.errors.json2csv.notSameSchema);
+          }
+          return firstDocSchema;
+        }
+        function computeNumberOfSchemaDifferences(firstDocSchema, restOfDocumentSchemas) {
+          return restOfDocumentSchemas.reduce((schemaDifferences, documentSchema) => {
+            const numberOfDifferences = utils.computeSchemaDifferences(firstDocSchema, documentSchema).length;
+            return numberOfDifferences > 0 ? schemaDifferences + 1 : schemaDifferences;
+          }, 0);
+        }
+        function filterExcludedKeys(keyPaths) {
+          if (options.excludeKeys) {
+            return keyPaths.filter((keyPath) => {
+              for (const excludedKey of options.excludeKeys) {
+                const regex = excludedKey instanceof RegExp ? excludedKey : new RegExp(`^${excludedKey}`);
+                if (excludedKey === keyPath || keyPath.match(regex)) {
+                  return false;
+                }
+              }
+              return true;
+            });
+          }
+          return keyPaths;
+        }
+        function sortHeaderFields(fieldNames) {
+          if (options.sortHeader && typeof options.sortHeader === "function") {
+            return fieldNames.sort(options.sortHeader);
+          } else if (options.sortHeader) {
+            return fieldNames.sort();
+          }
+          return fieldNames;
+        }
+        function trimHeaderFields(params) {
+          if (options.trimHeaderFields) {
+            params.headerFields = params.headerFields.map((field) => field.split(".").map((component) => component.trim()).join("."));
+          }
+          return params;
+        }
+        function wrapHeaderFields(params) {
+          if (options.prependHeader) {
+            params.headerFields = params.headerFields.map(function(headingKey) {
+              return wrapFieldValueIfNecessary(headingKey);
+            });
+          }
+          return params;
+        }
+        function generateCsvHeader(params) {
+          const fieldTitleMapKeys = Object.keys(options.fieldTitleMap);
+          params.header = params.headerFields.map(function(field) {
+            let headerKey = field;
+            if (fieldTitleMapKeys.includes(field)) {
+              headerKey = options.fieldTitleMap[field];
+            } else if (!options.escapeHeaderNestedDots) {
+              headerKey = headerKey.replace(/\\\./g, ".");
+            }
+            return wrapFieldValueIfNecessary(headerKey);
+          }).join(options.delimiter.field);
+          return params;
+        }
+        function convertKeysToHeaderFields() {
+          if (!options.keys)
+            return [];
+          return options.keys.map((key) => {
+            if (typeof key === "object" && "field" in key) {
+              options.fieldTitleMap[key.field] = key.title ?? key.field;
+              return key.field;
+            }
+            return key;
+          });
+        }
+        function extractWildcardMatchKeys() {
+          if (!options.keys)
+            return [];
+          return options.keys.flatMap((item) => {
+            if (typeof item === "string") {
+              return [];
+            } else if (item?.wildcardMatch) {
+              return item.field;
+            }
+            return [];
+          });
+        }
+        function retrieveHeaderFields(data2) {
+          const wildcardMatchKeys = extractWildcardMatchKeys();
+          const keyStrings = convertKeysToHeaderFields();
+          const fieldNames = getFieldNameList(data2);
+          const processed = processSchemas(fieldNames);
+          if (options.keys) {
+            options.keys = keyStrings;
+            const matchedKeys = keyStrings.flatMap((userProvidedKey) => {
+              if (!wildcardMatchKeys.includes(userProvidedKey)) {
+                return userProvidedKey;
+              }
+              const matches = [];
+              const regex = new RegExp(`^${userProvidedKey}`);
+              for (const detectedKey of processed) {
+                if (userProvidedKey === detectedKey || detectedKey.match(regex)) {
+                  matches.push(detectedKey);
+                }
+              }
+              return matches;
+            });
+            if (!options.unwindArrays) {
+              const filtered2 = filterExcludedKeys(matchedKeys);
+              return sortHeaderFields(filtered2);
+            }
+          }
+          const filtered = filterExcludedKeys(processed);
+          return sortHeaderFields(filtered);
+        }
+        function unwindRecordsIfNecessary(params, finalPass = false) {
+          if (options.unwindArrays) {
+            const originalRecordsLength = params.records.length;
+            params.headerFields.forEach((headerField) => {
+              params.records = utils.unwind(params.records, headerField);
+            });
+            const headerFields = retrieveHeaderFields(params.records);
+            params.headerFields = headerFields;
+            if (originalRecordsLength !== params.records.length) {
+              return unwindRecordsIfNecessary(params);
+            }
+            if (!finalPass) {
+              return unwindRecordsIfNecessary(params, true);
+            }
+            if (options.keys) {
+              const userSelectedFields = convertKeysToHeaderFields();
+              params.headerFields = filterExcludedKeys(userSelectedFields);
+            }
+            return params;
+          }
+          return params;
+        }
+        function processRecords(params) {
+          params.recordString = params.records.map((record) => {
+            const recordFieldData = retrieveRecordFieldData(record, params.headerFields), processedRecordData = recordFieldData.map((fieldValue) => {
+              fieldValue = trimRecordFieldValue(fieldValue);
+              fieldValue = preventCsvInjection(fieldValue);
+              let stringified = customValueParser ? customValueParser(fieldValue, recordFieldValueToString) : recordFieldValueToString(fieldValue);
+              stringified = wrapFieldValueIfNecessary(stringified);
+              return stringified;
+            });
+            return generateCsvRowFromRecord(processedRecordData);
+          }).join(options.delimiter.eol);
+          return params;
+        }
+        function processRecordFieldDataForExpandedArrayObject(recordFieldValue) {
+          const filteredRecordFieldValue = utils.removeEmptyFields(recordFieldValue);
+          if (!recordFieldValue.length || !filteredRecordFieldValue.length) {
+            return options.emptyFieldValue || "";
+          } else if (filteredRecordFieldValue.length === 1) {
+            return filteredRecordFieldValue[0];
+          }
+          return recordFieldValue;
+        }
+        function retrieveRecordFieldData(record, fields) {
+          const recordValues = [];
+          fields.forEach((field) => {
+            let recordFieldValue = (0, doc_path_1.evaluatePath)(record, field);
+            if (!utils.isUndefined(options.emptyFieldValue) && utils.isEmptyField(recordFieldValue)) {
+              recordFieldValue = options.emptyFieldValue;
+            } else if (options.expandArrayObjects && Array.isArray(recordFieldValue)) {
+              recordFieldValue = processRecordFieldDataForExpandedArrayObject(recordFieldValue);
+            }
+            recordValues.push(recordFieldValue);
+          });
+          return recordValues;
+        }
+        function recordFieldValueToString(fieldValue) {
+          const isDate3 = fieldValue instanceof Date;
+          if (fieldValue === null || Array.isArray(fieldValue) || typeof fieldValue === "object" && !isDate3) {
+            return JSON.stringify(fieldValue);
+          } else if (typeof fieldValue === "undefined") {
+            return "undefined";
+          } else if (isDate3 && options.useDateIso8601Format) {
+            return fieldValue.toISOString();
+          } else {
+            return !options.useLocaleFormat ? fieldValue.toString() : fieldValue.toLocaleString();
+          }
+        }
+        function trimRecordFieldValue(fieldValue) {
+          if (options.trimFieldValues) {
+            if (Array.isArray(fieldValue)) {
+              return fieldValue.map(trimRecordFieldValue);
+            } else if (typeof fieldValue === "string") {
+              return fieldValue.trim();
+            }
+            return fieldValue;
+          }
+          return fieldValue;
+        }
+        function preventCsvInjection(fieldValue) {
+          if (options.preventCsvInjection) {
+            if (Array.isArray(fieldValue)) {
+              return fieldValue.map(preventCsvInjection);
+            } else if (typeof fieldValue === "string" && !utils.isNumber(fieldValue)) {
+              return fieldValue.replace(/^[=+\-@\t\r]+/g, "");
+            }
+            return fieldValue;
+          }
+          return fieldValue;
+        }
+        function wrapFieldValueIfNecessary(fieldValue) {
+          const wrapDelimiter = options.delimiter.wrap;
+          if (fieldValue.includes(options.delimiter.wrap)) {
+            fieldValue = fieldValue.replace(wrapDelimiterCheckRegex, wrapDelimiter + wrapDelimiter);
+          }
+          if (fieldValue.includes(options.delimiter.field) || fieldValue.includes(options.delimiter.wrap) || fieldValue.match(crlfSearchRegex) || options.wrapBooleans && (fieldValue === "true" || fieldValue === "false")) {
+            fieldValue = wrapDelimiter + fieldValue + wrapDelimiter;
+          }
+          return fieldValue;
+        }
+        function generateCsvRowFromRecord(recordFieldValues) {
+          return recordFieldValues.join(options.delimiter.field);
+        }
+        function generateCsvFromComponents(params) {
+          const header = params.header, records = params.recordString, csv = (options.excelBOM ? constants_1.excelBOM : "") + (options.prependHeader ? header + options.delimiter.eol : "") + records;
+          return csv;
+        }
+        function convert(data2) {
+          if (utils.isObject(data2) && !data2.length) {
+            data2 = [data2];
+          }
+          const headerFields = {
+            headerFields: retrieveHeaderFields(data2),
+            records: data2,
+            header: "",
+            recordString: ""
+          };
+          const unwinded = unwindRecordsIfNecessary(headerFields);
+          const processed = processRecords(unwinded);
+          const wrapped = wrapHeaderFields(processed);
+          const trimmed = trimHeaderFields(wrapped);
+          const generated = generateCsvHeader(trimmed);
+          return generateCsvFromComponents(generated);
+        }
+        return {
+          convert
+        };
+      };
+      exports.Json2Csv = Json2Csv;
+    }
+  });
+
+  // node_modules/json-2-csv/lib/csv2json.js
+  var require_csv2json = __commonJS({
+    "node_modules/json-2-csv/lib/csv2json.js"(exports) {
+      "use strict";
+      var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
+        if (k2 === void 0) k2 = k;
+        var desc = Object.getOwnPropertyDescriptor(m, k);
+        if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+          desc = { enumerable: true, get: function() {
+            return m[k];
+          } };
+        }
+        Object.defineProperty(o, k2, desc);
+      } : function(o, m, k, k2) {
+        if (k2 === void 0) k2 = k;
+        o[k2] = m[k];
+      });
+      var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? function(o, v) {
+        Object.defineProperty(o, "default", { enumerable: true, value: v });
+      } : function(o, v) {
+        o["default"] = v;
+      });
+      var __importStar = exports && exports.__importStar || function(mod3) {
+        if (mod3 && mod3.__esModule) return mod3;
+        var result = {};
+        if (mod3 != null) {
+          for (var k in mod3) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod3, k)) __createBinding(result, mod3, k);
+        }
+        __setModuleDefault(result, mod3);
+        return result;
+      };
+      Object.defineProperty(exports, "__esModule", { value: true });
+      exports.Csv2Json = void 0;
+      var doc_path_1 = require_path();
+      var constants_1 = require_constants();
+      var utils = __importStar(require_utils2());
+      var Csv2Json = function(options) {
+        const escapedWrapDelimiterRegex = new RegExp(options.delimiter.wrap + options.delimiter.wrap, "g"), excelBOMRegex = new RegExp("^" + constants_1.excelBOM), valueParserFn = options.parseValue && typeof options.parseValue === "function" ? options.parseValue : JSON.parse;
+        function processHeaderKey(headerKey) {
+          headerKey = removeWrapDelimitersFromValue(headerKey);
+          if (options.trimHeaderFields) {
+            return headerKey.split(".").map((component) => component.trim()).join(".");
+          }
+          return headerKey;
+        }
+        function retrieveHeading(lines) {
+          let headerFields = [];
+          if (options.headerFields) {
+            headerFields = options.headerFields.map((headerField, index3) => ({
+              value: processHeaderKey(headerField),
+              index: index3
+            }));
+          } else {
+            const headerRow = lines[0];
+            headerFields = headerRow.map((headerKey, index3) => ({
+              value: processHeaderKey(headerKey),
+              index: index3
+            }));
+            if (options.keys) {
+              const keys = options.keys;
+              headerFields = headerFields.filter((headerKey) => keys.includes(headerKey.value));
+            }
+          }
+          return {
+            lines,
+            headerFields,
+            recordLines: []
+          };
+        }
+        function stripExcelBOM(csv) {
+          if (options.excelBOM) {
+            return csv.replace(excelBOMRegex, "");
+          }
+          return csv;
+        }
+        function splitLines(csv) {
+          const lines = [], lastCharacterIndex = csv.length - 1, eolDelimiterLength = options.delimiter.eol.length, stateVariables = {
+            insideWrapDelimiter: false,
+            parsingValue: true,
+            justParsedDoubleQuote: false,
+            startIndex: 0
+          };
+          let splitLine = [], character, charBefore, charAfter, nextNChar, index3 = 0;
+          while (index3 < csv.length) {
+            character = csv[index3];
+            charBefore = index3 ? csv[index3 - 1] : "";
+            charAfter = index3 < lastCharacterIndex ? csv[index3 + 1] : "";
+            nextNChar = utils.getNCharacters(csv, index3, eolDelimiterLength);
+            if ((nextNChar === options.delimiter.eol && !stateVariables.insideWrapDelimiter || index3 === lastCharacterIndex) && charBefore === options.delimiter.field) {
+              if (nextNChar === options.delimiter.eol && stateVariables.startIndex === index3) {
+                splitLine.push("");
+              } else if (character === options.delimiter.field) {
+                splitLine.push("");
+              } else {
+                splitLine.push(csv.substr(stateVariables.startIndex));
+              }
+              splitLine.push("");
+              lines.push(splitLine);
+              splitLine = [];
+              stateVariables.startIndex = index3 + eolDelimiterLength;
+              stateVariables.parsingValue = true;
+              stateVariables.insideWrapDelimiter = charAfter === options.delimiter.wrap;
+            } else if (index3 === lastCharacterIndex && character === options.delimiter.field) {
+              const parsedValue = csv.substring(stateVariables.startIndex, index3);
+              splitLine.push(parsedValue);
+              splitLine.push("");
+              lines.push(splitLine);
+            } else if (index3 === lastCharacterIndex || nextNChar === options.delimiter.eol && // if we aren't inside wrap delimiters or if we are but the character before was a wrap delimiter and we didn't just see two
+            (!stateVariables.insideWrapDelimiter || stateVariables.insideWrapDelimiter && charBefore === options.delimiter.wrap && !stateVariables.justParsedDoubleQuote)) {
+              const toIndex = index3 !== lastCharacterIndex || charBefore === options.delimiter.wrap ? index3 : void 0;
+              splitLine.push(csv.substring(stateVariables.startIndex, toIndex));
+              lines.push(splitLine);
+              splitLine = [];
+              stateVariables.startIndex = index3 + eolDelimiterLength;
+              stateVariables.parsingValue = true;
+              stateVariables.insideWrapDelimiter = charAfter === options.delimiter.wrap;
+            } else if (character === options.delimiter.wrap && charBefore === options.delimiter.field && !stateVariables.insideWrapDelimiter && !stateVariables.parsingValue) {
+              stateVariables.startIndex = index3;
+              stateVariables.insideWrapDelimiter = true;
+              stateVariables.parsingValue = true;
+              if (utils.getNCharacters(csv, index3 + 1, eolDelimiterLength) === options.delimiter.eol) {
+                index3 += options.delimiter.eol.length + 1;
+              }
+            } else if ((charBefore !== options.delimiter.wrap || stateVariables.justParsedDoubleQuote && charBefore === options.delimiter.wrap) && character === options.delimiter.wrap && utils.getNCharacters(csv, index3 + 1, eolDelimiterLength) === options.delimiter.eol) {
+              stateVariables.insideWrapDelimiter = false;
+              stateVariables.parsingValue = false;
+            } else if (character === options.delimiter.wrap && (index3 === 0 || utils.getNCharacters(csv, index3 - eolDelimiterLength, eolDelimiterLength) === options.delimiter.eol && !stateVariables.insideWrapDelimiter)) {
+              stateVariables.insideWrapDelimiter = true;
+              stateVariables.parsingValue = true;
+              stateVariables.startIndex = index3;
+            } else if (character === options.delimiter.wrap && charAfter === options.delimiter.field) {
+              splitLine.push(csv.substring(stateVariables.startIndex, index3 + 1));
+              stateVariables.startIndex = index3 + 2;
+              stateVariables.insideWrapDelimiter = false;
+              stateVariables.parsingValue = false;
+            } else if (character === options.delimiter.wrap && charBefore === options.delimiter.field && !stateVariables.insideWrapDelimiter && stateVariables.parsingValue) {
+              splitLine.push(csv.substring(stateVariables.startIndex, index3 - 1));
+              stateVariables.insideWrapDelimiter = true;
+              stateVariables.parsingValue = true;
+              stateVariables.startIndex = index3;
+            } else if (character === options.delimiter.wrap && charAfter === options.delimiter.wrap && index3 !== stateVariables.startIndex) {
+              index3 += 2;
+              stateVariables.justParsedDoubleQuote = true;
+              continue;
+            } else if (character === options.delimiter.field && charBefore !== options.delimiter.wrap && charAfter !== options.delimiter.wrap && !stateVariables.insideWrapDelimiter && stateVariables.parsingValue) {
+              splitLine.push(csv.substring(stateVariables.startIndex, index3));
+              stateVariables.startIndex = index3 + 1;
+            } else if (character === options.delimiter.field && charBefore === options.delimiter.wrap && charAfter !== options.delimiter.wrap && !stateVariables.parsingValue) {
+              stateVariables.insideWrapDelimiter = false;
+              stateVariables.parsingValue = true;
+              stateVariables.startIndex = index3 + 1;
+            }
+            index3++;
+            stateVariables.justParsedDoubleQuote = false;
+          }
+          return lines;
+        }
+        function retrieveRecordLines(params) {
+          if (options.headerFields) {
+            params.recordLines = params.lines;
+          } else {
+            params.recordLines = params.lines.splice(1);
+          }
+          return params;
+        }
+        function retrieveRecordValueFromLine(headerField, line) {
+          const value = line[headerField.index];
+          return processRecordValue(value);
+        }
+        function processRecordValue(fieldValue) {
+          const parsedJson = parseValue(fieldValue);
+          if (!utils.isError(parsedJson) && !utils.isInvalid(parsedJson)) {
+            return parsedJson;
+          } else if (fieldValue === "undefined") {
+            return void 0;
+          }
+          return fieldValue;
+        }
+        function trimRecordValue(fieldValue) {
+          if (options.trimFieldValues && fieldValue !== null) {
+            return fieldValue.trim();
+          }
+          return fieldValue;
+        }
+        function createDocument(headerFields, line) {
+          return headerFields.reduce((document2, headerField) => {
+            const value = retrieveRecordValueFromLine(headerField, line);
+            try {
+              return (0, doc_path_1.setPath)(document2, headerField.value, value);
+            } catch (error) {
+              return document2;
+            }
+          }, {});
+        }
+        function removeWrapDelimitersFromValue(fieldValue) {
+          const firstChar = fieldValue[0], lastIndex = fieldValue.length - 1, lastChar = fieldValue[lastIndex];
+          if (firstChar === options.delimiter.wrap && lastChar === options.delimiter.wrap) {
+            return fieldValue.substr(1, lastIndex - 1);
+          }
+          return fieldValue;
+        }
+        function unescapeWrapDelimiterInField(fieldValue) {
+          return fieldValue.replace(escapedWrapDelimiterRegex, options.delimiter.wrap);
+        }
+        function transformRecordLines(params) {
+          return params.recordLines.reduce((generatedJsonObjects, line) => {
+            line = line.map((fieldValue) => {
+              fieldValue = removeWrapDelimitersFromValue(fieldValue);
+              fieldValue = unescapeWrapDelimiterInField(fieldValue);
+              fieldValue = trimRecordValue(fieldValue);
+              return fieldValue;
+            });
+            const generatedDocument = createDocument(params.headerFields, line);
+            return generatedJsonObjects.concat(generatedDocument);
+          }, []);
+        }
+        function parseValue(value) {
+          try {
+            if (utils.isStringRepresentation(value, options) && !utils.isDateRepresentation(value)) {
+              return value;
+            }
+            const parsedJson = valueParserFn(value);
+            if (Array.isArray(parsedJson)) {
+              return parsedJson.map(trimRecordValue);
+            }
+            return parsedJson;
+          } catch (err) {
+            return err;
+          }
+        }
+        function convert(data2) {
+          const stripped = stripExcelBOM(data2);
+          const split = splitLines(stripped);
+          const heading = retrieveHeading(split);
+          const lines = retrieveRecordLines(heading);
+          return transformRecordLines(lines);
+        }
+        return {
+          convert
+        };
+      };
+      exports.Csv2Json = Csv2Json;
+    }
+  });
+
+  // node_modules/json-2-csv/lib/converter.js
+  var require_converter = __commonJS({
+    "node_modules/json-2-csv/lib/converter.js"(exports) {
+      "use strict";
+      Object.defineProperty(exports, "__esModule", { value: true });
+      exports.csv2json = exports.json2csv = void 0;
+      var constants_1 = require_constants();
+      var json2csv_1 = require_json2csv();
+      var csv2json_1 = require_csv2json();
+      var utils_1 = require_utils2();
+      function json2csv(data2, options) {
+        const builtOptions = (0, utils_1.buildJ2COptions)(options ?? {});
+        (0, utils_1.validate)(data2, utils_1.isObject, constants_1.errors.json2csv);
+        return (0, json2csv_1.Json2Csv)(builtOptions).convert(data2);
+      }
+      exports.json2csv = json2csv;
+      function csv2json2(data2, options) {
+        const builtOptions = (0, utils_1.buildC2JOptions)(options ?? {});
+        (0, utils_1.validate)(data2, utils_1.isString, constants_1.errors.csv2json);
+        return (0, csv2json_1.Csv2Json)(builtOptions).convert(data2);
+      }
+      exports.csv2json = csv2json2;
+    }
+  });
+
+  // node_modules/svelte/src/runtime/internal/utils.js
+  function noop() {
+  }
+  function run(fn) {
+    return fn();
+  }
+  function blank_object() {
+    return /* @__PURE__ */ Object.create(null);
+  }
+  function run_all(fns) {
+    fns.forEach(run);
+  }
+  function is_function(thing) {
+    return typeof thing === "function";
+  }
+  function safe_not_equal(a, b) {
+    return a != a ? b == b : a !== b || a && typeof a === "object" || typeof a === "function";
+  }
+  var src_url_equal_anchor;
+  function src_url_equal(element_src, url) {
+    if (element_src === url) return true;
+    if (!src_url_equal_anchor) {
+      src_url_equal_anchor = document.createElement("a");
+    }
+    src_url_equal_anchor.href = url;
+    return element_src === src_url_equal_anchor.href;
+  }
+  function is_empty(obj) {
+    return Object.keys(obj).length === 0;
+  }
+  function subscribe(store, ...callbacks) {
+    if (store == null) {
+      for (const callback of callbacks) {
+        callback(void 0);
+      }
+      return noop;
+    }
+    const unsub = store.subscribe(...callbacks);
+    return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
+  }
+  function component_subscribe(component, store, callback) {
+    component.$$.on_destroy.push(subscribe(store, callback));
+  }
+
+  // node_modules/svelte/src/runtime/internal/globals.js
+  var globals = typeof window !== "undefined" ? window : typeof globalThis !== "undefined" ? globalThis : (
+    // @ts-ignore Node typings have this
+    global
+  );
+
+  // node_modules/svelte/src/runtime/internal/ResizeObserverSingleton.js
+  var ResizeObserverSingleton = class _ResizeObserverSingleton {
+    /**
+     * @private
+     * @readonly
+     * @type {WeakMap<Element, import('./private.js').Listener>}
+     */
+    _listeners = "WeakMap" in globals ? /* @__PURE__ */ new WeakMap() : void 0;
+    /**
+     * @private
+     * @type {ResizeObserver}
+     */
+    _observer = void 0;
+    /** @type {ResizeObserverOptions} */
+    options;
+    /** @param {ResizeObserverOptions} options */
+    constructor(options) {
+      this.options = options;
+    }
+    /**
+     * @param {Element} element
+     * @param {import('./private.js').Listener} listener
+     * @returns {() => void}
+     */
+    observe(element2, listener) {
+      this._listeners.set(element2, listener);
+      this._getObserver().observe(element2, this.options);
+      return () => {
+        this._listeners.delete(element2);
+        this._observer.unobserve(element2);
+      };
+    }
+    /**
+     * @private
+     */
+    _getObserver() {
+      return this._observer ?? (this._observer = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          _ResizeObserverSingleton.entries.set(entry.target, entry);
+          this._listeners.get(entry.target)?.(entry);
+        }
+      }));
+    }
+  };
+  ResizeObserverSingleton.entries = "WeakMap" in globals ? /* @__PURE__ */ new WeakMap() : void 0;
+
+  // node_modules/svelte/src/runtime/internal/dom.js
+  var is_hydrating = false;
+  function start_hydrating() {
+    is_hydrating = true;
+  }
+  function end_hydrating() {
+    is_hydrating = false;
+  }
+  function append(target, node) {
+    target.appendChild(node);
+  }
+  function append_styles(target, style_sheet_id, styles) {
+    const append_styles_to = get_root_for_style(target);
+    if (!append_styles_to.getElementById(style_sheet_id)) {
+      const style = element("style");
+      style.id = style_sheet_id;
+      style.textContent = styles;
+      append_stylesheet(append_styles_to, style);
+    }
+  }
+  function get_root_for_style(node) {
+    if (!node) return document;
+    const root3 = node.getRootNode ? node.getRootNode() : node.ownerDocument;
+    if (root3 && /** @type {ShadowRoot} */
+    root3.host) {
+      return (
+        /** @type {ShadowRoot} */
+        root3
+      );
+    }
+    return node.ownerDocument;
+  }
+  function append_stylesheet(node, style) {
+    append(
+      /** @type {Document} */
+      node.head || node,
+      style
+    );
+    return style.sheet;
+  }
+  function insert(target, node, anchor) {
+    target.insertBefore(node, anchor || null);
+  }
+  function detach(node) {
+    if (node.parentNode) {
+      node.parentNode.removeChild(node);
+    }
+  }
+  function destroy_each(iterations, detaching) {
+    for (let i2 = 0; i2 < iterations.length; i2 += 1) {
+      if (iterations[i2]) iterations[i2].d(detaching);
+    }
+  }
+  function element(name315) {
+    return document.createElement(name315);
+  }
+  function text(data2) {
+    return document.createTextNode(data2);
+  }
+  function space() {
+    return text(" ");
+  }
+  function attr(node, attribute, value) {
+    if (value == null) node.removeAttribute(attribute);
+    else if (node.getAttribute(attribute) !== value) node.setAttribute(attribute, value);
+  }
+  function children(element2) {
+    return Array.from(element2.childNodes);
+  }
+  function set_data(text4, data2) {
+    data2 = "" + data2;
+    if (text4.data === data2) return;
+    text4.data = /** @type {string} */
+    data2;
+  }
+  var resize_observer_content_box = new ResizeObserverSingleton({
+    box: "content-box"
+  });
+  var resize_observer_border_box = new ResizeObserverSingleton({
+    box: "border-box"
+  });
+  var resize_observer_device_pixel_content_box = new ResizeObserverSingleton(
+    { box: "device-pixel-content-box" }
+  );
+  function get_custom_elements_slots(element2) {
+    const result = {};
+    element2.childNodes.forEach(
+      /** @param {Element} node */
+      (node) => {
+        result[node.slot || "default"] = true;
+      }
+    );
+    return result;
+  }
+
+  // node_modules/svelte/src/runtime/internal/lifecycle.js
+  var current_component;
+  function set_current_component(component) {
+    current_component = component;
+  }
+
+  // node_modules/svelte/src/runtime/internal/scheduler.js
+  var dirty_components = [];
+  var binding_callbacks = [];
+  var render_callbacks = [];
+  var flush_callbacks = [];
+  var resolved_promise = Promise.resolve();
+  var update_scheduled = false;
+  function schedule_update() {
+    if (!update_scheduled) {
+      update_scheduled = true;
+      resolved_promise.then(flush);
+    }
+  }
+  function add_render_callback(fn) {
+    render_callbacks.push(fn);
+  }
+  var seen_callbacks = /* @__PURE__ */ new Set();
+  var flushidx = 0;
+  function flush() {
+    if (flushidx !== 0) {
+      return;
+    }
+    const saved_component = current_component;
+    do {
+      try {
+        while (flushidx < dirty_components.length) {
+          const component = dirty_components[flushidx];
+          flushidx++;
+          set_current_component(component);
+          update(component.$$);
+        }
+      } catch (e3) {
+        dirty_components.length = 0;
+        flushidx = 0;
+        throw e3;
+      }
+      set_current_component(null);
+      dirty_components.length = 0;
+      flushidx = 0;
+      while (binding_callbacks.length) binding_callbacks.pop()();
+      for (let i2 = 0; i2 < render_callbacks.length; i2 += 1) {
+        const callback = render_callbacks[i2];
+        if (!seen_callbacks.has(callback)) {
+          seen_callbacks.add(callback);
+          callback();
+        }
+      }
+      render_callbacks.length = 0;
+    } while (dirty_components.length);
+    while (flush_callbacks.length) {
+      flush_callbacks.pop()();
+    }
+    update_scheduled = false;
+    seen_callbacks.clear();
+    set_current_component(saved_component);
+  }
+  function update($$) {
+    if ($$.fragment !== null) {
+      $$.update();
+      run_all($$.before_update);
+      const dirty = $$.dirty;
+      $$.dirty = [-1];
+      $$.fragment && $$.fragment.p($$.ctx, dirty);
+      $$.after_update.forEach(add_render_callback);
+    }
+  }
+  function flush_render_callbacks(fns) {
+    const filtered = [];
+    const targets = [];
+    render_callbacks.forEach((c) => fns.indexOf(c) === -1 ? filtered.push(c) : targets.push(c));
+    targets.forEach((c) => c());
+    render_callbacks = filtered;
+  }
+
+  // node_modules/svelte/src/runtime/internal/transitions.js
+  var outroing = /* @__PURE__ */ new Set();
+  function transition_in(block, local) {
+    if (block && block.i) {
+      outroing.delete(block);
+      block.i(local);
+    }
+  }
+
+  // node_modules/svelte/src/runtime/internal/each.js
+  function ensure_array_like(array_like_or_iterator) {
+    return array_like_or_iterator?.length !== void 0 ? array_like_or_iterator : Array.from(array_like_or_iterator);
+  }
+
+  // node_modules/svelte/src/shared/boolean_attributes.js
+  var _boolean_attributes = (
+    /** @type {const} */
+    [
+      "allowfullscreen",
+      "allowpaymentrequest",
+      "async",
+      "autofocus",
+      "autoplay",
+      "checked",
+      "controls",
+      "default",
+      "defer",
+      "disabled",
+      "formnovalidate",
+      "hidden",
+      "inert",
+      "ismap",
+      "loop",
+      "multiple",
+      "muted",
+      "nomodule",
+      "novalidate",
+      "open",
+      "playsinline",
+      "readonly",
+      "required",
+      "reversed",
+      "selected"
+    ]
+  );
+  var boolean_attributes = /* @__PURE__ */ new Set([..._boolean_attributes]);
+
+  // node_modules/svelte/src/runtime/internal/Component.js
+  function mount_component(component, target, anchor) {
+    const { fragment, after_update } = component.$$;
+    fragment && fragment.m(target, anchor);
+    add_render_callback(() => {
+      const new_on_destroy = component.$$.on_mount.map(run).filter(is_function);
+      if (component.$$.on_destroy) {
+        component.$$.on_destroy.push(...new_on_destroy);
+      } else {
+        run_all(new_on_destroy);
+      }
+      component.$$.on_mount = [];
+    });
+    after_update.forEach(add_render_callback);
+  }
+  function destroy_component(component, detaching) {
+    const $$ = component.$$;
+    if ($$.fragment !== null) {
+      flush_render_callbacks($$.after_update);
+      run_all($$.on_destroy);
+      $$.fragment && $$.fragment.d(detaching);
+      $$.on_destroy = $$.fragment = null;
+      $$.ctx = [];
+    }
+  }
+  function make_dirty(component, i2) {
+    if (component.$$.dirty[0] === -1) {
+      dirty_components.push(component);
+      schedule_update();
+      component.$$.dirty.fill(0);
+    }
+    component.$$.dirty[i2 / 31 | 0] |= 1 << i2 % 31;
+  }
+  function init(component, options, instance2, create_fragment2, not_equal, props, append_styles2 = null, dirty = [-1]) {
+    const parent_component = current_component;
+    set_current_component(component);
+    const $$ = component.$$ = {
+      fragment: null,
+      ctx: [],
+      // state
+      props,
+      update: noop,
+      not_equal,
+      bound: blank_object(),
+      // lifecycle
+      on_mount: [],
+      on_destroy: [],
+      on_disconnect: [],
+      before_update: [],
+      after_update: [],
+      context: new Map(options.context || (parent_component ? parent_component.$$.context : [])),
+      // everything else
+      callbacks: blank_object(),
+      dirty,
+      skip_bound: false,
+      root: options.target || parent_component.$$.root
+    };
+    append_styles2 && append_styles2($$.root);
+    let ready = false;
+    $$.ctx = instance2 ? instance2(component, options.props || {}, (i2, ret, ...rest) => {
+      const value = rest.length ? rest[0] : ret;
+      if ($$.ctx && not_equal($$.ctx[i2], $$.ctx[i2] = value)) {
+        if (!$$.skip_bound && $$.bound[i2]) $$.bound[i2](value);
+        if (ready) make_dirty(component, i2);
+      }
+      return ret;
+    }) : [];
+    $$.update();
+    ready = true;
+    run_all($$.before_update);
+    $$.fragment = create_fragment2 ? create_fragment2($$.ctx) : false;
+    if (options.target) {
+      if (options.hydrate) {
+        start_hydrating();
+        const nodes = children(options.target);
+        $$.fragment && $$.fragment.l(nodes);
+        nodes.forEach(detach);
+      } else {
+        $$.fragment && $$.fragment.c();
+      }
+      if (options.intro) transition_in(component.$$.fragment);
+      mount_component(component, options.target, options.anchor);
+      end_hydrating();
+      flush();
+    }
+    set_current_component(parent_component);
+  }
+  var SvelteElement;
+  if (typeof HTMLElement === "function") {
+    SvelteElement = class extends HTMLElement {
+      /** The Svelte component constructor */
+      $$ctor;
+      /** Slots */
+      $$s;
+      /** The Svelte component instance */
+      $$c;
+      /** Whether or not the custom element is connected */
+      $$cn = false;
+      /** Component props data */
+      $$d = {};
+      /** `true` if currently in the process of reflecting component props back to attributes */
+      $$r = false;
+      /** @type {Record<string, CustomElementPropDefinition>} Props definition (name, reflected, type etc) */
+      $$p_d = {};
+      /** @type {Record<string, Function[]>} Event listeners */
+      $$l = {};
+      /** @type {Map<Function, Function>} Event listener unsubscribe functions */
+      $$l_u = /* @__PURE__ */ new Map();
+      constructor($$componentCtor, $$slots, use_shadow_dom) {
+        super();
+        this.$$ctor = $$componentCtor;
+        this.$$s = $$slots;
+        if (use_shadow_dom) {
+          this.attachShadow({ mode: "open" });
+        }
+      }
+      addEventListener(type, listener, options) {
+        this.$$l[type] = this.$$l[type] || [];
+        this.$$l[type].push(listener);
+        if (this.$$c) {
+          const unsub = this.$$c.$on(type, listener);
+          this.$$l_u.set(listener, unsub);
+        }
+        super.addEventListener(type, listener, options);
+      }
+      removeEventListener(type, listener, options) {
+        super.removeEventListener(type, listener, options);
+        if (this.$$c) {
+          const unsub = this.$$l_u.get(listener);
+          if (unsub) {
+            unsub();
+            this.$$l_u.delete(listener);
+          }
+        }
+      }
+      async connectedCallback() {
+        this.$$cn = true;
+        if (!this.$$c) {
+          let create_slot = function(name315) {
+            return () => {
+              let node;
+              const obj = {
+                c: function create2() {
+                  node = element("slot");
+                  if (name315 !== "default") {
+                    attr(node, "name", name315);
+                  }
+                },
+                /**
+                 * @param {HTMLElement} target
+                 * @param {HTMLElement} [anchor]
+                 */
+                m: function mount(target, anchor) {
+                  insert(target, node, anchor);
+                },
+                d: function destroy(detaching) {
+                  if (detaching) {
+                    detach(node);
+                  }
+                }
+              };
+              return obj;
+            };
+          };
+          await Promise.resolve();
+          if (!this.$$cn || this.$$c) {
+            return;
+          }
+          const $$slots = {};
+          const existing_slots = get_custom_elements_slots(this);
+          for (const name315 of this.$$s) {
+            if (name315 in existing_slots) {
+              $$slots[name315] = [create_slot(name315)];
+            }
+          }
+          for (const attribute of this.attributes) {
+            const name315 = this.$$g_p(attribute.name);
+            if (!(name315 in this.$$d)) {
+              this.$$d[name315] = get_custom_element_value(name315, attribute.value, this.$$p_d, "toProp");
+            }
+          }
+          for (const key in this.$$p_d) {
+            if (!(key in this.$$d) && this[key] !== void 0) {
+              this.$$d[key] = this[key];
+              delete this[key];
+            }
+          }
+          this.$$c = new this.$$ctor({
+            target: this.shadowRoot || this,
+            props: {
+              ...this.$$d,
+              $$slots,
+              $$scope: {
+                ctx: []
+              }
+            }
+          });
+          const reflect_attributes = () => {
+            this.$$r = true;
+            for (const key in this.$$p_d) {
+              this.$$d[key] = this.$$c.$$.ctx[this.$$c.$$.props[key]];
+              if (this.$$p_d[key].reflect) {
+                const attribute_value = get_custom_element_value(
+                  key,
+                  this.$$d[key],
+                  this.$$p_d,
+                  "toAttribute"
+                );
+                if (attribute_value == null) {
+                  this.removeAttribute(this.$$p_d[key].attribute || key);
+                } else {
+                  this.setAttribute(this.$$p_d[key].attribute || key, attribute_value);
+                }
+              }
+            }
+            this.$$r = false;
+          };
+          this.$$c.$$.after_update.push(reflect_attributes);
+          reflect_attributes();
+          for (const type in this.$$l) {
+            for (const listener of this.$$l[type]) {
+              const unsub = this.$$c.$on(type, listener);
+              this.$$l_u.set(listener, unsub);
+            }
+          }
+          this.$$l = {};
+        }
+      }
+      // We don't need this when working within Svelte code, but for compatibility of people using this outside of Svelte
+      // and setting attributes through setAttribute etc, this is helpful
+      attributeChangedCallback(attr3, _oldValue, newValue) {
+        if (this.$$r) return;
+        attr3 = this.$$g_p(attr3);
+        this.$$d[attr3] = get_custom_element_value(attr3, newValue, this.$$p_d, "toProp");
+        this.$$c?.$set({ [attr3]: this.$$d[attr3] });
+      }
+      disconnectedCallback() {
+        this.$$cn = false;
+        Promise.resolve().then(() => {
+          if (!this.$$cn && this.$$c) {
+            this.$$c.$destroy();
+            this.$$c = void 0;
+          }
+        });
+      }
+      $$g_p(attribute_name) {
+        return Object.keys(this.$$p_d).find(
+          (key) => this.$$p_d[key].attribute === attribute_name || !this.$$p_d[key].attribute && key.toLowerCase() === attribute_name
+        ) || attribute_name;
+      }
+    };
+  }
+  function get_custom_element_value(prop2, value, props_definition, transform) {
+    const type = props_definition[prop2]?.type;
+    value = type === "Boolean" && typeof value !== "boolean" ? value != null : value;
+    if (!transform || !props_definition[prop2]) {
+      return value;
+    } else if (transform === "toAttribute") {
+      switch (type) {
+        case "Object":
+        case "Array":
+          return value == null ? null : JSON.stringify(value);
+        case "Boolean":
+          return value ? "" : null;
+        case "Number":
+          return value == null ? null : value;
+        default:
+          return value;
+      }
+    } else {
+      switch (type) {
+        case "Object":
+        case "Array":
+          return value && JSON.parse(value);
+        case "Boolean":
+          return value;
+        case "Number":
+          return value != null ? +value : value;
+        default:
+          return value;
+      }
+    }
+  }
+  function create_custom_element(Component, props_definition, slots, accessors, use_shadow_dom, extend3) {
+    let Class = class extends SvelteElement {
+      constructor() {
+        super(Component, slots, use_shadow_dom);
+        this.$$p_d = props_definition;
+      }
+      static get observedAttributes() {
+        return Object.keys(props_definition).map(
+          (key) => (props_definition[key].attribute || key).toLowerCase()
+        );
+      }
+    };
+    Object.keys(props_definition).forEach((prop2) => {
+      Object.defineProperty(Class.prototype, prop2, {
+        get() {
+          return this.$$c && prop2 in this.$$c ? this.$$c[prop2] : this.$$d[prop2];
+        },
+        set(value) {
+          value = get_custom_element_value(prop2, value, props_definition);
+          this.$$d[prop2] = value;
+          this.$$c?.$set({ [prop2]: value });
+        }
+      });
+    });
+    accessors.forEach((accessor) => {
+      Object.defineProperty(Class.prototype, accessor, {
+        get() {
+          return this.$$c?.[accessor];
+        }
+      });
+    });
+    if (extend3) {
+      Class = extend3(Class);
+    }
+    Component.element = /** @type {any} */
+    Class;
+    return Class;
+  }
+  var SvelteComponent = class {
+    /**
+     * ### PRIVATE API
+     *
+     * Do not use, may change at any time
+     *
+     * @type {any}
+     */
+    $$ = void 0;
+    /**
+     * ### PRIVATE API
+     *
+     * Do not use, may change at any time
+     *
+     * @type {any}
+     */
+    $$set = void 0;
+    /** @returns {void} */
+    $destroy() {
+      destroy_component(this, 1);
+      this.$destroy = noop;
+    }
+    /**
+     * @template {Extract<keyof Events, string>} K
+     * @param {K} type
+     * @param {((e: Events[K]) => void) | null | undefined} callback
+     * @returns {() => void}
+     */
+    $on(type, callback) {
+      if (!is_function(callback)) {
+        return noop;
+      }
+      const callbacks = this.$$.callbacks[type] || (this.$$.callbacks[type] = []);
+      callbacks.push(callback);
+      return () => {
+        const index3 = callbacks.indexOf(callback);
+        if (index3 !== -1) callbacks.splice(index3, 1);
+      };
+    }
+    /**
+     * @param {Partial<Props>} props
+     * @returns {void}
+     */
+    $set(props) {
+      if (this.$$set && !is_empty(props)) {
+        this.$$.skip_bound = true;
+        this.$$set(props);
+        this.$$.skip_bound = false;
+      }
+    }
+  };
+
+  // node_modules/svelte/src/shared/version.js
+  var PUBLIC_VERSION = "4";
+
+  // node_modules/svelte/src/runtime/internal/disclose-version/index.js
+  if (typeof window !== "undefined")
+    (window.__svelte || (window.__svelte = { v: /* @__PURE__ */ new Set() })).v.add(PUBLIC_VERSION);
+
+  // node_modules/svelte/src/runtime/store/index.js
+  var subscriber_queue = [];
+  function writable(value, start = noop) {
+    let stop;
+    const subscribers = /* @__PURE__ */ new Set();
+    function set(new_value) {
+      if (safe_not_equal(value, new_value)) {
+        value = new_value;
+        if (stop) {
+          const run_queue = !subscriber_queue.length;
+          for (const subscriber of subscribers) {
+            subscriber[1]();
+            subscriber_queue.push(subscriber, value);
+          }
+          if (run_queue) {
+            for (let i2 = 0; i2 < subscriber_queue.length; i2 += 2) {
+              subscriber_queue[i2][0](subscriber_queue[i2 + 1]);
+            }
+            subscriber_queue.length = 0;
+          }
+        }
+      }
+    }
+    function update3(fn) {
+      set(fn(value));
+    }
+    function subscribe2(run2, invalidate = noop) {
+      const subscriber = [run2, invalidate];
+      subscribers.add(subscriber);
+      if (subscribers.size === 1) {
+        stop = start(set, update3) || noop;
+      }
+      run2(value);
+      return () => {
+        subscribers.delete(subscriber);
+        if (subscribers.size === 0 && stop) {
+          stop();
+          stop = null;
+        }
+      };
+    }
+    return { set, update: update3, subscribe: subscribe2 };
+  }
+
   // node_modules/axios/lib/helpers/bind.js
   function bind(fn, thisArg) {
     return function wrap2() {
@@ -4384,7 +5126,7 @@
     isArray(arrayOrString) ? define2(arrayOrString) : define2(String(arrayOrString).split(delimiter));
     return obj;
   };
-  var noop = () => {
+  var noop2 = () => {
   };
   var toFiniteNumber = (value, defaultValue) => {
     return value != null && Number.isFinite(value = +value) ? value : defaultValue;
@@ -4477,7 +5219,7 @@
     freezeMethods,
     toObjectSet,
     toCamelCase,
-    noop,
+    noop: noop2,
     toFiniteNumber,
     findKey,
     global: _global,
@@ -4697,7 +5439,7 @@
     params && toFormData_default(params, this, options);
   }
   var prototype2 = AxiosURLSearchParams.prototype;
-  prototype2.append = function append(name315, value) {
+  prototype2.append = function append2(name315, value) {
     this._pairs.push([name315, value]);
   };
   prototype2.toString = function toString2(encoder) {
@@ -6104,7 +6846,7 @@
   }
 
   // node_modules/axios/lib/env/data.js
-  var VERSION = "1.7.2";
+  var VERSION2 = "1.7.2";
 
   // node_modules/axios/lib/helpers/validator.js
   var validators = {};
@@ -6116,7 +6858,7 @@
   var deprecatedWarnings = {};
   validators.transitional = function transitional(validator, version3, message) {
     function formatMessage(opt, desc) {
-      return "[Axios v" + VERSION + "] Transitional option '" + opt + "'" + desc + (message ? ". " + message : "");
+      return "[Axios v" + VERSION2 + "] Transitional option '" + opt + "'" + desc + (message ? ". " + message : "");
     }
     return (value, opt, opts) => {
       if (validator === false) {
@@ -6502,20 +7244,20 @@
   // node_modules/axios/lib/axios.js
   function createInstance(defaultConfig) {
     const context = new Axios_default(defaultConfig);
-    const instance4 = bind(Axios_default.prototype.request, context);
-    utils_default.extend(instance4, Axios_default.prototype, context, { allOwnKeys: true });
-    utils_default.extend(instance4, context, null, { allOwnKeys: true });
-    instance4.create = function create2(instanceConfig) {
+    const instance2 = bind(Axios_default.prototype.request, context);
+    utils_default.extend(instance2, Axios_default.prototype, context, { allOwnKeys: true });
+    utils_default.extend(instance2, context, null, { allOwnKeys: true });
+    instance2.create = function create2(instanceConfig) {
       return createInstance(mergeConfig(defaultConfig, instanceConfig));
     };
-    return instance4;
+    return instance2;
   }
   var axios = createInstance(defaults_default);
   axios.Axios = Axios_default;
   axios.CanceledError = CanceledError_default;
   axios.CancelToken = CancelToken_default;
   axios.isCancel = isCancel;
-  axios.VERSION = VERSION;
+  axios.VERSION = VERSION2;
   axios.toFormData = toFormData_default;
   axios.AxiosError = AxiosError_default;
   axios.Cancel = axios.CanceledError;
@@ -6539,7 +7281,7 @@
     CanceledError: CanceledError2,
     isCancel: isCancel2,
     CancelToken: CancelToken2,
-    VERSION: VERSION2,
+    VERSION: VERSION3,
     all: all2,
     Cancel,
     isAxiosError: isAxiosError2,
@@ -6574,7 +7316,7 @@
     merge: () => merge2,
     parseHTML: () => parseHTML,
     root: () => root,
-    text: () => text,
+    text: () => text2,
     xml: () => xml
   });
 
@@ -6582,7 +7324,7 @@
   var esm_exports2 = {};
   __export(esm_exports2, {
     DocumentPosition: () => DocumentPosition,
-    append: () => append2,
+    append: () => append3,
     appendChild: () => appendChild,
     compareDocumentPosition: () => compareDocumentPosition,
     existsOne: () => existsOne,
@@ -7941,7 +8683,7 @@
       child.prev = null;
     }
   }
-  function append2(elem, next2) {
+  function append3(elem, next2) {
     removeElement(next2);
     const { parent: parent2 } = elem;
     const currNext = elem.next;
@@ -8344,7 +9086,7 @@
     const options = { ...this._options, xmlMode: true };
     return render2(this, dom, options);
   }
-  function text(elements) {
+  function text2(elements) {
     const elems = elements ? elements : this ? this.root() : [];
     let ret = "";
     for (let i2 = 0; i2 < elems.length; i2++) {
@@ -8412,7 +9154,7 @@
   var attributes_exports = {};
   __export(attributes_exports, {
     addClass: () => addClass,
-    attr: () => attr,
+    attr: () => attr2,
     data: () => data,
     hasClass: () => hasClass,
     prop: () => prop,
@@ -8485,7 +9227,7 @@
       return !xmlMode && rboolean.test(name315) ? name315 : elem.attribs[name315];
     }
     if (elem.name === "option" && name315 === "value") {
-      return text(elem.children);
+      return text2(elem.children);
     }
     if (elem.name === "input" && (elem.attribs["type"] === "radio" || elem.attribs["type"] === "checkbox") && name315 === "value") {
       return "on";
@@ -8499,7 +9241,7 @@
       el.attribs[name315] = `${value}`;
     }
   }
-  function attr(name315, value) {
+  function attr2(name315, value) {
     if (typeof name315 === "object" || value !== void 0) {
       if (typeof value === "function") {
         if (typeof name315 !== "string") {
@@ -8696,7 +9438,7 @@
           }
           return this;
         }
-        return this.attr("multiple") ? option.toArray().map((el) => text(el.children)) : option.attr("value");
+        return this.attr("multiple") ? option.toArray().map((el) => text2(el.children)) : option.attr("value");
       }
       case "input":
       case "option":
@@ -8839,7 +9581,7 @@
   __export(traversing_exports, {
     add: () => add,
     addBack: () => addBack,
-    children: () => children,
+    children: () => children2,
     closest: () => closest,
     contents: () => contents,
     each: () => each,
@@ -10557,7 +11299,7 @@
   }, _removeDuplicates);
   var prevUntil = _matchUntil((el) => prevElementSibling(el), _removeDuplicates);
   var siblings = _matcher((elem) => getSiblings(elem).filter((el) => isTag2(el) && el !== elem), uniqueSort);
-  var children = _matcher((elem) => getChildren(elem).filter(isTag2), _removeDuplicates);
+  var children2 = _matcher((elem) => getChildren(elem).filter(isTag2), _removeDuplicates);
   function contents() {
     const elems = this.toArray().reduce((newElems, elem) => hasChildren(elem) ? newElems.concat(elem.children) : newElems, []);
     return this._make(elems);
@@ -10679,7 +11421,7 @@
   __export(manipulation_exports, {
     _makeDomArray: () => _makeDomArray,
     after: () => after,
-    append: () => append3,
+    append: () => append4,
     appendTo: () => appendTo,
     before: () => before,
     clone: () => clone,
@@ -10691,7 +11433,7 @@
     prependTo: () => prependTo,
     remove: () => remove,
     replaceWith: () => replaceWith,
-    text: () => text2,
+    text: () => text3,
     toString: () => toString3,
     unwrap: () => unwrap,
     wrap: () => wrap,
@@ -10713,11 +11455,11 @@
         return doc;
       }
       const root3 = new Document([]);
-      update(doc, root3);
+      update2(doc, root3);
       return root3;
     };
   }
-  function update(newChilds, parent2) {
+  function update2(newChilds, parent2) {
     const arr = Array.isArray(newChilds) ? newChilds : [newChilds];
     if (parent2) {
       parent2.children = arr;
@@ -10818,7 +11560,7 @@
     prependTarget.prepend(this);
     return this;
   }
-  var append3 = _insert((dom, children3, parent2) => {
+  var append4 = _insert((dom, children3, parent2) => {
     uniqueSplice(children3, children3.length, 0, dom, parent2);
   });
   var prepend2 = _insert((dom, children3, parent2) => {
@@ -10856,14 +11598,14 @@
       return;
     const siblings2 = parent2.children;
     const index3 = siblings2.indexOf(el);
-    update([el], elInsertLocation);
+    update2([el], elInsertLocation);
     uniqueSplice(siblings2, index3, 0, wrapperDom, parent2);
   });
   var wrapInner = _wrap((el, elInsertLocation, wrapperDom) => {
     if (!hasChildren(el))
       return;
-    update(el.children, elInsertLocation);
-    update(wrapperDom, el);
+    update2(el.children, elInsertLocation);
+    update2(wrapperDom, el);
   });
   function unwrap(selector) {
     this.parent(selector).not("body").each((_, el) => {
@@ -10984,7 +11726,7 @@
       const siblings2 = parent2.children;
       const cont = typeof content === "function" ? content.call(el, i2, el) : content;
       const dom = this._makeDomArray(cont);
-      update(dom, null);
+      update2(dom, null);
       const index3 = siblings2.indexOf(el);
       uniqueSplice(siblings2, index3, 1, dom, parent2);
       if (!dom.includes(el)) {
@@ -11016,18 +11758,18 @@
         child.next = child.prev = child.parent = null;
       });
       const content = isCheerio(str) ? str.toArray() : this._parse(`${str}`, this.options, false, el).children;
-      update(content, el);
+      update2(content, el);
     });
   }
   function toString3() {
     return this._render(this);
   }
-  function text2(str) {
+  function text3(str) {
     if (str === void 0) {
-      return text(this);
+      return text2(this);
     }
     if (typeof str === "function") {
-      return domEach(this, (el, i2) => this._make(el).text(str.call(el, i2, text([el]))));
+      return domEach(this, (el, i2) => this._make(el).text(str.call(el, i2, text2([el]))));
     }
     return domEach(this, (el) => {
       if (!hasChildren(el))
@@ -11036,7 +11778,7 @@
         child.next = child.prev = child.parent = null;
       });
       const textNode = new Text2(`${str}`);
-      update(textNode, el);
+      update2(textNode, el);
     });
   }
   function clone() {
@@ -11235,9 +11977,9 @@
           // $([dom])
           selector
         ) : void 0;
-        const instance4 = new LoadedCheerio(elements, rootInstance, options2);
+        const instance2 = new LoadedCheerio(elements, rootInstance, options2);
         if (elements) {
-          return instance4;
+          return instance2;
         }
         if (typeof selector !== "string") {
           throw new Error("Unexpected type of selector");
@@ -11260,7 +12002,7 @@
           new LoadedCheerio(Array.isArray(context) ? context : [context], rootInstance, options2)
         );
         if (!searchContext)
-          return instance4;
+          return instance2;
         return searchContext.find(search);
       }
       Object.assign(initialize, static_exports, {
@@ -20848,717 +21590,36 @@
   };
   var parse_default = parse6;
 
-  // src/module/rating.ts
-  var import_json_2_csv = __toESM(require_converter(), 1);
-
-  // node_modules/svelte/src/runtime/internal/utils.js
-  function noop2() {
-  }
-  function run(fn) {
-    return fn();
-  }
-  function blank_object() {
-    return /* @__PURE__ */ Object.create(null);
-  }
-  function run_all(fns) {
-    fns.forEach(run);
-  }
-  function is_function(thing) {
-    return typeof thing === "function";
-  }
-  function safe_not_equal(a, b) {
-    return a != a ? b == b : a !== b || a && typeof a === "object" || typeof a === "function";
-  }
-  var src_url_equal_anchor;
-  function src_url_equal(element_src, url) {
-    if (element_src === url) return true;
-    if (!src_url_equal_anchor) {
-      src_url_equal_anchor = document.createElement("a");
-    }
-    src_url_equal_anchor.href = url;
-    return element_src === src_url_equal_anchor.href;
-  }
-  function is_empty(obj) {
-    return Object.keys(obj).length === 0;
-  }
-
-  // node_modules/svelte/src/runtime/internal/globals.js
-  var globals = typeof window !== "undefined" ? window : typeof globalThis !== "undefined" ? globalThis : (
-    // @ts-ignore Node typings have this
-    global
-  );
-
-  // node_modules/svelte/src/runtime/internal/ResizeObserverSingleton.js
-  var ResizeObserverSingleton = class _ResizeObserverSingleton {
-    /**
-     * @private
-     * @readonly
-     * @type {WeakMap<Element, import('./private.js').Listener>}
-     */
-    _listeners = "WeakMap" in globals ? /* @__PURE__ */ new WeakMap() : void 0;
-    /**
-     * @private
-     * @type {ResizeObserver}
-     */
-    _observer = void 0;
-    /** @type {ResizeObserverOptions} */
-    options;
-    /** @param {ResizeObserverOptions} options */
-    constructor(options) {
-      this.options = options;
-    }
-    /**
-     * @param {Element} element
-     * @param {import('./private.js').Listener} listener
-     * @returns {() => void}
-     */
-    observe(element2, listener) {
-      this._listeners.set(element2, listener);
-      this._getObserver().observe(element2, this.options);
-      return () => {
-        this._listeners.delete(element2);
-        this._observer.unobserve(element2);
-      };
-    }
-    /**
-     * @private
-     */
-    _getObserver() {
-      return this._observer ?? (this._observer = new ResizeObserver((entries) => {
-        for (const entry of entries) {
-          _ResizeObserverSingleton.entries.set(entry.target, entry);
-          this._listeners.get(entry.target)?.(entry);
-        }
-      }));
-    }
-  };
-  ResizeObserverSingleton.entries = "WeakMap" in globals ? /* @__PURE__ */ new WeakMap() : void 0;
-
-  // node_modules/svelte/src/runtime/internal/dom.js
-  var is_hydrating = false;
-  function start_hydrating() {
-    is_hydrating = true;
-  }
-  function end_hydrating() {
-    is_hydrating = false;
-  }
-  function append4(target, node) {
-    target.appendChild(node);
-  }
-  function append_styles(target, style_sheet_id, styles) {
-    const append_styles_to = get_root_for_style(target);
-    if (!append_styles_to.getElementById(style_sheet_id)) {
-      const style = element("style");
-      style.id = style_sheet_id;
-      style.textContent = styles;
-      append_stylesheet(append_styles_to, style);
-    }
-  }
-  function get_root_for_style(node) {
-    if (!node) return document;
-    const root3 = node.getRootNode ? node.getRootNode() : node.ownerDocument;
-    if (root3 && /** @type {ShadowRoot} */
-    root3.host) {
-      return (
-        /** @type {ShadowRoot} */
-        root3
-      );
-    }
-    return node.ownerDocument;
-  }
-  function append_stylesheet(node, style) {
-    append4(
-      /** @type {Document} */
-      node.head || node,
-      style
-    );
-    return style.sheet;
-  }
-  function insert(target, node, anchor) {
-    target.insertBefore(node, anchor || null);
-  }
-  function detach(node) {
-    if (node.parentNode) {
-      node.parentNode.removeChild(node);
-    }
-  }
-  function destroy_each(iterations, detaching) {
-    for (let i2 = 0; i2 < iterations.length; i2 += 1) {
-      if (iterations[i2]) iterations[i2].d(detaching);
-    }
-  }
-  function element(name315) {
-    return document.createElement(name315);
-  }
-  function text3(data2) {
-    return document.createTextNode(data2);
-  }
-  function space() {
-    return text3(" ");
-  }
-  function listen(node, event, handler, options) {
-    node.addEventListener(event, handler, options);
-    return () => node.removeEventListener(event, handler, options);
-  }
-  function attr2(node, attribute, value) {
-    if (value == null) node.removeAttribute(attribute);
-    else if (node.getAttribute(attribute) !== value) node.setAttribute(attribute, value);
-  }
-  function children2(element2) {
-    return Array.from(element2.childNodes);
-  }
-  function set_data(text4, data2) {
-    data2 = "" + data2;
-    if (text4.data === data2) return;
-    text4.data = /** @type {string} */
-    data2;
-  }
-  var resize_observer_content_box = new ResizeObserverSingleton({
-    box: "content-box"
-  });
-  var resize_observer_border_box = new ResizeObserverSingleton({
-    box: "border-box"
-  });
-  var resize_observer_device_pixel_content_box = new ResizeObserverSingleton(
-    { box: "device-pixel-content-box" }
-  );
-  function get_custom_elements_slots(element2) {
-    const result = {};
-    element2.childNodes.forEach(
-      /** @param {Element} node */
-      (node) => {
-        result[node.slot || "default"] = true;
-      }
-    );
-    return result;
-  }
-
-  // node_modules/svelte/src/runtime/internal/lifecycle.js
-  var current_component;
-  function set_current_component(component) {
-    current_component = component;
-  }
-
-  // node_modules/svelte/src/runtime/internal/scheduler.js
-  var dirty_components = [];
-  var binding_callbacks = [];
-  var render_callbacks = [];
-  var flush_callbacks = [];
-  var resolved_promise = Promise.resolve();
-  var update_scheduled = false;
-  function schedule_update() {
-    if (!update_scheduled) {
-      update_scheduled = true;
-      resolved_promise.then(flush);
-    }
-  }
-  function add_render_callback(fn) {
-    render_callbacks.push(fn);
-  }
-  var seen_callbacks = /* @__PURE__ */ new Set();
-  var flushidx = 0;
-  function flush() {
-    if (flushidx !== 0) {
-      return;
-    }
-    const saved_component = current_component;
-    do {
+  // src/module/getSongs.ts
+  async function getSongs() {
+    const bodies = [];
+    const failedGenres = [];
+    await Promise.all([1, 2, 3, 4, 5, 6, 7, 8].map(async (genre) => {
       try {
-        while (flushidx < dirty_components.length) {
-          const component = dirty_components[flushidx];
-          flushidx++;
-          set_current_component(component);
-          update2(component.$$);
-        }
-      } catch (e3) {
-        dirty_components.length = 0;
-        flushidx = 0;
-        throw e3;
+        const fetched = await fetch(`https://donderhiroba.jp/score_list.php?genre=${genre}`);
+        const body = await fetched.text();
+        bodies.push(body);
+      } catch {
+        failedGenres.push(genre);
       }
-      set_current_component(null);
-      dirty_components.length = 0;
-      flushidx = 0;
-      while (binding_callbacks.length) binding_callbacks.pop()();
-      for (let i2 = 0; i2 < render_callbacks.length; i2 += 1) {
-        const callback = render_callbacks[i2];
-        if (!seen_callbacks.has(callback)) {
-          seen_callbacks.add(callback);
-          callback();
-        }
+    }));
+    await Promise.all(failedGenres.map(async (genre) => {
+      try {
+        const fetched = await fetch(`https://donderhiroba.jp/score_list.php?genre=${genre}`);
+        const body = await fetched.text();
+        bodies.push(body);
+      } catch {
+        console.warn(`Error occured in genre ${genre}`);
       }
-      render_callbacks.length = 0;
-    } while (dirty_components.length);
-    while (flush_callbacks.length) {
-      flush_callbacks.pop()();
-    }
-    update_scheduled = false;
-    seen_callbacks.clear();
-    set_current_component(saved_component);
-  }
-  function update2($$) {
-    if ($$.fragment !== null) {
-      $$.update();
-      run_all($$.before_update);
-      const dirty = $$.dirty;
-      $$.dirty = [-1];
-      $$.fragment && $$.fragment.p($$.ctx, dirty);
-      $$.after_update.forEach(add_render_callback);
-    }
-  }
-  function flush_render_callbacks(fns) {
-    const filtered = [];
-    const targets = [];
-    render_callbacks.forEach((c) => fns.indexOf(c) === -1 ? filtered.push(c) : targets.push(c));
-    targets.forEach((c) => c());
-    render_callbacks = filtered;
-  }
-
-  // node_modules/svelte/src/runtime/internal/transitions.js
-  var outroing = /* @__PURE__ */ new Set();
-  var outros;
-  function transition_in(block, local) {
-    if (block && block.i) {
-      outroing.delete(block);
-      block.i(local);
-    }
-  }
-  function transition_out(block, local, detach2, callback) {
-    if (block && block.o) {
-      if (outroing.has(block)) return;
-      outroing.add(block);
-      outros.c.push(() => {
-        outroing.delete(block);
-        if (callback) {
-          if (detach2) block.d(1);
-          callback();
-        }
-      });
-      block.o(local);
-    } else if (callback) {
-      callback();
-    }
-  }
-
-  // node_modules/svelte/src/runtime/internal/each.js
-  function ensure_array_like(array_like_or_iterator) {
-    return array_like_or_iterator?.length !== void 0 ? array_like_or_iterator : Array.from(array_like_or_iterator);
-  }
-
-  // node_modules/svelte/src/shared/boolean_attributes.js
-  var _boolean_attributes = (
-    /** @type {const} */
-    [
-      "allowfullscreen",
-      "allowpaymentrequest",
-      "async",
-      "autofocus",
-      "autoplay",
-      "checked",
-      "controls",
-      "default",
-      "defer",
-      "disabled",
-      "formnovalidate",
-      "hidden",
-      "inert",
-      "ismap",
-      "loop",
-      "multiple",
-      "muted",
-      "nomodule",
-      "novalidate",
-      "open",
-      "playsinline",
-      "readonly",
-      "required",
-      "reversed",
-      "selected"
-    ]
-  );
-  var boolean_attributes = /* @__PURE__ */ new Set([..._boolean_attributes]);
-
-  // node_modules/svelte/src/runtime/internal/Component.js
-  function create_component(block) {
-    block && block.c();
-  }
-  function mount_component(component, target, anchor) {
-    const { fragment, after_update } = component.$$;
-    fragment && fragment.m(target, anchor);
-    add_render_callback(() => {
-      const new_on_destroy = component.$$.on_mount.map(run).filter(is_function);
-      if (component.$$.on_destroy) {
-        component.$$.on_destroy.push(...new_on_destroy);
-      } else {
-        run_all(new_on_destroy);
-      }
-      component.$$.on_mount = [];
-    });
-    after_update.forEach(add_render_callback);
-  }
-  function destroy_component(component, detaching) {
-    const $$ = component.$$;
-    if ($$.fragment !== null) {
-      flush_render_callbacks($$.after_update);
-      run_all($$.on_destroy);
-      $$.fragment && $$.fragment.d(detaching);
-      $$.on_destroy = $$.fragment = null;
-      $$.ctx = [];
-    }
-  }
-  function make_dirty(component, i2) {
-    if (component.$$.dirty[0] === -1) {
-      dirty_components.push(component);
-      schedule_update();
-      component.$$.dirty.fill(0);
-    }
-    component.$$.dirty[i2 / 31 | 0] |= 1 << i2 % 31;
-  }
-  function init(component, options, instance4, create_fragment4, not_equal, props, append_styles2 = null, dirty = [-1]) {
-    const parent_component = current_component;
-    set_current_component(component);
-    const $$ = component.$$ = {
-      fragment: null,
-      ctx: [],
-      // state
-      props,
-      update: noop2,
-      not_equal,
-      bound: blank_object(),
-      // lifecycle
-      on_mount: [],
-      on_destroy: [],
-      on_disconnect: [],
-      before_update: [],
-      after_update: [],
-      context: new Map(options.context || (parent_component ? parent_component.$$.context : [])),
-      // everything else
-      callbacks: blank_object(),
-      dirty,
-      skip_bound: false,
-      root: options.target || parent_component.$$.root
-    };
-    append_styles2 && append_styles2($$.root);
-    let ready = false;
-    $$.ctx = instance4 ? instance4(component, options.props || {}, (i2, ret, ...rest) => {
-      const value = rest.length ? rest[0] : ret;
-      if ($$.ctx && not_equal($$.ctx[i2], $$.ctx[i2] = value)) {
-        if (!$$.skip_bound && $$.bound[i2]) $$.bound[i2](value);
-        if (ready) make_dirty(component, i2);
-      }
-      return ret;
-    }) : [];
-    $$.update();
-    ready = true;
-    run_all($$.before_update);
-    $$.fragment = create_fragment4 ? create_fragment4($$.ctx) : false;
-    if (options.target) {
-      if (options.hydrate) {
-        start_hydrating();
-        const nodes = children2(options.target);
-        $$.fragment && $$.fragment.l(nodes);
-        nodes.forEach(detach);
-      } else {
-        $$.fragment && $$.fragment.c();
-      }
-      if (options.intro) transition_in(component.$$.fragment);
-      mount_component(component, options.target, options.anchor);
-      end_hydrating();
-      flush();
-    }
-    set_current_component(parent_component);
-  }
-  var SvelteElement;
-  if (typeof HTMLElement === "function") {
-    SvelteElement = class extends HTMLElement {
-      /** The Svelte component constructor */
-      $$ctor;
-      /** Slots */
-      $$s;
-      /** The Svelte component instance */
-      $$c;
-      /** Whether or not the custom element is connected */
-      $$cn = false;
-      /** Component props data */
-      $$d = {};
-      /** `true` if currently in the process of reflecting component props back to attributes */
-      $$r = false;
-      /** @type {Record<string, CustomElementPropDefinition>} Props definition (name, reflected, type etc) */
-      $$p_d = {};
-      /** @type {Record<string, Function[]>} Event listeners */
-      $$l = {};
-      /** @type {Map<Function, Function>} Event listener unsubscribe functions */
-      $$l_u = /* @__PURE__ */ new Map();
-      constructor($$componentCtor, $$slots, use_shadow_dom) {
-        super();
-        this.$$ctor = $$componentCtor;
-        this.$$s = $$slots;
-        if (use_shadow_dom) {
-          this.attachShadow({ mode: "open" });
-        }
-      }
-      addEventListener(type, listener, options) {
-        this.$$l[type] = this.$$l[type] || [];
-        this.$$l[type].push(listener);
-        if (this.$$c) {
-          const unsub = this.$$c.$on(type, listener);
-          this.$$l_u.set(listener, unsub);
-        }
-        super.addEventListener(type, listener, options);
-      }
-      removeEventListener(type, listener, options) {
-        super.removeEventListener(type, listener, options);
-        if (this.$$c) {
-          const unsub = this.$$l_u.get(listener);
-          if (unsub) {
-            unsub();
-            this.$$l_u.delete(listener);
-          }
-        }
-      }
-      async connectedCallback() {
-        this.$$cn = true;
-        if (!this.$$c) {
-          let create_slot = function(name315) {
-            return () => {
-              let node;
-              const obj = {
-                c: function create2() {
-                  node = element("slot");
-                  if (name315 !== "default") {
-                    attr2(node, "name", name315);
-                  }
-                },
-                /**
-                 * @param {HTMLElement} target
-                 * @param {HTMLElement} [anchor]
-                 */
-                m: function mount(target, anchor) {
-                  insert(target, node, anchor);
-                },
-                d: function destroy(detaching) {
-                  if (detaching) {
-                    detach(node);
-                  }
-                }
-              };
-              return obj;
-            };
-          };
-          await Promise.resolve();
-          if (!this.$$cn || this.$$c) {
-            return;
-          }
-          const $$slots = {};
-          const existing_slots = get_custom_elements_slots(this);
-          for (const name315 of this.$$s) {
-            if (name315 in existing_slots) {
-              $$slots[name315] = [create_slot(name315)];
-            }
-          }
-          for (const attribute of this.attributes) {
-            const name315 = this.$$g_p(attribute.name);
-            if (!(name315 in this.$$d)) {
-              this.$$d[name315] = get_custom_element_value(name315, attribute.value, this.$$p_d, "toProp");
-            }
-          }
-          for (const key in this.$$p_d) {
-            if (!(key in this.$$d) && this[key] !== void 0) {
-              this.$$d[key] = this[key];
-              delete this[key];
-            }
-          }
-          this.$$c = new this.$$ctor({
-            target: this.shadowRoot || this,
-            props: {
-              ...this.$$d,
-              $$slots,
-              $$scope: {
-                ctx: []
-              }
-            }
-          });
-          const reflect_attributes = () => {
-            this.$$r = true;
-            for (const key in this.$$p_d) {
-              this.$$d[key] = this.$$c.$$.ctx[this.$$c.$$.props[key]];
-              if (this.$$p_d[key].reflect) {
-                const attribute_value = get_custom_element_value(
-                  key,
-                  this.$$d[key],
-                  this.$$p_d,
-                  "toAttribute"
-                );
-                if (attribute_value == null) {
-                  this.removeAttribute(this.$$p_d[key].attribute || key);
-                } else {
-                  this.setAttribute(this.$$p_d[key].attribute || key, attribute_value);
-                }
-              }
-            }
-            this.$$r = false;
-          };
-          this.$$c.$$.after_update.push(reflect_attributes);
-          reflect_attributes();
-          for (const type in this.$$l) {
-            for (const listener of this.$$l[type]) {
-              const unsub = this.$$c.$on(type, listener);
-              this.$$l_u.set(listener, unsub);
-            }
-          }
-          this.$$l = {};
-        }
-      }
-      // We don't need this when working within Svelte code, but for compatibility of people using this outside of Svelte
-      // and setting attributes through setAttribute etc, this is helpful
-      attributeChangedCallback(attr3, _oldValue, newValue) {
-        if (this.$$r) return;
-        attr3 = this.$$g_p(attr3);
-        this.$$d[attr3] = get_custom_element_value(attr3, newValue, this.$$p_d, "toProp");
-        this.$$c?.$set({ [attr3]: this.$$d[attr3] });
-      }
-      disconnectedCallback() {
-        this.$$cn = false;
-        Promise.resolve().then(() => {
-          if (!this.$$cn && this.$$c) {
-            this.$$c.$destroy();
-            this.$$c = void 0;
-          }
-        });
-      }
-      $$g_p(attribute_name) {
-        return Object.keys(this.$$p_d).find(
-          (key) => this.$$p_d[key].attribute === attribute_name || !this.$$p_d[key].attribute && key.toLowerCase() === attribute_name
-        ) || attribute_name;
-      }
-    };
-  }
-  function get_custom_element_value(prop2, value, props_definition, transform) {
-    const type = props_definition[prop2]?.type;
-    value = type === "Boolean" && typeof value !== "boolean" ? value != null : value;
-    if (!transform || !props_definition[prop2]) {
-      return value;
-    } else if (transform === "toAttribute") {
-      switch (type) {
-        case "Object":
-        case "Array":
-          return value == null ? null : JSON.stringify(value);
-        case "Boolean":
-          return value ? "" : null;
-        case "Number":
-          return value == null ? null : value;
-        default:
-          return value;
-      }
-    } else {
-      switch (type) {
-        case "Object":
-        case "Array":
-          return value && JSON.parse(value);
-        case "Boolean":
-          return value;
-        case "Number":
-          return value != null ? +value : value;
-        default:
-          return value;
-      }
-    }
-  }
-  function create_custom_element(Component, props_definition, slots, accessors, use_shadow_dom, extend3) {
-    let Class = class extends SvelteElement {
-      constructor() {
-        super(Component, slots, use_shadow_dom);
-        this.$$p_d = props_definition;
-      }
-      static get observedAttributes() {
-        return Object.keys(props_definition).map(
-          (key) => (props_definition[key].attribute || key).toLowerCase()
-        );
-      }
-    };
-    Object.keys(props_definition).forEach((prop2) => {
-      Object.defineProperty(Class.prototype, prop2, {
-        get() {
-          return this.$$c && prop2 in this.$$c ? this.$$c[prop2] : this.$$d[prop2];
-        },
-        set(value) {
-          value = get_custom_element_value(prop2, value, props_definition);
-          this.$$d[prop2] = value;
-          this.$$c?.$set({ [prop2]: value });
-        }
-      });
-    });
-    accessors.forEach((accessor) => {
-      Object.defineProperty(Class.prototype, accessor, {
-        get() {
-          return this.$$c?.[accessor];
-        }
-      });
-    });
-    if (extend3) {
-      Class = extend3(Class);
-    }
-    Component.element = /** @type {any} */
-    Class;
-    return Class;
-  }
-  var SvelteComponent = class {
-    /**
-     * ### PRIVATE API
-     *
-     * Do not use, may change at any time
-     *
-     * @type {any}
-     */
-    $$ = void 0;
-    /**
-     * ### PRIVATE API
-     *
-     * Do not use, may change at any time
-     *
-     * @type {any}
-     */
-    $$set = void 0;
-    /** @returns {void} */
-    $destroy() {
-      destroy_component(this, 1);
-      this.$destroy = noop2;
-    }
-    /**
-     * @template {Extract<keyof Events, string>} K
-     * @param {K} type
-     * @param {((e: Events[K]) => void) | null | undefined} callback
-     * @returns {() => void}
-     */
-    $on(type, callback) {
-      if (!is_function(callback)) {
-        return noop2;
-      }
-      const callbacks = this.$$.callbacks[type] || (this.$$.callbacks[type] = []);
-      callbacks.push(callback);
-      return () => {
-        const index3 = callbacks.indexOf(callback);
-        if (index3 !== -1) callbacks.splice(index3, 1);
+    }));
+    const parsed = parse_default.parseClearData(bodies);
+    return [...new Set(parsed.map((clearData) => {
+      return {
+        songNo: clearData.songNo,
+        hasUra: clearData.difficulty.ura !== void 0
       };
-    }
-    /**
-     * @param {Partial<Props>} props
-     * @returns {void}
-     */
-    $set(props) {
-      if (this.$$set && !is_empty(props)) {
-        this.$$.skip_bound = true;
-        this.$$set(props);
-        this.$$.skip_bound = false;
-      }
-    }
-  };
-
-  // node_modules/svelte/src/shared/version.js
-  var PUBLIC_VERSION = "4";
-
-  // node_modules/svelte/src/runtime/internal/disclose-version/index.js
-  if (typeof window !== "undefined")
-    (window.__svelte || (window.__svelte = { v: /* @__PURE__ */ new Set() })).v.add(PUBLIC_VERSION);
+    }))];
+  }
 
   // node_modules/@babel/runtime/helpers/esm/extends.js
   function _extends() {
@@ -63832,177 +63893,120 @@
   // node_modules/mathjs/lib/esm/utils/emitter.js
   var import_tiny_emitter = __toESM(require_tiny_emitter(), 1);
 
-  // src/components/rating.svelte
-  function add_css(target) {
-    append_styles(target, "svelte-8qaadq", "table.svelte-8qaadq{border-collapse:collapse}th.svelte-8qaadq,td.svelte-8qaadq{border:1px solid black}");
+  // src/module/calculateRating.ts
+  function calculateRating(difficultyScoreData, maxCombo, measure) {
+    const percentage = add3(divide2((difficultyScoreData.good * 2 + difficultyScoreData.ok) * 100, maxCombo * 2), min2(5, divide2(difficultyScoreData.roll, 100)));
+    const compensatedPercentage = getCompensated(percentage);
+    return Math.round(measure * compensatedPercentage * getCrownBonus(difficultyScoreData.crown) / 1e3);
   }
-  function get_each_context(ctx, list, i2) {
-    const child_ctx = ctx.slice();
-    child_ctx[3] = list[i2];
-    return child_ctx;
-  }
-  function create_each_block(ctx) {
-    let tr;
-    let td0;
-    let t1;
-    let td1;
-    let t3;
-    let td2;
-    let t5;
-    let td3;
-    let t7;
-    let td4;
-    let t9;
-    let td5;
-    let t11;
-    return {
-      c() {
-        tr = element("tr");
-        td0 = element("td");
-        td0.textContent = `${/*rating*/
-        ctx[3].songNo}`;
-        t1 = space();
-        td1 = element("td");
-        td1.textContent = `${/*rating*/
-        ctx[3].title}`;
-        t3 = space();
-        td2 = element("td");
-        td2.textContent = `${/*rating*/
-        ctx[3].difficulty}`;
-        t5 = space();
-        td3 = element("td");
-        td3.textContent = `${/*rating*/
-        ctx[3].score}`;
-        t7 = space();
-        td4 = element("td");
-        td4.textContent = `${/*rating*/
-        ctx[3].crown}`;
-        t9 = space();
-        td5 = element("td");
-        td5.textContent = `${/*rating*/
-        ctx[3].rating}`;
-        t11 = space();
-        attr2(td0, "class", "svelte-8qaadq");
-        attr2(td1, "class", "svelte-8qaadq");
-        attr2(td2, "class", "svelte-8qaadq");
-        attr2(td3, "class", "svelte-8qaadq");
-        attr2(td4, "class", "svelte-8qaadq");
-        attr2(td5, "class", "svelte-8qaadq");
-      },
-      m(target, anchor) {
-        insert(target, tr, anchor);
-        append4(tr, td0);
-        append4(tr, t1);
-        append4(tr, td1);
-        append4(tr, t3);
-        append4(tr, td2);
-        append4(tr, t5);
-        append4(tr, td3);
-        append4(tr, t7);
-        append4(tr, td4);
-        append4(tr, t9);
-        append4(tr, td5);
-        append4(tr, t11);
-      },
-      p: noop2,
-      d(detaching) {
-        if (detaching) {
-          detach(tr);
-        }
+  function getCrownBonus(crown) {
+    switch (crown) {
+      case "played": {
+        return 0.7;
       }
-    };
-  }
-  function create_fragment(ctx) {
-    let div2;
-    let t2;
-    let table;
-    let tr;
-    let t14;
-    let each_value = ensure_array_like(
-      /*ratings*/
-      ctx[0]
-    );
-    let each_blocks = [];
-    for (let i2 = 0; i2 < each_value.length; i2 += 1) {
-      each_blocks[i2] = create_each_block(get_each_context(ctx, each_value, i2));
+      case "silver": {
+        return 1;
+      }
+      case "gold": {
+        return 1.1;
+      }
+      case "donderfull": {
+        return 1.15;
+      }
+      default: {
+        return 0;
+      }
     }
-    return {
-      c() {
-        div2 = element("div");
-        div2.textContent = `레이팅: ${getRating(
-          /*ratings*/
-          ctx[0]
-        )}`;
-        t2 = space();
-        table = element("table");
-        tr = element("tr");
-        tr.innerHTML = `<th class="svelte-8qaadq">곡 번호</th> <th class="svelte-8qaadq">곡명</th> <th class="svelte-8qaadq">난이도</th> <th class="svelte-8qaadq">점수</th> <th class="svelte-8qaadq">왕관</th> <th class="svelte-8qaadq">레이팅</th>`;
-        t14 = space();
-        for (let i2 = 0; i2 < each_blocks.length; i2 += 1) {
-          each_blocks[i2].c();
-        }
-        attr2(table, "class", "svelte-8qaadq");
-      },
-      m(target, anchor) {
-        insert(target, div2, anchor);
-        insert(target, t2, anchor);
-        insert(target, table, anchor);
-        append4(table, tr);
-        append4(table, t14);
-        for (let i2 = 0; i2 < each_blocks.length; i2 += 1) {
-          if (each_blocks[i2]) {
-            each_blocks[i2].m(table, null);
-          }
-        }
-      },
-      p(ctx2, [dirty]) {
-        if (dirty & /*ratings*/
-        1) {
-          each_value = ensure_array_like(
-            /*ratings*/
-            ctx2[0]
-          );
-          let i2;
-          for (i2 = 0; i2 < each_value.length; i2 += 1) {
-            const child_ctx = get_each_context(ctx2, each_value, i2);
-            if (each_blocks[i2]) {
-              each_blocks[i2].p(child_ctx, dirty);
-            } else {
-              each_blocks[i2] = create_each_block(child_ctx);
-              each_blocks[i2].c();
-              each_blocks[i2].m(table, null);
-            }
-          }
-          for (; i2 < each_blocks.length; i2 += 1) {
-            each_blocks[i2].d(1);
-          }
-          each_blocks.length = each_value.length;
-        }
-      },
-      i: noop2,
-      o: noop2,
-      d(detaching) {
-        if (detaching) {
-          detach(div2);
-          detach(t2);
-          detach(table);
-        }
-        destroy_each(each_blocks, detaching);
-      }
-    };
   }
-  function getCompensated(score) {
-    if (score < 6e5) {
-      return subtract(exp2(multiply(divide2(log3(400001), 6e5), score)), 1).valueOf();
-    } else if (score < 75e4) {
-      return add3(multiply(divide2(5, 3), subtract(score, 6e5)), 4e5).valueOf();
-    } else if (score < 95e4) {
-      return add3(multiply(divide2(3, 2), subtract(score, 75e4)), 65e4).valueOf();
+  function getCompensated(percentage) {
+    const multiplied = percentage * 1e4;
+    let compensated;
+    if (multiplied < 6e5) {
+      compensated = subtract(
+        exp2(
+          multiply(
+            divide2(log3(400001), 6e5),
+            multiplied
+          )
+        ),
+        1
+      ).valueOf();
+    } else if (multiplied < 75e4) {
+      compensated = add3(
+        multiply(
+          divide2(5, 3),
+          subtract(multiplied, 6e5)
+        ),
+        4e5
+      ).valueOf();
+    } else if (multiplied < 95e4) {
+      compensated = add3(
+        multiply(
+          divide2(3, 2),
+          subtract(multiplied, 75e4)
+        ),
+        65e4
+      ).valueOf();
     } else {
-      return add3(multiply(divide2(15e4, log3(16)), log3(add3(divide2(subtract(score, 95e4), 1e4), 1))), 95e4).valueOf();
+      compensated = add3(
+        multiply(
+          divide2(15e4, log3(16)),
+          log3(
+            add3(
+              divide2(
+                subtract(multiplied, 95e4),
+                1e4
+              ),
+              1
+            )
+          )
+        ),
+        95e4
+      ).valueOf();
     }
+    return compensated;
   }
-  function getRating(ratings) {
+
+  // src/module/getRatings.ts
+  function getRatings(scoreDatas, measures) {
+    const ratings = [];
+    scoreDatas.forEach((scoreData) => {
+      const oni = scoreData.difficulty.oni;
+      if (oni) {
+        const measure = measures.find((measure2) => `${measure2.songno}` === `${scoreData.songNo}` && measure2.diff === "oni");
+        if (measure) {
+          const rating = {
+            songNo: `${measure.songno}`,
+            title: measure["곡명"],
+            level: measure["원본레벨"],
+            rating: calculateRating(oni, measure["노트수"], measure["상수"]),
+            crown: oni.crown,
+            diff: measure.diff,
+            accuracy: add3(divide2((oni.good * 2 + oni.ok) * 100, measure["노트수"] * 2), min2(5, divide2(oni.roll, 100)))
+          };
+          ratings.push(rating);
+        }
+      }
+      const ura = scoreData.difficulty.ura;
+      if (ura) {
+        const measure = measures.find((measure2) => `${measure2.songno}` === `${scoreData.songNo}` && measure2.diff === "ura");
+        if (measure) {
+          const rating = {
+            songNo: `${measure.songno}`,
+            title: measure["곡명"],
+            level: measure["원본레벨"],
+            rating: calculateRating(ura, measure["노트수"], measure["상수"]),
+            crown: ura.crown,
+            diff: measure.diff,
+            accuracy: add3(divide2((ura.good * 2 + ura.ok) * 100, measure["노트수"] * 2), min2(5, divide2(ura.roll, 100)))
+          };
+          ratings.push(rating);
+        }
+      }
+    });
+    return ratings.sort((a, b) => b.rating - a.rating);
+  }
+  function getTotalRating(ratings) {
     let firstSum = 0;
     for (let i2 = 0; i2 < Math.min(30, ratings.length); i2++) {
       firstSum += ratings[i2].rating;
@@ -64032,392 +64036,9 @@
     }
     return Math.round(average + otherSum);
   }
-  function instance($$self, $$props, $$invalidate) {
-    let { measures } = $$props;
-    let { scoreDatas } = $$props;
-    const ratings = [];
-    scoreDatas.forEach((song) => {
-      const filteredMeasures = measures.filter((measure) => measure.songno.toString() === song.songNo);
-      if (filteredMeasures.length === 0) {
-        return;
-      }
-      Object.keys(song.difficulty).forEach((diff2) => {
-        const measure = filteredMeasures.find((m) => m.diff === diff2);
-        if (!measure) {
-          return;
-        }
-        const difficulty = song.difficulty[diff2];
-        let bonus = 1;
-        if (difficulty.crown === "silver") {
-          bonus = 1.1;
-        } else if (difficulty.crown === "gold") {
-          bonus = 1.3;
-        } else if (difficulty.crown === "donderfull") {
-          bonus = 1.45;
-        }
-        ratings.push({
-          songNo: song.songNo,
-          difficulty: diff2,
-          score: difficulty.score,
-          rating: Math.round(multiply(measure["상수"], getCompensated(difficulty.score), bonus).valueOf() / 1e3),
-          title: measure["곡명"],
-          crown: difficulty.crown
-        });
-      });
-    });
-    ratings.sort((a, b) => b.rating - a.rating);
-    $$self.$$set = ($$props2) => {
-      if ("measures" in $$props2) $$invalidate(1, measures = $$props2.measures);
-      if ("scoreDatas" in $$props2) $$invalidate(2, scoreDatas = $$props2.scoreDatas);
-    };
-    return [ratings, measures, scoreDatas];
-  }
-  var Rating = class extends SvelteComponent {
-    constructor(options) {
-      super();
-      init(this, options, instance, create_fragment, safe_not_equal, { measures: 1, scoreDatas: 2 }, add_css);
-    }
-    get measures() {
-      return this.$$.ctx[1];
-    }
-    set measures(measures) {
-      this.$$set({ measures });
-      flush();
-    }
-    get scoreDatas() {
-      return this.$$.ctx[2];
-    }
-    set scoreDatas(scoreDatas) {
-      this.$$set({ scoreDatas });
-      flush();
-    }
-  };
-  create_custom_element(Rating, { "measures": {}, "scoreDatas": {} }, [], [], true);
-  var rating_default = Rating;
 
-  // src/components/user.svelte
-  function add_css2(target) {
-    append_styles(target, "svelte-1xx2p07", ".container.svelte-1xx2p07{width:min(100%, 300px);display:flex;flex-direction:column;align-items:center;justify-content:center}img.svelte-1xx2p07{width:min(100%, 200px);height:auto}table.svelte-1xx2p07{width:100%;border-collapse:collapse}td.svelte-1xx2p07{text-align:center;border:1px solid black}");
-  }
-  function create_fragment2(ctx) {
-    let div2;
-    let img;
-    let img_src_value;
-    let t0;
-    let table;
-    let tr0;
-    let td0;
-    let t2;
-    let td1;
-    let t3_value = (
-      /*userData*/
-      ctx[0].nickname + ""
-    );
-    let t3;
-    let t4;
-    let tr1;
-    let td2;
-    let t6;
-    let td3;
-    let t7_value = (
-      /*userData*/
-      ctx[0].taikoNumber + ""
-    );
-    let t7;
-    return {
-      c() {
-        div2 = element("div");
-        img = element("img");
-        t0 = space();
-        table = element("table");
-        tr0 = element("tr");
-        td0 = element("td");
-        td0.textContent = "닉네임";
-        t2 = space();
-        td1 = element("td");
-        t3 = text3(t3_value);
-        t4 = space();
-        tr1 = element("tr");
-        td2 = element("td");
-        td2.textContent = "북 번호";
-        t6 = space();
-        td3 = element("td");
-        t7 = text3(t7_value);
-        if (!src_url_equal(img.src, img_src_value = /*userData*/
-        ctx[0].myDon)) attr2(img, "src", img_src_value);
-        attr2(img, "alt", "");
-        attr2(img, "class", "svelte-1xx2p07");
-        attr2(td0, "class", "svelte-1xx2p07");
-        attr2(td1, "class", "svelte-1xx2p07");
-        attr2(td2, "class", "svelte-1xx2p07");
-        attr2(td3, "class", "svelte-1xx2p07");
-        attr2(table, "class", "svelte-1xx2p07");
-        attr2(div2, "class", "container svelte-1xx2p07");
-      },
-      m(target, anchor) {
-        insert(target, div2, anchor);
-        append4(div2, img);
-        append4(div2, t0);
-        append4(div2, table);
-        append4(table, tr0);
-        append4(tr0, td0);
-        append4(tr0, t2);
-        append4(tr0, td1);
-        append4(td1, t3);
-        append4(table, t4);
-        append4(table, tr1);
-        append4(tr1, td2);
-        append4(tr1, t6);
-        append4(tr1, td3);
-        append4(td3, t7);
-      },
-      p(ctx2, [dirty]) {
-        if (dirty & /*userData*/
-        1 && !src_url_equal(img.src, img_src_value = /*userData*/
-        ctx2[0].myDon)) {
-          attr2(img, "src", img_src_value);
-        }
-        if (dirty & /*userData*/
-        1 && t3_value !== (t3_value = /*userData*/
-        ctx2[0].nickname + "")) set_data(t3, t3_value);
-        if (dirty & /*userData*/
-        1 && t7_value !== (t7_value = /*userData*/
-        ctx2[0].taikoNumber + "")) set_data(t7, t7_value);
-      },
-      i: noop2,
-      o: noop2,
-      d(detaching) {
-        if (detaching) {
-          detach(div2);
-        }
-      }
-    };
-  }
-  function instance2($$self, $$props, $$invalidate) {
-    let { userData } = $$props;
-    $$self.$$set = ($$props2) => {
-      if ("userData" in $$props2) $$invalidate(0, userData = $$props2.userData);
-    };
-    return [userData];
-  }
-  var User = class extends SvelteComponent {
-    constructor(options) {
-      super();
-      init(this, options, instance2, create_fragment2, safe_not_equal, { userData: 0 }, add_css2);
-    }
-    get userData() {
-      return this.$$.ctx[0];
-    }
-    set userData(userData) {
-      this.$$set({ userData });
-      flush();
-    }
-  };
-  create_custom_element(User, { "userData": {} }, [], [], true);
-  var user_default = User;
-
-  // src/components/display.svelte
-  function add_css3(target) {
-    append_styles(target, "svelte-ay1d4c", "div.svelte-ay1d4c{display:flex;flex-direction:column;justify-content:center;align-items:center}");
-  }
-  function create_fragment3(ctx) {
-    let meta;
-    let style;
-    let t1;
-    let button;
-    let t3;
-    let div2;
-    let user;
-    let t4;
-    let rating;
-    let current;
-    let mounted;
-    let dispose;
-    user = new user_default({
-      props: { userData: (
-        /*data*/
-        ctx[0].userData
-      ) }
-    });
-    rating = new rating_default({
-      props: {
-        measures: (
-          /*measures*/
-          ctx[1]
-        ),
-        scoreDatas: (
-          /*data*/
-          ctx[0].scoreDatas
-        )
-      }
-    });
-    return {
-      c() {
-        meta = element("meta");
-        style = element("style");
-        style.textContent = "body {\r\n            background-color: white !important;\r\n        }";
-        t1 = space();
-        button = element("button");
-        button.textContent = "점수데이터 복사하기";
-        t3 = space();
-        div2 = element("div");
-        create_component(user.$$.fragment);
-        t4 = space();
-        create_component(rating.$$.fragment);
-        attr2(meta, "name", "viewport");
-        attr2(meta, "content", "width=device-width, initial-scale=1.0, user-scalable=yes");
-        attr2(div2, "class", "svelte-ay1d4c");
-      },
-      m(target, anchor) {
-        append4(document.head, meta);
-        append4(document.head, style);
-        insert(target, t1, anchor);
-        insert(target, button, anchor);
-        insert(target, t3, anchor);
-        insert(target, div2, anchor);
-        mount_component(user, div2, null);
-        append4(div2, t4);
-        mount_component(rating, div2, null);
-        current = true;
-        if (!mounted) {
-          dispose = listen(
-            button,
-            "click",
-            /*click_handler*/
-            ctx[2]
-          );
-          mounted = true;
-        }
-      },
-      p(ctx2, [dirty]) {
-        const user_changes = {};
-        if (dirty & /*data*/
-        1) user_changes.userData = /*data*/
-        ctx2[0].userData;
-        user.$set(user_changes);
-        const rating_changes = {};
-        if (dirty & /*measures*/
-        2) rating_changes.measures = /*measures*/
-        ctx2[1];
-        if (dirty & /*data*/
-        1) rating_changes.scoreDatas = /*data*/
-        ctx2[0].scoreDatas;
-        rating.$set(rating_changes);
-      },
-      i(local) {
-        if (current) return;
-        transition_in(user.$$.fragment, local);
-        transition_in(rating.$$.fragment, local);
-        current = true;
-      },
-      o(local) {
-        transition_out(user.$$.fragment, local);
-        transition_out(rating.$$.fragment, local);
-        current = false;
-      },
-      d(detaching) {
-        if (detaching) {
-          detach(t1);
-          detach(button);
-          detach(t3);
-          detach(div2);
-        }
-        detach(meta);
-        detach(style);
-        destroy_component(user);
-        destroy_component(rating);
-        mounted = false;
-        dispose();
-      }
-    };
-  }
-  function instance3($$self, $$props, $$invalidate) {
-    let { data: data2 } = $$props;
-    let { measures } = $$props;
-    const click_handler = async () => {
-      try {
-        await navigator.clipboard.writeText(JSON.stringify(data2));
-        alert("복사 완료");
-      } catch {
-        alert("복사 실패");
-      }
-    };
-    $$self.$$set = ($$props2) => {
-      if ("data" in $$props2) $$invalidate(0, data2 = $$props2.data);
-      if ("measures" in $$props2) $$invalidate(1, measures = $$props2.measures);
-    };
-    return [data2, measures, click_handler];
-  }
-  var Display = class extends SvelteComponent {
-    constructor(options) {
-      super();
-      init(this, options, instance3, create_fragment3, safe_not_equal, { data: 0, measures: 1 }, add_css3);
-    }
-    get data() {
-      return this.$$.ctx[0];
-    }
-    set data(data2) {
-      this.$$set({ data: data2 });
-      flush();
-    }
-    get measures() {
-      return this.$$.ctx[1];
-    }
-    set measures(measures) {
-      this.$$set({ measures });
-      flush();
-    }
-  };
-  create_custom_element(Display, { "data": {}, "measures": {} }, [], [], true);
-  var display_default = Display;
-
-  // src/module/rating.ts
-  function createDialog() {
-    const background = document.createElement("div");
-    background.style.position = "fixed";
-    background.style.top = "0";
-    background.style.left = "0";
-    background.style.backgroundColor = "gray";
-    background.style.width = "100%";
-    background.style.minHeight = "100%";
-    background.style.zIndex = "10000";
-    const dialog = document.createElement("div");
-    dialog.style.position = "fixed";
-    dialog.style.top = "50%";
-    dialog.style.left = "50%";
-    dialog.style.transform = "translate(-50%, -50%)";
-    dialog.style.width = "min(500px, 100%)";
-    dialog.style.minHeight = "min(500px, 100%)";
-    dialog.style.backgroundColor = "white";
-    dialog.style.border = "2px solid black";
-    dialog.style.borderRadius = "10px";
-    dialog.style.display = "flex";
-    dialog.style.flexDirection = "column";
-    dialog.style.justifyContent = "center";
-    dialog.style.alignItems = "center";
-    dialog.style.zIndex = "10001";
-    document.body.appendChild(background);
-    document.body.appendChild(dialog);
-    return dialog;
-  }
-  async function getUser() {
-    const fetched = await fetch("https://donderhiroba.jp");
-    const body = await fetched.text();
-    const parsed = parse_default.parseCurrentLogin(body);
-    parsed.nickname = parsed.nickname.replace(/\n/g, "").replace(/\t/g, "");
-    return parsed;
-  }
-  async function getSongNos() {
-    const bodies = [];
-    await Promise.all([1, 2, 3, 4, 5, 6, 7, 8].map(async (genre) => {
-      const fetched = await fetch(`https://donderhiroba.jp/score_list.php?genre=${genre}`);
-      const body = await fetched.text();
-      bodies.push(body);
-    }));
-    const parsed = parse_default.parseClearData(bodies);
-    return [...new Set(parsed.map((clearData) => clearData.songNo))];
-  }
-  async function getScoreDatas(songNos, dialog) {
+  // src/module/getScoreDatas.ts
+  async function getScoreDatas(songs, completed) {
     let grouped = [
       [],
       [],
@@ -64430,21 +64051,28 @@
       [],
       []
     ];
-    songNos.forEach((songNo, index3) => {
-      grouped[Number(index3.toString().at(-1))].push(songNo);
+    songs.forEach((song, index3) => {
+      grouped[Number(index3.toString().at(-1))].push(song);
     });
-    let scoreDatas = [];
-    let completed = 0;
-    dialog.innerHTML = `${completed}/${songNos.length} 완료`;
+    const scoreDatas = [];
+    const errors = [];
     await Promise.all(grouped.map(async (group) => {
-      for (const songNo of group) {
+      for (const song of group) {
         const bodies = [];
-        for (const diff2 of [4, 5]) {
-          const fetched = await fetch(`https://donderhiroba.jp/score_detail.php?song_no=${songNo}&level=${diff2}`);
+        try {
+          const fetched = await fetch(`https://donderhiroba.jp/score_detail.php?song_no=${song.songNo}&level=4`);
           const body = await fetched.text();
           bodies.push(body);
+          if (song.hasUra) {
+            const fetched2 = await fetch(`https://donderhiroba.jp/score_detail.php?song_no=${song.songNo}&level=5`);
+            const body2 = await fetched2.text();
+            bodies.push(body2);
+          }
+        } catch {
+          errors.push(song);
+          continue;
         }
-        const parsed = parse_default.parseScoreData([bodies, songNo]);
+        const parsed = parse_default.parseScoreData([bodies, song.songNo]);
         if (!parsed) continue;
         if (parsed.difficulty?.normal) {
           parsed.difficulty.ura = parsed.difficulty.normal;
@@ -64455,69 +64083,511 @@
           delete parsed.difficulty.easy;
         }
         scoreDatas.push(parsed);
-        completed++;
-        dialog.innerHTML = `${completed}/${songNos.length} 완료`;
+        completed.update((e3) => e3 + 1);
       }
     }));
+    for (const song of errors) {
+      const bodies = [];
+      try {
+        const fetched = await fetch(`https://donderhiroba.jp/score_detail.php?song_no=${song.songNo}&level=4`);
+        const body = await fetched.text();
+        bodies.push(body);
+        if (song.hasUra) {
+          const fetched2 = await fetch(`https://donderhiroba.jp/score_detail.php?song_no=${song.songNo}&level=5`);
+          const body2 = await fetched2.text();
+          bodies.push(body2);
+        }
+      } catch {
+        console.warn(`Error occured in song ${song.songNo}`);
+      }
+      const parsed = parse_default.parseScoreData([bodies, song.songNo]);
+      if (!parsed) continue;
+      if (parsed.difficulty?.normal) {
+        parsed.difficulty.ura = parsed.difficulty.normal;
+        delete parsed.difficulty.normal;
+      }
+      if (parsed.difficulty?.easy) {
+        parsed.difficulty.oni = parsed.difficulty.easy;
+        delete parsed.difficulty.easy;
+      }
+      scoreDatas.push(parsed);
+      completed.update((e3) => e3 + 1);
+    }
     return scoreDatas;
   }
+
+  // src/module/getMeasures.ts
+  var import_json_2_csv = __toESM(require_converter(), 1);
   async function getMeasures() {
     return await fetch("https://raw.githubusercontent.com/taikowiki/taiko-fumen-measure-table/main/main.csv").then((data2) => data2.text()).then((text4) => (0, import_json_2_csv.csv2json)(text4));
   }
-  async function main() {
-    const dialog = createDialog();
-    dialog.innerHTML = "유저 데이터를 가져오는 중...";
-    let userData;
-    try {
-      userData = await getUser();
-    } catch (err) {
-      console.warn(err);
-      dialog.innerHTML = "에러가 발생했습니다.";
-      return;
+
+  // src/module/getUser.ts
+  async function getUser() {
+    const fetched = await fetch("https://donderhiroba.jp");
+    const body = await fetched.text();
+    const parsed = parse_default.parseCurrentLogin(body);
+    parsed.nickname = parsed.nickname.replace(/\n/g, "").replace(/\t/g, "");
+    return parsed;
+  }
+
+  // src/components/main.svelte
+  function add_css(target) {
+    append_styles(target, "svelte-143s3ri", ".svelte-143s3ri:default(html, body){height:99%}.container.svelte-143s3ri{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center}table.svelte-143s3ri{max-width:100%;border-collapse:collapse}th.svelte-143s3ri,td.svelte-143s3ri{text-align:center;border:1px solid black}");
+  }
+  function get_each_context(ctx, list, i2) {
+    const child_ctx = ctx.slice();
+    child_ctx[9] = list[i2];
+    return child_ctx;
+  }
+  function create_else_block(ctx) {
+    let div0;
+    let t0_value = (
+      /*user*/
+      ctx[0]?.nickname + ""
+    );
+    let t0;
+    let t1;
+    let t2_value = (
+      /*user*/
+      ctx[0]?.taikoNumber + ""
+    );
+    let t2;
+    let t3;
+    let div1;
+    let img;
+    let img_src_value;
+    let t4;
+    let div2;
+    let t5;
+    let t6;
+    let t7;
+    let table;
+    let tr;
+    let t19;
+    let each_value = ensure_array_like(
+      /*ratings*/
+      ctx[3]
+    );
+    let each_blocks = [];
+    for (let i2 = 0; i2 < each_value.length; i2 += 1) {
+      each_blocks[i2] = create_each_block(get_each_context(ctx, each_value, i2));
     }
-    dialog.innerHTML = "song no를 가져오는 중...";
-    let songNos;
-    try {
-      songNos = await getSongNos();
-    } catch (err) {
-      console.warn(err);
-      dialog.innerHTML = "에러가 발생했습니다.";
-      return;
-    }
-    dialog.innerHTML = "song no 가져오기 완료!";
-    let scoreDatas;
-    try {
-      scoreDatas = await getScoreDatas(songNos, dialog);
-    } catch (err) {
-      console.warn(err);
-      dialog.innerHTML = "에러가 발생했습니다.";
-      return;
-    }
-    dialog.innerHTML = "";
-    const data2 = {
-      userData,
-      scoreDatas
-    };
-    const measures = await getMeasures();
-    document.body.innerHTML = "";
-    new display_default({
-      target: document.body,
-      props: {
-        data: data2,
-        measures
+    return {
+      c() {
+        div0 = element("div");
+        t0 = text(t0_value);
+        t1 = space();
+        t2 = text(t2_value);
+        t3 = space();
+        div1 = element("div");
+        img = element("img");
+        t4 = space();
+        div2 = element("div");
+        t5 = text("레이팅: ");
+        t6 = text(
+          /*totalRating*/
+          ctx[4]
+        );
+        t7 = space();
+        table = element("table");
+        tr = element("tr");
+        tr.innerHTML = `<th class="svelte-143s3ri">songNo</th> <th class="svelte-143s3ri">곡명</th> <th class="svelte-143s3ri">diff</th> <th class="svelte-143s3ri">왕관</th> <th class="svelte-143s3ri">정확도</th> <th class="svelte-143s3ri">레이팅</th>`;
+        t19 = space();
+        for (let i2 = 0; i2 < each_blocks.length; i2 += 1) {
+          each_blocks[i2].c();
+        }
+        attr(div0, "class", "svelte-143s3ri");
+        if (!src_url_equal(img.src, img_src_value = /*user*/
+        ctx[0]?.myDon)) attr(img, "src", img_src_value);
+        attr(img, "alt", "");
+        attr(img, "class", "svelte-143s3ri");
+        attr(div1, "class", "svelte-143s3ri");
+        attr(div2, "class", "svelte-143s3ri");
+        attr(tr, "class", "svelte-143s3ri");
+        attr(table, "class", "svelte-143s3ri");
+      },
+      m(target, anchor) {
+        insert(target, div0, anchor);
+        append(div0, t0);
+        append(div0, t1);
+        append(div0, t2);
+        insert(target, t3, anchor);
+        insert(target, div1, anchor);
+        append(div1, img);
+        insert(target, t4, anchor);
+        insert(target, div2, anchor);
+        append(div2, t5);
+        append(div2, t6);
+        insert(target, t7, anchor);
+        insert(target, table, anchor);
+        append(table, tr);
+        append(table, t19);
+        for (let i2 = 0; i2 < each_blocks.length; i2 += 1) {
+          if (each_blocks[i2]) {
+            each_blocks[i2].m(table, null);
+          }
+        }
+      },
+      p(ctx2, dirty) {
+        if (dirty & /*user*/
+        1 && t0_value !== (t0_value = /*user*/
+        ctx2[0]?.nickname + "")) set_data(t0, t0_value);
+        if (dirty & /*user*/
+        1 && t2_value !== (t2_value = /*user*/
+        ctx2[0]?.taikoNumber + "")) set_data(t2, t2_value);
+        if (dirty & /*user*/
+        1 && !src_url_equal(img.src, img_src_value = /*user*/
+        ctx2[0]?.myDon)) {
+          attr(img, "src", img_src_value);
+        }
+        if (dirty & /*totalRating*/
+        16) set_data(
+          t6,
+          /*totalRating*/
+          ctx2[4]
+        );
+        if (dirty & /*ratings, Math*/
+        8) {
+          each_value = ensure_array_like(
+            /*ratings*/
+            ctx2[3]
+          );
+          let i2;
+          for (i2 = 0; i2 < each_value.length; i2 += 1) {
+            const child_ctx = get_each_context(ctx2, each_value, i2);
+            if (each_blocks[i2]) {
+              each_blocks[i2].p(child_ctx, dirty);
+            } else {
+              each_blocks[i2] = create_each_block(child_ctx);
+              each_blocks[i2].c();
+              each_blocks[i2].m(table, null);
+            }
+          }
+          for (; i2 < each_blocks.length; i2 += 1) {
+            each_blocks[i2].d(1);
+          }
+          each_blocks.length = each_value.length;
+        }
+      },
+      d(detaching) {
+        if (detaching) {
+          detach(div0);
+          detach(t3);
+          detach(div1);
+          detach(t4);
+          detach(div2);
+          detach(t7);
+          detach(table);
+        }
+        destroy_each(each_blocks, detaching);
       }
+    };
+  }
+  function create_if_block_1(ctx) {
+    let t0;
+    let t1;
+    let t2;
+    let t3;
+    return {
+      c() {
+        t0 = text(
+          /*$completed*/
+          ctx[5]
+        );
+        t1 = text("/");
+        t2 = text(
+          /*totals*/
+          ctx[2]
+        );
+        t3 = text(" 완료");
+      },
+      m(target, anchor) {
+        insert(target, t0, anchor);
+        insert(target, t1, anchor);
+        insert(target, t2, anchor);
+        insert(target, t3, anchor);
+      },
+      p(ctx2, dirty) {
+        if (dirty & /*$completed*/
+        32) set_data(
+          t0,
+          /*$completed*/
+          ctx2[5]
+        );
+        if (dirty & /*totals*/
+        4) set_data(
+          t2,
+          /*totals*/
+          ctx2[2]
+        );
+      },
+      d(detaching) {
+        if (detaching) {
+          detach(t0);
+          detach(t1);
+          detach(t2);
+          detach(t3);
+        }
+      }
+    };
+  }
+  function create_if_block(ctx) {
+    let t;
+    return {
+      c() {
+        t = text("songNo를 가져오는 중...");
+      },
+      m(target, anchor) {
+        insert(target, t, anchor);
+      },
+      p: noop,
+      d(detaching) {
+        if (detaching) {
+          detach(t);
+        }
+      }
+    };
+  }
+  function create_each_block(ctx) {
+    let tr;
+    let td0;
+    let t0_value = (
+      /*rating*/
+      ctx[9].songNo + ""
+    );
+    let t0;
+    let t1;
+    let td1;
+    let t2_value = (
+      /*rating*/
+      ctx[9].title + ""
+    );
+    let t2;
+    let t3;
+    let td2;
+    let t4_value = (
+      /*rating*/
+      ctx[9].diff + ""
+    );
+    let t4;
+    let t5;
+    let td3;
+    let t6_value = (
+      /*rating*/
+      ctx[9].crown + ""
+    );
+    let t6;
+    let t7;
+    let td4;
+    let t8_value = Math.min(Math.round(
+      /*rating*/
+      ctx[9].accuracy * 1e4
+    ) / 1e4, 105) + "";
+    let t8;
+    let t9;
+    let t10;
+    let td5;
+    let t11_value = (
+      /*rating*/
+      ctx[9].rating + ""
+    );
+    let t11;
+    let t12;
+    return {
+      c() {
+        tr = element("tr");
+        td0 = element("td");
+        t0 = text(t0_value);
+        t1 = space();
+        td1 = element("td");
+        t2 = text(t2_value);
+        t3 = space();
+        td2 = element("td");
+        t4 = text(t4_value);
+        t5 = space();
+        td3 = element("td");
+        t6 = text(t6_value);
+        t7 = space();
+        td4 = element("td");
+        t8 = text(t8_value);
+        t9 = text("%");
+        t10 = space();
+        td5 = element("td");
+        t11 = text(t11_value);
+        t12 = space();
+        attr(td0, "class", "svelte-143s3ri");
+        attr(td1, "class", "svelte-143s3ri");
+        attr(td2, "class", "svelte-143s3ri");
+        attr(td3, "class", "svelte-143s3ri");
+        attr(td4, "class", "svelte-143s3ri");
+        attr(td5, "class", "svelte-143s3ri");
+        attr(tr, "class", "svelte-143s3ri");
+      },
+      m(target, anchor) {
+        insert(target, tr, anchor);
+        append(tr, td0);
+        append(td0, t0);
+        append(tr, t1);
+        append(tr, td1);
+        append(td1, t2);
+        append(tr, t3);
+        append(tr, td2);
+        append(td2, t4);
+        append(tr, t5);
+        append(tr, td3);
+        append(td3, t6);
+        append(tr, t7);
+        append(tr, td4);
+        append(td4, t8);
+        append(td4, t9);
+        append(tr, t10);
+        append(tr, td5);
+        append(td5, t11);
+        append(tr, t12);
+      },
+      p(ctx2, dirty) {
+        if (dirty & /*ratings*/
+        8 && t0_value !== (t0_value = /*rating*/
+        ctx2[9].songNo + "")) set_data(t0, t0_value);
+        if (dirty & /*ratings*/
+        8 && t2_value !== (t2_value = /*rating*/
+        ctx2[9].title + "")) set_data(t2, t2_value);
+        if (dirty & /*ratings*/
+        8 && t4_value !== (t4_value = /*rating*/
+        ctx2[9].diff + "")) set_data(t4, t4_value);
+        if (dirty & /*ratings*/
+        8 && t6_value !== (t6_value = /*rating*/
+        ctx2[9].crown + "")) set_data(t6, t6_value);
+        if (dirty & /*ratings*/
+        8 && t8_value !== (t8_value = Math.min(Math.round(
+          /*rating*/
+          ctx2[9].accuracy * 1e4
+        ) / 1e4, 105) + "")) set_data(t8, t8_value);
+        if (dirty & /*ratings*/
+        8 && t11_value !== (t11_value = /*rating*/
+        ctx2[9].rating + "")) set_data(t11, t11_value);
+      },
+      d(detaching) {
+        if (detaching) {
+          detach(tr);
+        }
+      }
+    };
+  }
+  function create_fragment(ctx) {
+    let div2;
+    function select_block_type(ctx2, dirty) {
+      if (
+        /*scene*/
+        ctx2[1] === "songno"
+      ) return create_if_block;
+      if (
+        /*scene*/
+        ctx2[1] === "crawl"
+      ) return create_if_block_1;
+      return create_else_block;
+    }
+    let current_block_type = select_block_type(ctx, -1);
+    let if_block = current_block_type(ctx);
+    return {
+      c() {
+        div2 = element("div");
+        if_block.c();
+        attr(div2, "class", "container svelte-143s3ri");
+      },
+      m(target, anchor) {
+        insert(target, div2, anchor);
+        if_block.m(div2, null);
+      },
+      p(ctx2, [dirty]) {
+        if (current_block_type === (current_block_type = select_block_type(ctx2, dirty)) && if_block) {
+          if_block.p(ctx2, dirty);
+        } else {
+          if_block.d(1);
+          if_block = current_block_type(ctx2);
+          if (if_block) {
+            if_block.c();
+            if_block.m(div2, null);
+          }
+        }
+      },
+      i: noop,
+      o: noop,
+      d(detaching) {
+        if (detaching) {
+          detach(div2);
+        }
+        if_block.d();
+      }
+    };
+  }
+  function instance($$self, $$props, $$invalidate) {
+    let $completed;
+    let scene = "songno";
+    const completed = writable(0);
+    component_subscribe($$self, completed, (value) => $$invalidate(5, $completed = value));
+    let totals = 0;
+    let { scoreDatas = void 0 } = $$props;
+    let ratings;
+    let totalRating;
+    let { user = void 0 } = $$props;
+    ;
+    async function main2() {
+      if (!user) {
+        $$invalidate(0, user = await getUser());
+      }
+      const songs = await getSongs();
+      $$invalidate(2, totals = songs.length);
+      $$invalidate(1, scene = "crawl");
+      if (!scoreDatas) {
+        $$invalidate(7, scoreDatas = await getScoreDatas(songs, completed));
+      }
+      $$invalidate(3, ratings = getRatings(scoreDatas, await getMeasures()));
+      $$invalidate(4, totalRating = getTotalRating(ratings));
+      $$invalidate(1, scene = "result");
+      console.log(ratings);
+    }
+    main2();
+    $$self.$$set = ($$props2) => {
+      if ("scoreDatas" in $$props2) $$invalidate(7, scoreDatas = $$props2.scoreDatas);
+      if ("user" in $$props2) $$invalidate(0, user = $$props2.user);
+    };
+    return [user, scene, totals, ratings, totalRating, $completed, completed, scoreDatas];
+  }
+  var Main = class extends SvelteComponent {
+    constructor(options) {
+      super();
+      init(this, options, instance, create_fragment, safe_not_equal, { scoreDatas: 7, user: 0 }, add_css);
+    }
+    get scoreDatas() {
+      return this.$$.ctx[7];
+    }
+    set scoreDatas(scoreDatas) {
+      this.$$set({ scoreDatas });
+      flush();
+    }
+    get user() {
+      return this.$$.ctx[0];
+    }
+    set user(user) {
+      this.$$set({ user });
+      flush();
+    }
+  };
+  create_custom_element(Main, { "scoreDatas": {}, "user": {} }, [], [], true);
+  var main_default = Main;
+
+  // src/module/main.ts
+  async function main() {
+    document.body.innerHTML = "";
+    new main_default({
+      target: document.body
     });
   }
   main();
 })();
 /*! Bundled license information:
-
-doc-path/lib/path.js:
-  (**
-   * @license MIT
-   * doc-path <https://github.com/mrodrig/doc-path>
-   * Copyright (c) 2015-present, Michael Rodrigues.
-   *)
 
 complex.js/complex.js:
   (**
@@ -64526,6 +64596,13 @@ complex.js/complex.js:
    * Copyright (c) 2020, Robert Eisele (robert@xarg.org)
    * Dual licensed under the MIT or GPL Version 2 licenses.
    **)
+
+doc-path/lib/path.js:
+  (**
+   * @license MIT
+   * doc-path <https://github.com/mrodrig/doc-path>
+   * Copyright (c) 2015-present, Michael Rodrigues.
+   *)
 
 decimal.js/decimal.mjs:
   (*!
