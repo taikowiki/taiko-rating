@@ -64235,7 +64235,7 @@
         t10 = space();
         div4 = element("div");
         button = element("button");
-        button.textContent = "점수데이터 복사하기";
+        button.textContent = "점수데이터 다운로드";
         t12 = space();
         div5 = element("div");
         t13 = text("정확도 100% 경쟁 이론치: ");
@@ -64337,7 +64337,7 @@
           dispose = listen(
             button,
             "click",
-            /*copy*/
+            /*download*/
             ctx[12]
           );
           mounted = true;
@@ -64741,22 +64741,14 @@
       $$invalidate(9, max105vertex = getVertex(max105Ratings));
       $$invalidate(1, scene = "result");
     }
-    async function copy() {
-      navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
-        if (result.state === "granted" || result.state === "prompt") {
-          try {
-            const data2 = { userData: user, scoreDatas };
-            navigator.clipboard.writeText(JSON.stringify(data2));
-            alert("복사 완료");
-          } catch {
-            alert("복사 실패");
-          }
-        } else {
-          alert("복사 실패");
-        }
-      }).catch(() => {
-        alert("복사 실패");
-      });
+    function download() {
+      const data2 = { userData: user, scoreDatas };
+      const anchor = document.createElement("a");
+      const txtFile = new Blob([JSON.stringify(data2)], { type: "text/plain" });
+      anchor.href = URL.createObjectURL(txtFile);
+      anchor.download = "score_data.txt";
+      anchor.click();
+      anchor.remove();
     }
     main2();
     $$self.$$set = ($$props2) => {
@@ -64776,7 +64768,7 @@
       max105vertex,
       $completed,
       completed,
-      copy,
+      download,
       scoreDatas
     ];
   }
