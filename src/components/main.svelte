@@ -55,11 +55,13 @@
                 crown: "donderful",
                 accuracy: 100,
                 rating: Math.round(
-                    (measure["상수"] * getCompensated(100) * getCrownBonus("donderfull")) /
+                    (measure["상수"] *
+                        getCompensated(100) *
+                        getCrownBonus("donderfull")) /
                         1000,
                 ),
             };
-            max100Ratings.push(r)
+            max100Ratings.push(r);
         });
         max100competitive = getCompetitive(max100Ratings);
         max100vertex = getVertex(max100Ratings);
@@ -74,11 +76,13 @@
                 crown: "donderful",
                 accuracy: 105,
                 rating: Math.round(
-                    (measure["상수"] * getCompensated(105) * getCrownBonus("donderfull")) /
+                    (measure["상수"] *
+                        getCompensated(105) *
+                        getCrownBonus("donderfull")) /
                         1000,
                 ),
             };
-            max105Ratings.push(r)
+            max105Ratings.push(r);
         });
         max105competitive = getCompetitive(max105Ratings);
         max105vertex = getVertex(max105Ratings);
@@ -86,30 +90,17 @@
         scene = "result";
     }
 
-    async function copy() {
-        navigator.permissions
-            //@ts-expect-error
-            .query({ name: "clipboard-write" })
-            .then((result) => {
-                if (result.state === "granted" || result.state === "prompt") {
-                    try {
-                        const data = {
-                            userData: user,
-                            scoreDatas,
-                        };
-
-                        navigator.clipboard.writeText(JSON.stringify(data));
-                        alert("복사 완료");
-                    } catch {
-                        alert("복사 실패");
-                    }
-                } else {
-                    alert("복사 실패");
-                }
-            })
-            .catch(() => {
-                alert("복사 실패");
-            });
+    function download() {
+        const data = {
+            userData: user,
+            scoreDatas,
+        };
+        const anchor = document.createElement("a");
+        const txtFile = new Blob([JSON.stringify(data)], {type: 'text/plain'} );
+        anchor.href = URL.createObjectURL(txtFile);
+        anchor.download = "score_data.txt";
+        anchor.click();
+        anchor.remove();
     }
 
     main();
@@ -135,7 +126,7 @@
             표준 레이팅: {vertex}
         </div>
         <div>
-            <button on:click={copy}>점수데이터 복사하기</button>
+            <button on:click={download}>점수데이터 다운로드</button>
         </div>
         <div>
             정확도 100% 경쟁 이론치: {max100competitive}
