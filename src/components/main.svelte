@@ -40,8 +40,6 @@
         ratings = getRatings(scoreDatas, measures);
         totalRating = getTotalRating(ratings);
 
-        scene = "result";
-
         let max100Ratings: Rating[] = [];
         measures.forEach((measure) => {
             const r: Rating = {
@@ -52,10 +50,11 @@
                 crown: "donderful",
                 accuracy: 100,
                 rating: Math.round(
-                    (measure["상수"] * 100 * getCrownBonus("donderfull")) /
+                    (measure["상수"] * 1000000 * getCrownBonus("donderfull")) /
                         1000,
                 ),
             };
+            max100Ratings.push(r)
         });
         max100 = getTotalRating(max100Ratings);
 
@@ -69,14 +68,15 @@
                 crown: "donderful",
                 accuracy: 105,
                 rating: Math.round(
-                    (measure["상수"] * 105 * getCrownBonus("donderfull")) /
+                    (measure["상수"] * 1050000 * getCrownBonus("donderfull")) /
                         1000,
                 ),
             };
+            max105Ratings.push(r)
         });
         max105 = getTotalRating(max105Ratings);
 
-        console.log(ratings);
+        scene = "result";
     }
 
     async function copy() {

@@ -64626,7 +64626,6 @@
       const measures = await getMeasures();
       $$invalidate(3, ratings = getRatings(scoreDatas, measures));
       $$invalidate(4, totalRating = getTotalRating(ratings));
-      $$invalidate(1, scene = "result");
       let max100Ratings = [];
       measures.forEach((measure) => {
         const r = {
@@ -64636,8 +64635,9 @@
           diff: measure["diff"],
           crown: "donderful",
           accuracy: 100,
-          rating: Math.round(measure["상수"] * 100 * getCrownBonus("donderfull") / 1e3)
+          rating: Math.round(measure["상수"] * 1e6 * getCrownBonus("donderfull") / 1e3)
         };
+        max100Ratings.push(r);
       });
       $$invalidate(5, max100 = getTotalRating(max100Ratings));
       let max105Ratings = [];
@@ -64649,11 +64649,12 @@
           diff: measure["diff"],
           crown: "donderful",
           accuracy: 105,
-          rating: Math.round(measure["상수"] * 105 * getCrownBonus("donderfull") / 1e3)
+          rating: Math.round(measure["상수"] * 105e4 * getCrownBonus("donderfull") / 1e3)
         };
+        max105Ratings.push(r);
       });
       $$invalidate(6, max105 = getTotalRating(max105Ratings));
-      console.log(ratings);
+      $$invalidate(1, scene = "result");
     }
     async function copy() {
       navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
