@@ -5,7 +5,7 @@
     import type { CardData, ScoreData } from "node-hiroba/types";
     import { parse } from "node-hiroba";
 
-    const wikiOrigin = "https://localhost:5173";
+    const wikiOrigin = "https://taiko.wiki";
 
     const Container = createSSC(
         "div",

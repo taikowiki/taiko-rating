@@ -12,6 +12,8 @@
 javascript:(async() => {const fetched = await fetch('https://raw.githubusercontent.com/taikowiki/taiko-rating/main/build/rating.js');const script = await fetched.text();(new Function(script))();})();
 ```
 
+이후 위키(https://taiko.wiki)에서 확인할 수 있습니다.
+
 ## 경험치
 
 사용자의 플레이 기록을 이용하여 경험치 계산합니다.
