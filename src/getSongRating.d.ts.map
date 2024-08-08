@@ -1,0 +1,1 @@
+{"version":3,"file":"getSongRating.d.ts","sourceRoot":"","sources":["getSongRating.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,mBAAmB,EAAE,KAAK,EAAE,MAAM,mBAAmB,CAAC;AAEpE,wBAAgB,aAAa,CAAC,mBAAmB,EAAE,mBAAmB,EAAE,QAAQ,EAAE,MAAM,EAAE,OAAO,EAAE,MAAM,UAKxG;AAED,wBAAgB,aAAa,CAAC,KAAK,EAAE,KAAK,4BAkBzC;AAED,wBAAgB,cAAc,CAAC,UAAU,EAAE,MAAM,GAAG,MAAM,CAyDzD"}

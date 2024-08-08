@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "@types/mathjs": "^9.4.2",
+    "json-2-csv": "^5.5.5",
+    "mathjs": "^13.0.3",
+    "object.groupby": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/object.groupby": "^1.0.4",
+    "node-hiroba": "^1.6.0"
+  },
+  "name": "taiko-rating",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["taiko", "rating"],
+  "author": "hotsixman",
+  "license": "ISC",
+  "description": "",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taikowiki/taiko-rating"
+  }
+}
