@@ -4,7 +4,7 @@
     import Profile from "./components/profile.svelte";
     import type { CardData, ScoreData } from "node-hiroba/types";
     import { parse } from "node-hiroba";
-    import lzutf8 from 'lzutf8';
+    import lzutf8 from "lzutf8";
 
     const wikiOrigin = "https://taiko.wiki";
 
@@ -34,6 +34,14 @@
     //ready
     let sendType: "clear" | "score" = "clear";
     async function send(cardData: CardData, sendType: "clear" | "score") {
+        if (!confirm(`Send your donderhiroba datas to ${wikiOrigin}. It will be deleted together when you delete your account. Do you agree?`)) {
+            alert("Canceled.");
+            message = '';
+            uploadMessage = '';
+            scene = 'ready';
+            return;
+        }
+
         const wikiUser = await (
             await fetch(wikiOrigin + "/api/user", {
                 credentials: "include",
@@ -55,7 +63,9 @@
                     donderData: cardData,
                     clearData,
                 });
-                const body = (lzutf8.compress(data, {outputEncoding: "ByteArray"}) as Uint8Array);
+                const body = lzutf8.compress(data, {
+                    outputEncoding: "ByteArray",
+                }) as Uint8Array;
                 await fetch(wikiOrigin + "/api/user/donder", {
                     credentials: "include",
                     method: "POST",
@@ -173,7 +183,9 @@
                     scoreData,
                 });
 
-                const body = (lzutf8.compress(data, {outputEncoding: "ByteArray"}) as Uint8Array);
+                const body = lzutf8.compress(data, {
+                    outputEncoding: "ByteArray",
+                }) as Uint8Array;
 
                 await fetch(wikiOrigin + "/api/user/donder", {
                     credentials: "include",
