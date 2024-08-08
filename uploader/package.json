@@ -21,6 +21,8 @@
   "dependencies": {
     "esbuild": "^0.23.0",
     "esbuild-svelte": "^0.8.1",
-    "styled-svelte-component": "^0.4.2"
+    "node-hiroba": "^1.6.0",
+    "styled-svelte-component": "^0.4.2",
+    "svelte-preprocess": "^6.0.2"
   }
 }
