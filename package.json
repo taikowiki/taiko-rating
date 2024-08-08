@@ -9,7 +9,7 @@
     "@types/object.groupby": "^1.0.4",
     "node-hiroba": "^1.6.0"
   },
-  "name": "taiko-rating",
+  "name": "@taiko-wiki/taiko-rating",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
