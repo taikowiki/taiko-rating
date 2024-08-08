@@ -4,6 +4,7 @@
     import Profile from "./components/profile.svelte";
     import type { CardData, ScoreData } from "node-hiroba/types";
     import { parse } from "node-hiroba";
+    import lzutf8 from 'lzutf8';
 
     const wikiOrigin = "https://taiko.wiki";
 
@@ -50,13 +51,15 @@
                 uploadMessage = "Fetching clear data...";
                 const clearData = await hiroba.getClearData(null);
                 uploadMessage = "Uploading clear data...";
+                const data = JSON.stringify({
+                    donderData: cardData,
+                    clearData,
+                });
+                const body = (lzutf8.compress(data, {outputEncoding: "ByteArray"}) as Uint8Array);
                 await fetch(wikiOrigin + "/api/user/donder", {
                     credentials: "include",
                     method: "POST",
-                    body: JSON.stringify({
-                        donderData: cardData,
-                        clearData,
-                    }),
+                    body,
                     headers: {
                         "Content-Type": "application/json",
                     },
@@ -164,14 +167,18 @@
                     }
                 }
 
+                const data = JSON.stringify({
+                    donderData: cardData,
+                    clearData,
+                    scoreData,
+                });
+
+                const body = (lzutf8.compress(data, {outputEncoding: "ByteArray"}) as Uint8Array);
+
                 await fetch(wikiOrigin + "/api/user/donder", {
                     credentials: "include",
                     method: "POST",
-                    body: JSON.stringify({
-                        donderData: cardData,
-                        clearData,
-                        scoreData,
-                    }),
+                    body,
                     headers: {
                         "Content-Type": "application/json",
                     },
