@@ -71,9 +71,11 @@ export async function fetchMeasures() {
         .then(data => data.text())
         .then(text => csv2json(text))
         .then(measures => {
-        if ("노트수 " in measures[0]) {
+        if ("노트수\r" in measures[0]) {
             measures.forEach(measure => {
-                measure['노트수'] = measure['노트수 '];
+                const notes = measure['노트수\r'];
+                delete measure['노트수\r'];
+                measure['노트수'] = notes;
             });
         }
         return measures;
