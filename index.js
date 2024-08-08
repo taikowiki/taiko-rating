@@ -69,6 +69,14 @@ export function getRating(scoreDatas, measures) {
 export async function fetchMeasures() {
     return await fetch('https://raw.githubusercontent.com/taikowiki/taiko-fumen-measure-table/main/main.csv')
         .then(data => data.text())
-        .then(text => csv2json(text));
+        .then(text => csv2json(text))
+        .then(measures => {
+        if ("노트수 " in measures[0]) {
+            measures.forEach(measure => {
+                measure['노트수'] = measure['노트수 '];
+            });
+        }
+        return measures;
+    });
 }
 //# sourceMappingURL=index.js.map

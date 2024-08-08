@@ -83,5 +83,13 @@ export function getRating(scoreDatas: Record<string, OniUraScoreData> | OniUraSc
 export async function fetchMeasures() {
     return await fetch('https://raw.githubusercontent.com/taikowiki/taiko-fumen-measure-table/main/main.csv')
         .then(data => data.text())
-        .then(text => csv2json(text) as Measure[])
+        .then(text => csv2json(text) as (Measure & { "노트수 "?: number })[])
+        .then(measures => {
+            if ("노트수 " in measures[0]) {
+                measures.forEach(measure => {
+                    measure['노트수'] = measure['노트수 '] as number;
+                })
+            }
+            return measures as Measure[];
+        })
 }
