@@ -75,7 +75,8 @@ export function getRating(scoreDatas: Record<string, OniUraScoreData> | OniUraSc
 
     return {
         rating,
-        exp
+        exp,
+        songRatingDatas
     }
 }
 

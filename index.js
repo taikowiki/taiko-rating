@@ -62,7 +62,8 @@ export function getRating(scoreDatas, measures) {
     const exp = Math.ceil(average + otherSum);
     return {
         rating,
-        exp
+        exp,
+        songRatingDatas
     };
 }
 export async function fetchMeasures() {
