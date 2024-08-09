@@ -75,6 +75,8 @@
                     },
                 });
             } else {
+                uploadMessage = 'Updating score...';
+                await hiroba.updateScore(null);
                 uploadMessage = "Fetching clear data...";
                 const clearData = await hiroba.getClearData(null);
                 const songNoDatas: { songNo: string; hasUra: boolean }[] = [];
