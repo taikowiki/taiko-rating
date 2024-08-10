@@ -63983,10 +63983,10 @@
             songNo: `${measure.songno}`,
             title: measure["곡명"],
             level: measure["원본레벨"],
-            rating: calculateRating(oni, measure["노트수"], measure["상수"]),
+            rating: calculateRating(oni, measure["노트수\r"], measure["상수"]),
             crown: oni.crown,
             diff: measure.diff,
-            accuracy: add3(divide2((oni.good * 2 + oni.ok) * 100, measure["노트수"] * 2), min2(5, divide2(oni.roll, 100)))
+            accuracy: add3(divide2((oni.good * 2 + oni.ok) * 100, measure["노트수\r"] * 2), min2(5, divide2(oni.roll, 100)))
           };
           ratings.push(rating);
         }
@@ -63999,10 +63999,10 @@
             songNo: `${measure.songno}`,
             title: measure["곡명"],
             level: measure["원본레벨"],
-            rating: calculateRating(ura, measure["노트수"], measure["상수"]),
+            rating: calculateRating(ura, measure["노트수\r"], measure["상수"]),
             crown: ura.crown,
             diff: measure.diff,
-            accuracy: add3(divide2((ura.good * 2 + ura.ok) * 100, measure["노트수"] * 2), min2(5, divide2(ura.roll, 100)))
+            accuracy: add3(divide2((ura.good * 2 + ura.ok) * 100, measure["노트수\r"] * 2), min2(5, divide2(ura.roll, 100)))
           };
           ratings.push(rating);
         }
