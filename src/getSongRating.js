@@ -1,8 +1,12 @@
 import * as mathjs from 'mathjs';
 export function getSongRating(difficultyScoreData, maxCombo, measure) {
-    const percentage = mathjs.add(mathjs.divide((difficultyScoreData.good * 2 + difficultyScoreData.ok) * 100, maxCombo * 2), mathjs.min(5, mathjs.divide(difficultyScoreData.roll, 100)));
-    const compensatedPercentage = getCompensated(percentage);
-    return Math.round(measure * compensatedPercentage * getCrownBonus(difficultyScoreData.crown) / 1000);
+    const accuracy = mathjs.add(mathjs.divide((difficultyScoreData.good * 2 + difficultyScoreData.ok) * 100, maxCombo * 2), mathjs.min(5, mathjs.divide(difficultyScoreData.roll, 100)));
+    const compensatedAccuracy = getCompensated(accuracy);
+    const value = Math.round(measure * compensatedAccuracy * getCrownBonus(difficultyScoreData.crown) / 1000);
+    return {
+        value,
+        accuracy
+    };
 }
 export function getCrownBonus(crown) {
     switch (crown) {
@@ -23,8 +27,8 @@ export function getCrownBonus(crown) {
         }
     }
 }
-export function getCompensated(percentage) {
-    const multiplied = percentage * 10000;
+export function getCompensated(accuracy) {
+    const multiplied = accuracy * 10000;
     let compensated;
     if (multiplied < 600000) {
         compensated = mathjs

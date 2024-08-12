@@ -2,10 +2,15 @@ import * as mathjs from 'mathjs';
 import type { DifficultyScoreData, Crown } from 'node-hiroba/types';
 
 export function getSongRating(difficultyScoreData: DifficultyScoreData, maxCombo: number, measure: number) {
-    const percentage = mathjs.add(mathjs.divide((difficultyScoreData.good * 2 + difficultyScoreData.ok) * 100, maxCombo * 2), mathjs.min(5, mathjs.divide(difficultyScoreData.roll, 100)));
-    const compensatedPercentage = getCompensated(percentage);
+    const accuracy = mathjs.add(mathjs.divide((difficultyScoreData.good * 2 + difficultyScoreData.ok) * 100, maxCombo * 2), mathjs.min(5, mathjs.divide(difficultyScoreData.roll, 100)));
+    const compensatedAccuracy = getCompensated(accuracy);
 
-    return Math.round(measure * compensatedPercentage * getCrownBonus(difficultyScoreData.crown) / 1000);
+    const value = Math.round(measure * compensatedAccuracy * getCrownBonus(difficultyScoreData.crown) / 1000);
+
+    return {
+        value,
+        accuracy
+    }
 }
 
 export function getCrownBonus(crown: Crown) {
@@ -28,8 +33,8 @@ export function getCrownBonus(crown: Crown) {
     }
 }
 
-export function getCompensated(percentage: number): number {
-    const multiplied = percentage * 10000;
+export function getCompensated(accuracy: number): number {
+    const multiplied = accuracy * 10000;
 
     let compensated: number;
     if (multiplied < 600000) {

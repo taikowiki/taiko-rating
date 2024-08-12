@@ -4,8 +4,11 @@ export declare function getRating(scoreDatas: Record<string, OniUraScoreData> | 
     exp: number;
     songRatingDatas: {
         songNo: string;
-        difficulty: 'oni' | 'ura';
-        songRating: number;
+        difficulty: "oni" | "ura";
+        songRating: {
+            value: number;
+            accuracy: number;
+        };
     }[];
 };
 export declare function fetchMeasures(): Promise<Measure[]>;
