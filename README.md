@@ -52,7 +52,7 @@ javascript:(async() => {const fetched = await fetch('https://raw.githubuserconte
 정확도는 다음과 같이 구할 수 있습니다.
 
 ```math
-\mathrm{정확도} = \frac{\mathrm{량개수 \times 2 + 가개수}}{\mathrm{최대노트수 \times 2}}
+\mathrm{정확도} = \frac{\mathrm{량개수 \times 2 + 가개수 + min(5, 연타수 \times 0.01)}}{\mathrm{최대노트수 \times 2}}
 ```
 
 #### 정확도 보정치
