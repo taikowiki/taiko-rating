@@ -18,14 +18,14 @@ export function getRating(scoreDatas: Record<string, OniUraScoreData> | OniUraSc
         groupedScoreData = scoreDatas
     }
 
-    const songRatingDatas: { songNo: string; difficulty: 'oni' | 'ura'; songRating: {value: number; accuracy: number;}; }[] = [];
+    const songRatingDatas: { songNo: string; difficulty: 'oni' | 'ura'; songRating: ReturnType<typeof getSongRating> }[] = [];
     measures.forEach(measure => {
         const difficultyScoreData = groupedScoreData[measure.songno]?.difficulty?.[measure.diff];
         if (!difficultyScoreData) {
             return;
         }
 
-        const songRating = getSongRating(difficultyScoreData, measure['노트수'], measure['상수']);
+        const songRating = getSongRating(difficultyScoreData, measure.notes, measure.measureValue);
 
         songRatingDatas.push({
             songNo: measure.songno,
@@ -83,15 +83,33 @@ export function getRating(scoreDatas: Record<string, OniUraScoreData> | OniUraSc
 export async function fetchMeasures() {
     return await fetch('https://raw.githubusercontent.com/taikowiki/taiko-fumen-measure-table/main/main.csv')
         .then(data => data.text())
-        .then(text => csv2json(text) as (Measure & { "노트수\r"?: number })[])
+        .then(text => csv2json(text) as any[])
         .then(measures => {
-            if ("노트수\r" in measures[0]) {
-                measures.forEach(measure => {
-                    const notes = measure['노트수\r'] as number;
-                    delete measure['노트수\r'];
-                    measure['노트수'] = notes;
-                })
-            }
-            return measures as Measure[];
+            const trimedMeasures = measures.map(measure => {
+                Object.keys(measure).forEach((key) => {
+                    const value = measure[key];
+                    delete measure[key];
+                    measure[key.trim()] = value;
+                });
+
+                if("상수대역" in measure){
+                    const newMeasure: Measure = {
+                        range: measure['상수대역'],
+                        measureValue: measure['상수'],
+                        level: measure['원본레벨'],
+                        songno: measure.songno,
+                        diff: measure.diff,
+                        title: measure['곡명'],
+                        notes: measure['노트수']
+                    }
+
+                    return newMeasure;
+                }
+                else{
+                    return measure as Measure;
+                }
+            })
+
+            return trimedMeasures;
         })
 }

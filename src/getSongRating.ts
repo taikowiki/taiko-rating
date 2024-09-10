@@ -1,15 +1,16 @@
 import * as mathjs from 'mathjs';
 import type { DifficultyScoreData, Crown } from 'node-hiroba/types';
 
-export function getSongRating(difficultyScoreData: DifficultyScoreData, maxCombo: number, measure: number) {
+export function getSongRating(difficultyScoreData: DifficultyScoreData, maxCombo: number, measureValue: number): {value: number; accuracy: number; measureValue: number;} {
     const accuracy = mathjs.add(mathjs.divide((difficultyScoreData.good * 2 + difficultyScoreData.ok) * 100, maxCombo * 2), mathjs.min(5, mathjs.divide(difficultyScoreData.roll, 100)));
     const compensatedAccuracy = getCompensated(accuracy);
 
-    const value = Math.round(measure * compensatedAccuracy * getCrownBonus(difficultyScoreData.crown) / 1000);
+    const value = Math.round(measureValue * compensatedAccuracy * getCrownBonus(difficultyScoreData.crown) / 1000);
 
     return {
         value,
-        accuracy
+        accuracy,
+        measureValue
     }
 }
 

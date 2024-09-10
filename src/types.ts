@@ -1,6 +1,6 @@
 import type { ScoreData, DifficultyScoreData } from "node-hiroba/types"
 
-export interface Measure {
+export interface MeasureKr {
     '상수대역': number,
     '상수': number,
     '원본레벨': number,
@@ -8,7 +8,16 @@ export interface Measure {
     diff: 'oni' | 'ura'
     '곡명': string
     '노트수': number
-    'bpm': string
+}
+
+export interface Measure{
+    range: number;
+    measureValue: number;
+    level: number;
+    songno: string;
+    diff: 'oni'|'ura';
+    title: string;
+    notes: number;
 }
 
 export interface OniUraScoreData extends ScoreData {
