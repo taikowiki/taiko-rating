@@ -28,3 +28,6 @@ tests
 
 유물
 uploader/*
+
+*.json
+*.map
