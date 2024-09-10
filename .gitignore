@@ -31,3 +31,4 @@ uploader/*
 
 *.json
 *.map
+*.d.ts
