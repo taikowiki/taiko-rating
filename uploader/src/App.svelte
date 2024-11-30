@@ -1,27 +1,11 @@
 <script lang="ts">
-    import createSSC from "styled-svelte-component";
     import hiroba from "node-hiroba";
     import Profile from "./components/profile.svelte";
     import type { CardData, ScoreData } from "node-hiroba/types";
     import { parse } from "node-hiroba";
     import lzutf8 from "lzutf8";
 
-    const wikiOrigin = "https://taiko.wiki";
-
-    const Container = createSSC(
-        "div",
-        () => `
-    width: 100%;
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    `,
-    );
-
-    const ErrorDisplay = createSSC(
-        "span",
-        () => `color:red; font-weight: bold;`,
-    );
+    const wikiOrigin = "https://localhost:5173";
 
     let scene: "ready" | "upload" = "ready";
 
@@ -34,11 +18,15 @@
     //ready
     let sendType: "clear" | "score" = "clear";
     async function send(cardData: CardData, sendType: "clear" | "score") {
-        if (!confirm(`Send your donderhiroba datas to ${wikiOrigin}. It will be deleted together when you delete your account. Do you agree?`)) {
+        if (
+            !confirm(
+                `Send your donderhiroba datas to ${wikiOrigin}. It will be deleted together when you delete your account. Do you agree?`,
+            )
+        ) {
             alert("Canceled.");
-            message = '';
-            uploadMessage = '';
-            scene = 'ready';
+            message = "";
+            uploadMessage = "";
+            scene = "ready";
             return;
         }
 
@@ -75,7 +63,7 @@
                     },
                 });
             } else {
-                uploadMessage = 'Updating score...';
+                uploadMessage = "Updating score...";
                 await hiroba.updateScore(null);
                 uploadMessage = "Fetching clear data...";
                 const clearData = await hiroba.getClearData(null);
@@ -213,13 +201,13 @@
     //upload
 </script>
 
-<Container>
+<div class="container">
     {#await hiroba.getCurrentLogin(null)}
         Loading...
     {:then cardData}
         {#if scene === "ready"}
             {#if message}
-                <ErrorDisplay>{message}</ErrorDisplay>
+                <div class="error_display">{message}</div>
             {/if}
             <Profile {cardData} />
             <label>
@@ -241,6 +229,20 @@
             {uploadMessage}
         {/if}
     {:catch}
-        <ErrorDisplay>Not Logined</ErrorDisplay>
+        <div class="error_display">Not Logined</div>
     {/await}
-</Container>
+</div>
+
+<style>
+    .container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .error_display {
+        color: red;
+        font-weight: bold;
+    }
+</style>
