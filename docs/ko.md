@@ -2,17 +2,9 @@
 
 동더히로바를 이용하여 레이팅을 계산합니다.
 
-## 사용법
+## 가이드
 
-동더히로바에 접속한 후, 아래 코드를 주소창에 넣고 엔터키를 누르세요. 동더히로바에 로그인이 되어 있어야 합니다.
-
-크로미움 기반 브라우저에서는 `javascript:`를 먼저 입력하고 아래 코드를 붙여넣으세요.
-
-```
-javascript:(async() => {const fetched = await fetch('https://raw.githubusercontent.com/taikowiki/taiko-rating/main/build/rating.js');const script = await fetched.text();(new Function(script))();})();
-```
-
-이후 위키(https://taiko.wiki) 에서 확인할 수 있습니다.
+[Donderhiroba Plus](https://chromewebstore.google.com/detail/donder-hiroba-plus/dmendcaacmlddhgalacgccejbamnncci) 와 [taiko.wiki](https://taiko.wiki) 를 통해 레이팅을 확인할 수 있는 [가이드](/docs/guide/ko.md)가 있습니다.
 
 ## 경험치
 

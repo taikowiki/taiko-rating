@@ -1,22 +1,12 @@
 # Taiko Rating
 
-Calculates ratings using Dongder Hiroba.
+Calculates ratings using Donder Hiroba.
 
 - [한국어](/docs/ko.md)
 
-## Usage
+## Guide
 
-Access Dongder Hiroba and enter the following code in the address bar, then press Enter. You need to be logged into Dongder Hiroba.
-
-For Chromium-based browsers, first type `javascript:` and then paste the code below.
-
-```
-javascript:(async() => {const fetched = await fetch('https://raw.githubusercontent.com/taikowiki/taiko-rating/main/build/rating.js');const script = await fetched.text();(new Function(script))();})();
-```
-
-Or use chrome extension, [Donderhiroba Plus](https://chromewebstore.google.com/detail/donder-hiroba-plus/dmendcaacmlddhgalacgccejbamnncci)
-
-Afterward, you can check it on the wiki (https://taiko.wiki/auth/user/donder).
+Here is a [guide](/docs/guide/en.md) to how to watch your rating using [Donderhiroba Plus](https://chromewebstore.google.com/detail/donder-hiroba-plus/dmendcaacmlddhgalacgccejbamnncci) and [taiko.wiki](https://taiko.wiki).
 
 ## Experience Points
 
