@@ -55,12 +55,14 @@ The calculation method for getting modified accuracy is as follows:
 ```math
 \mathrm{modify}(x) = 
 \begin{cases}
-e^{\frac{ln400001}{600000}10000x} - 1 \quad (10000x < 600000)\\
-\frac{5}{3}(10000x-600000)+400000 \quad (600000 \leqq 10000x < 750000)\\
-\frac{3}{2}(10000x-750000)+650000 \quad (750000 \leqq 10000x < 950000)\\
-\frac{150000}{ln16}ln(\frac{10000x-950000}{10000}+1)+950000 \quad (950000 \leqq x)
+e^{\frac{ln400001}{60}x} - 1 \quad (0 \leqq x < 600000)\\
+\frac{5}{3}(10000x-600000)+400000 \quad (60 \leqq x < 75)\\
+\frac{3}{2}(10000x-750000)+650000 \quad (75 \leqq 10000x < 95)\\
+\frac{150000}{ln16}ln(x-94)+950000 \quad (95 \leqq x)
 \end{cases}
 ```
+
+![graph](/docs/img/graph.png)
 
 #### Modified Crown Value
 
