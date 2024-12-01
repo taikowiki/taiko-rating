@@ -50,7 +50,7 @@ Accuracy can be calculated as follows:
 
 #### Modified Accuracy
 
-The calculation method for the accuracy modifier is as follows:
+The calculation method for getting modified accuracy is as follows:
 
 ```math
 \mathrm{modify}(x) = 
