@@ -5,8 +5,8 @@
     - If you use Android, use [Kiwi Browser](https://play.google.com/store/apps/details?id=com.kiwibrowser.browser)
     - If you use IOS, use [Orion Browser by Kagi](https://apps.apple.com/us/app/orion-browser-by-kagi/id1484498200)
 
-2. Log in to [taiko.wiki](https://taiko.wiki) with the browser.
-3. Login to [Donder Hiroba](https://donderhiroba.jp) with the browser.
+2. Log in to [taiko.wiki](https://taiko.wiki) with the same browser.
+3. Login to [Donder Hiroba](https://donderhiroba.jp) with the same browser.
 4. Open `Donderhiroba Plus`.
 
     ![](/docs/img/4.png)
