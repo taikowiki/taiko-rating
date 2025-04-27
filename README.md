@@ -52,15 +52,6 @@ Accuracy can be calculated as follows:
 \end{cases}
 ```
 
-### Max Roll
-```math
-\mathrm{Max\,Roll} = 
-\begin{cases}
-min(floor((\mathrm{World\,Best\,Record\,Roll\,Count}) * 0.85), 100)\,\,\,\,((\mathrm{World\,Best\,Record\,Roll\,Count}) > 5)\\
-(\mathrm{World\,Best\,Record\,Roll\,Count})\,\,\,\,(O.W.)
-\end{cases}
-```
-
 #### Modified Accuracy
 
 The calculation method for getting modified accuracy is as follows:
@@ -72,6 +63,15 @@ e^{\frac{ln400001}{60}x} - 1 \quad (0 \leqq x < 600000)\\
 \frac{5}{3}(10000x-600000)+400000 \quad (60 \leqq x < 75)\\
 \frac{3}{2}(10000x-750000)+650000 \quad (75 \leqq x < 95)\\
 \frac{150000}{ln16}ln(x-94)+950000 \quad (95 \leqq x)
+\end{cases}
+```
+
+### Max Roll
+```math
+\mathrm{Max\,Roll} = 
+\begin{cases}
+min(floor((\mathrm{World\,Best\,Record\,Roll\,Count}) * 0.85), 100)\,\,\,\,((\mathrm{World\,Best\,Record\,Roll\,Count}) > 5)\\
+(\mathrm{World\,Best\,Record\,Roll\,Count})\,\,\,\,(O.W.)
 \end{cases}
 ```
 
