@@ -18,6 +18,7 @@ export interface Measure{
     diff: 'oni'|'ura';
     title: string;
     notes: number;
+    maxroll: number;
 }
 
 export interface OniUraScoreData extends ScoreData {

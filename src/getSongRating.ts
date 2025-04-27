@@ -1,8 +1,21 @@
 import * as mathjs from 'mathjs';
 import type { DifficultyScoreData, Crown } from 'node-hiroba/types';
 
-export function getSongRating(difficultyScoreData: DifficultyScoreData, maxCombo: number, measureValue: number): {value: number; accuracy: number; measureValue: number;} {
-    const accuracy = mathjs.add(mathjs.divide((difficultyScoreData.good * 2 + difficultyScoreData.ok) * 100, maxCombo * 2), mathjs.min(5, mathjs.divide(difficultyScoreData.roll, 100)));
+/**
+ * 곡의 레이팅을 계산
+ * @param difficultyScoreData 
+ * @param maxCombo 
+ * @param measureValue 
+ * @returns 
+ */
+export function getSongRating(difficultyScoreData: DifficultyScoreData, maxCombo: number, measureValue: number, maxRoll?: number): {value: number; accuracy: number; measureValue: number;} {
+    maxRoll = maxRoll ?? 0;
+
+    const accuracyWithNoBonus = mathjs.divide((difficultyScoreData.good * 2 + difficultyScoreData.ok) * 100, maxCombo * 2);
+    const rollBonus = maxRoll === 0 ? 0 : mathjs.divide(difficultyScoreData.roll, maxRoll);
+
+    // 최종 정확도 계산
+    const accuracy = maxRoll === 0 ? mathjs.min(101, mathjs.multiply(accuracyWithNoBonus, 1.01)) : mathjs.min(101, mathjs.add(accuracyWithNoBonus, rollBonus));
     const compensatedAccuracy = getCompensated(accuracy);
 
     const value = Math.round(measureValue * compensatedAccuracy * getCrownBonus(difficultyScoreData.crown) / 1000);
@@ -14,6 +27,11 @@ export function getSongRating(difficultyScoreData: DifficultyScoreData, maxCombo
     }
 }
 
+/**
+ * 왕관 보너스 반환
+ * @param crown 
+ * @returns 
+ */
 export function getCrownBonus(crown: Crown) {
     switch (crown) {
         case ('played'): {
@@ -23,10 +41,10 @@ export function getCrownBonus(crown: Crown) {
             return 1;
         }
         case ('gold'): {
-            return 1.1;
+            return 1.05;
         }
         case ('donderfull'): {
-            return 1.15;
+            return 1.1;
         }
         default: {
             return 0
@@ -34,6 +52,11 @@ export function getCrownBonus(crown: Crown) {
     }
 }
 
+/**
+ * 정확도 보정치 계산 함수
+ * @param accuracy 
+ * @returns 
+ */
 export function getCompensated(accuracy: number): number {
     const multiplied = accuracy * 10000;
 

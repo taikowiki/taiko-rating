@@ -45,7 +45,11 @@ The calculation method for each song rating is as follows:
 Accuracy can be calculated as follows:
 
 ```math
-\mathrm{Accuracy} = (\frac{\mathrm{Good \times 2 + Ok}}{\mathrm{Max\,Combo \times 2}} + min(0.05, Roll \times 0.0001)) \times 100
+\mathrm{Accuracy} = 
+\begin{cases}
+(\frac{\mathrm{Good \times 2 + Ok}}{\mathrm{Max\,Combo \times 2}} + min(0.01, \frac{Roll}{\mathrm{Max\,Roll}})) \times 100\,\,\,\,(\mathrm{Max\,Roll} > 0) \\
+(\frac{\mathrm{Good \times 2 + Ok}}{\mathrm{Max\,Combo \times 2}}) \times 101\,\,\,\,(\mathrm{Max\,Roll} = 0)
+\end{cases}
 ```
 
 #### Modified Accuracy

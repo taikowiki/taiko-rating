@@ -4,6 +4,12 @@ import { getSongRating } from "./src/getSongRating.js";
 import { csv2json } from "json-2-csv";
 import groupBy from "object.groupby";
 
+/**
+ * 전체 레이팅 계산
+ * @param scoreDatas 
+ * @param measures 
+ * @returns 
+ */
 export function getRating(scoreDatas: Record<string, OniUraScoreData> | OniUraScoreData[], measures: Measure[]) {
     let groupedScoreData: Record<string, ScoreData>;
     if (Array.isArray(scoreDatas)) {
@@ -80,6 +86,10 @@ export function getRating(scoreDatas: Record<string, OniUraScoreData> | OniUraSc
     }
 }
 
+/**
+ * 상수표 요청
+ * @returns 
+ */
 export async function fetchMeasures() {
     return await fetch('https://raw.githubusercontent.com/taikowiki/taiko-fumen-measure-table/main/main.csv')
         .then(data => data.text())
@@ -93,21 +103,31 @@ export async function fetchMeasures() {
                 });
 
                 if("상수대역" in measure){
-                    const newMeasure: Measure = {
+                    var measure_: Measure = {
                         range: measure['상수대역'],
                         measureValue: measure['상수'],
                         level: measure['원본레벨'],
                         songno: measure.songno,
                         diff: measure.diff,
                         title: measure['곡명'],
-                        notes: measure['노트수']
+                        notes: measure['노트수'],
+                        maxroll: measure.maxroll ?? 0
                     }
-
-                    return newMeasure;
                 }
                 else{
-                    return measure as Measure;
+                    var measure_ = measure as Measure;
                 }
+
+                return {
+                    range: Number(measure_.range),
+                    measureValue: Number(measure_.measureValue),
+                    level: Number(measure_.level),
+                    songno: String(measure_.songno),
+                    diff: String(measure_.diff) as 'oni' | 'ura',
+                    title: String(measure_.title),
+                    notes: Number(measure_.notes),
+                    maxroll: Number(measure_.maxroll ?? 0)
+                } as Measure
             })
 
             return trimedMeasures;

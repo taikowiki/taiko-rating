@@ -44,7 +44,11 @@
 정확도는 다음과 같이 구할 수 있습니다.
 
 ```math
-\mathrm{정확도} = (\frac{\mathrm{량개수 \times 2 + 가개수}}{\mathrm{최대노트수 \times 2}} + min(0.05, 연타수 \times 0.0001)) \times 100
+\mathrm{정확도} = 
+\begin{cases}
+(\frac{\mathrm{량 \times 2 + 가}}{\mathrm{최대콤보수 \times 2}} + min(0.01, \frac{연타수}{\mathrm{최대연타수}})) \times 100\,\,\,\,(\mathrm{최대연타수} > 0) \\
+(\frac{\mathrm{량 \times 2 + 가}}{\mathrm{최대콤보수 \times 2}}) \times 101\,\,\,\,(\mathrm{최대연타수} = 0)
+\end{cases}
 ```
 
 #### 정확도 보정치
