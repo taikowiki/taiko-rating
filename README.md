@@ -52,6 +52,15 @@ Accuracy can be calculated as follows:
 \end{cases}
 ```
 
+### Max Roll
+```math
+\mathrm{Max\,Roll} = 
+\begin{cases}
+min(floor((\mathrm{World\,Best\,Record\,Roll\,Count}) * 0.85), 100)\,\,\,\,((\mathrm{World\,Best\,Record\,Roll\,Count}) > 5)\\
+(\mathrm{World\,Best\,Record\,Roll\,Count})\,\,\,\,(O.W.)
+\end{cases}
+```
+
 #### Modified Accuracy
 
 The calculation method for getting modified accuracy is as follows:
