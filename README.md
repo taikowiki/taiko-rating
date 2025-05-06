@@ -84,6 +84,6 @@ The calculation method for the crown modifier is as follows:
 ```
 Not cleared: 0.7
 Cleared: 1
-Full Combo: 1.1
-Donderful Combo: 1.15
+Full Combo: 1.05
+Donderful Combo: 1.1
 ```
