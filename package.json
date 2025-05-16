@@ -1,22 +1,20 @@
 {
-  "dependencies": {
-    "-": "^0.0.1",
-    "@types/mathjs": "^9.4.2",
-    "@types/node": "^22.14.0",
-    "D": "^1.0.0",
-    "json-2-csv": "^5.5.5",
-    "mathjs": "^13.0.3",
-    "object.groupby": "^1.0.3"
-  },
-  "devDependencies": {
-    "@types/object.groupby": "^1.0.4",
-    "node-hiroba": "^1.7.7"
-  },
   "name": "@taiko-wiki/taiko-rating",
-  "version": "1.4.0",
-  "main": "index.js",
+  "version": "1.5.0",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./types": "./src/module/types.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run build:cjs & npm run build:esm",
+    "build:cjs": "tsc --p ./dist/cjs/tsconfig.json",
+    "build:esm": "tsc --p ./dist/esm/tsconfig.json"
   },
   "keywords": [
     "taiko",
@@ -29,5 +27,18 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/taikowiki/taiko-rating"
+  },
+  "dependencies": {
+    "-": "^0.0.1",
+    "@types/mathjs": "^9.4.2",
+    "@types/node": "^22.14.0",
+    "D": "^1.0.0",
+    "json-2-csv": "^5.5.5",
+    "mathjs": "^13.0.3",
+    "object.groupby": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/object.groupby": "^1.0.4",
+    "node-hiroba": "^1.7.7"
   }
 }

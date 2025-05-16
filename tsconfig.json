@@ -1,5 +1,7 @@
 {
-  "include": ["index.ts"],
+  "include": [
+    "src/**/*.ts"
+  ],
   "compilerOptions": {
     // "incremental": true,
     "target": "ESNext",
@@ -11,8 +13,7 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext"
+    "moduleResolution": "bundler"
   },
   "ts-node": {
     "esm": true,

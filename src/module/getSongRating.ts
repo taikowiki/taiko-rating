@@ -18,7 +18,10 @@ export function getSongRating(difficultyScoreData: DifficultyScoreData, maxCombo
     const accuracy = maxRoll === 0 ? mathjs.min(101, mathjs.multiply(accuracyWithNoBonus, 1.01)) : mathjs.min(101, mathjs.add(accuracyWithNoBonus, rollBonus));
     const compensatedAccuracy = getCompensated(accuracy);
 
-    const value = Math.round(measureValue * compensatedAccuracy * getCrownBonus(difficultyScoreData.crown) / 1000);
+    let value = Math.round(measureValue * compensatedAccuracy * getCrownBonus(difficultyScoreData.crown) / 1000);
+    if(mathjs.compare(mathjs.divide(85, 100), accuracy) && difficultyScoreData.crown === "silver"){ // if 0.85 > 정확도 && 은관
+        value = mathjs.multiply(value, mathjs.divide(7, 10));
+    }
 
     return {
         value,

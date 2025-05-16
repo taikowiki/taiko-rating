@@ -1,6 +1,6 @@
 import { ScoreData } from "node-hiroba/types";
-import { Measure, OniUraScoreData } from "./src/types.js";
-import { getSongRating } from "./src/getSongRating.js";
+import { Measure, OniUraScoreData } from "./module/types.js";
+import { getSongRating } from "./module/getSongRating.js";
 import { csv2json } from "json-2-csv";
 import groupBy from "object.groupby";
 
