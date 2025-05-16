@@ -1,5 +1,5 @@
 import { csv2json } from "json-2-csv";
-import { Measure } from "./types";
+import { Measure } from "./types.js";
 
 /**
  * 상수표 요청

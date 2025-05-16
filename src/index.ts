@@ -1,3 +1,3 @@
-export * from './module/fetchMeasures';
-export * from './module/getRating';
-export * from './module/getSongRating';
+export * from './module/fetchMeasures.js';
+export * from './module/getRating.js';
+export * from './module/getSongRating.js';
