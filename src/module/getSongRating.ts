@@ -12,7 +12,7 @@ export function getSongRating(difficultyScoreData: DifficultyScoreData, maxCombo
     maxRoll = maxRoll ?? 0;
 
     const accuracyWithNoBonus = mathjs.divide((difficultyScoreData.good * 2 + difficultyScoreData.ok) * 100, maxCombo * 2);
-    const rollBonus = maxRoll === 0 ? 0 : mathjs.divide(difficultyScoreData.roll, maxRoll);
+    const rollBonus = maxRoll === 0 ? 0 : mathjs.min(mathjs.divide(difficultyScoreData.roll, maxRoll), 1);
 
     // 최종 정확도 계산
     const accuracy = maxRoll === 0 ? mathjs.min(101, mathjs.multiply(accuracyWithNoBonus, 1.01)) : mathjs.min(101, mathjs.add(accuracyWithNoBonus, rollBonus));
