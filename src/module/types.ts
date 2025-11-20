@@ -8,6 +8,7 @@ export interface MeasureKr {
     diff: 'oni' | 'ura'
     '곡명': string
     '노트수': number
+    maxroll: number;
 }
 
 export interface Measure{

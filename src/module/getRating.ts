@@ -30,7 +30,7 @@ export function getRating(scoreDatas: Record<string, OniUraScoreData> | OniUraSc
             return;
         }
 
-        const songRating = getSongRating(difficultyScoreData, measure.notes, measure.measureValue, measure.notes);
+        const songRating = getSongRating(difficultyScoreData, measure.notes, measure.measureValue, measure.maxroll);
 
         songRatingDatas.push({
             songNo: measure.songno,
